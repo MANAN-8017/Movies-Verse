@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Movie Details | MoviesVerse</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="Style.css">
+<link rel="stylesheet" href="Movie_detail.css">
+</head>
+
+<!-- dynamic rating display -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".stars").forEach(container => {
+        const rating = parseFloat(container.dataset.rating);
+        container.innerHTML = "";
+
+        for (let i = 1; i <= 5; i++) {
+            if (rating >= i) {
+                container.innerHTML += '<span class="star filled">★</span>';
+            } else if (rating >= i - 0.5) {
+                container.innerHTML += '<span class="star half">★</span>';
+            } else {
+                container.innerHTML += '<span class="star">★</span>';
+            }
+        }
+    });
+});
+</script>
+<script>
+function toggleLike(btn) {
+    btn.classList.toggle("active");
+
+    const icon = btn.querySelector(".icon");
+    const text = btn.querySelector(".text");
+
+    if (btn.classList.contains("active")) {
+        icon.textContent = "♥";
+        text.textContent = "Liked";
+    } else {
+        icon.textContent = "♡";
+        text.textContent = "Like";
+    }
+}
+
+function toggleWatched(btn) {
+    btn.classList.toggle("active");
+
+    const text = btn.querySelector(".text");
+
+    text.textContent = btn.classList.contains("active")
+        ? "Watched"
+        : "Watch";
+}
+
+function toggleWatchlist(btn) {
+    btn.classList.toggle("active");
+
+    const text = btn.querySelector(".text");
+
+    text.textContent = btn.classList.contains("active")
+        ? "Watchlisted"
+        : "Watchlist";
+}
+</script>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search movies, TV shows...">
+        <button>Search</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="index.html">Movies</a>
+        <a href="Watchlist.html">Watchlist</a>
+        <a href="Watched.html">Watched</a>
+        <a href="Sign_In.html">Sign In</a>
+    </div>
+</div>
+
+<div class="movie-top">
+
+    <!-- LEFT COLUMN -->
+    <div class="left-column">
+
+        <div class="trailer-box">
+            <iframe
+                src="https://www.youtube.com/embed/uYPbbksJxIg"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- DESCRIPTION BELOW TRAILER -->
+        <div class="trailer-description">
+            <h2>Description</h2>
+            <p>
+                Oppenheimer is a gripping historical drama about J. Robert Oppenheimer, the physicist behind the atomic bomb. The film 
+        explores his scientific brilliance, the moral dilemmas of the Manhattan Project, and the lasting consequences of his decisions. 
+        With intense performances and striking visuals, it reflects on ambition, responsibility, and the cost of groundbreaking innovation.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="movie-meta">
+        <div class="poster">
+            <img src="/Data/Pics/fe748e176533255.64c6e08a621b1.jpg">
+        </div>
+
+        <div class="movie-info">
+            <h1>Oppenheimer (2023)</h1>
+
+            <div class="genres">
+                <span>Biography</span>
+                <span>Drama</span>
+                <span>History</span>
+            </div>
+
+            <div class="details">
+                Release Date: 21 July 2023<br><br>
+                Language: English<br><br>
+                Runtime: 180 min<br><br>
+                Director: Christopher Nolan
+            </div>
+
+<div class="action-row">
+    <div class="action-btn rating">★ 4.1 / 5</div>
+
+    <button class="action-btn like-btn" onclick="toggleLike(this)">
+        <span class="icon">♡</span>
+        <span class="text">Like</span>
+    </button>
+
+    <button class="action-btn watch-btn" onclick="toggleWatched(this)">
+        <span class="icon">👁</span>
+        <span class="text">Watch</span>
+    </button>
+
+    <button class="action-btn list-btn" onclick="toggleWatchlist(this)">
+        <span class="icon">🕒</span>
+        <span class="text">Watchlist</span>
+    </button>
+
+
+</div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- CAST -->
+<div class="section">
+    <h2>Cast</h2>
+    <div class="cast-grid">
+        <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Cillian Murphy.jpg">
+            <h4>Cillian Murphy</h4>
+            <p>J. Robert Oppenheimer</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Emily Blunt.jpg">
+            <h4>Emily Blunt</h4>
+            <p>Kitty Oppenheimer</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Matt Damon.jpg">
+            <h4>Matt Damon</h4>
+            <p>Leslie Groves</p>
+        </div>
+                <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Robert Downey Jr..jpg">
+            <h4>Robert Downey Jr.</h4>
+            <p>Lewis Strauss</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Alden Ehreneich.jpg">
+            <h4>Alden Ehrenreich</h4>
+            <p>Senate Aide</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="/Data/Cast/Oppenheimer/Scott Grimes.jpg">
+            <h4>Scott Grimes</h4>
+            <p>Counsel</p>
+        </div>
+    </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="section">
+    <h2>Ratings & Reviews</h2>
+
+    <div class="review-summary">
+        Overall Rating: <span class="stars" data-rating="4.1"></span> 4.1 / 5 based on 1.2M reviews
+    </div>
+
+    <div class="review-card">
+        <strong>Sam</strong> <span class="stars" data-rating="3.5"></span> <p>Masterpiece. One of Nolan’s best works.</p>
+    </div>
+
+    <div class="review-card">
+        <strong>Sarah</strong> <span class="stars" data-rating="3"></span> <p>Slow pacing, but extremely powerful performances.</p>
+    </div>
+</div>
+
+<!-- ADD REVIEW -->
+
+<div class="section">
+    <h2>Add Your Review</h2>
+
+    <div class="review-form">
+        <form>
+            <label><strong>Your Rating:</strong></label><br><br>
+<!-- Dynamic Rating Display: -->
+<!-- star rating input: -->
+            <div class="star-rating">
+                <!-- 5 -->
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5"></label>
+
+                <input type="radio" id="star4half" name="rating" value="4.5">
+                <label for="star4half" class="half"></label>
+
+                <!-- 4 -->
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4"></label>
+
+                <input type="radio" id="star3half" name="rating" value="3.5">
+                <label for="star3half" class="half"></label>
+
+                <!-- 3 -->
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3"></label>
+
+                <input type="radio" id="star2half" name="rating" value="2.5">
+                <label for="star2half" class="half"></label>
+
+                <!-- 2 -->
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2"></label>
+
+                <input type="radio" id="star1half" name="rating" value="1.5">
+                <label for="star1half" class="half"></label>
+
+                <!-- 1 -->
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1"></label>
+
+                <input type="radio" id="starhalf" name="rating" value="0.5">
+                <label for="starhalf" class="half"></label>
+            </div>
+
+            <br><br>
+
+            <textarea placeholder="Write your review..."></textarea>
+
+            <br><br>
+
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">Help</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

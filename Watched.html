@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watched Movies - MoviesVerse</title>
+    <title>Watched Movies</title>
     <link rel="stylesheet" href="Style.css">
 </head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
 <body>
 
 <div class="navbar">
@@ -19,8 +27,20 @@
     <div class="nav-links">
         <a href="index.html">Movies</a>
         <a href="Watchlist.html">Watchlist</a>
-    </div>
+        
+        <div class="profile-dropdown">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
 
+        <div class="dropdown-menu">
+            <a href="Profile.html">Profile</a>
+            <a href="Watched.html">Watched</a>
+            <a href="Favorite.html">Favorite Movies</a>
+            <a href="Settings.html">Settings</a>
+            <hr>
+            <a href="Sign_In.html" class="logout">Logout</a>
+        </div>
+        </div>
+    </div>
 </div>
 
 <section class="hero">

@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Trending Movies - MoviesVerse</title>
+    <title>Trending Movies</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="Style1.css">
 </head>
-<body>
 
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
+<body>
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -20,8 +28,19 @@
     <div class="nav-links">
         <a href="index.html">Movies</a>
         <a href="Watchlist.html">Watchlist</a>
-        <a href="Watched.html">Watched</a>
-        <a href="Sign_In.html">Sign In</a>
+        
+        <div class="profile-dropdown">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+            
+            <div class="dropdown-menu">
+                <a href="Profile.html">Profile</a>
+                <a href="Watched.html">Watched</a>
+                <a href="Favorite.html">Favorite Movies</a>
+                <a href="Settings.html">Settings</a>
+                <hr>
+                <a href="Sign_In.html" class="logout">Logout</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -50,10 +69,6 @@
                         <span class="card-star">★</span>
                         <span>3.6</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>898K views</span>
-                    </div>
                     <h3 class="card-title">Black Panther</h3>
                     <p class="card-meta">2024</p>
                 </div>
@@ -68,10 +83,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>4.1</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>837K views</span>
                     </div>
                     <h3 class="card-title">Top Gun: Maverick</h3>
                     <p class="card-meta">2024</p>
@@ -89,10 +100,6 @@
                         <span class="card-star">★</span>
                         <span>3.3</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>837K views</span>
-                    </div>
                     <h3 class="card-title">Deadpool & Wolverine</h3>
                     <p class="card-meta">2024</p>
                 </div>
@@ -107,10 +114,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.7</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>809K views</span>
                     </div>
                     <h3 class="card-title">The Social Network</h3>
                     <p class="card-meta">2024</p>
@@ -127,10 +130,6 @@
                         <span class="card-star">★</span>
                         <span>3.3</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>219K views</span>
-                    </div>
                     <h3 class="card-title">The Killer</h3>
                     <p class="card-meta">2023</p>
                 </div>
@@ -145,10 +144,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.1</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>171K views</span>
                     </div>
                     <h3 class="card-title">The Guilty</h3>
                     <p class="card-meta">2021</p>
@@ -166,10 +161,6 @@
                         <span class="card-star">★</span>
                         <span>3.5</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>149K views</span>
-                    </div>
                     <h3 class="card-title">Final Destination: Bloodlines</h3>
                     <p class="card-meta">2024</p>
                 </div>
@@ -184,10 +175,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.0</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>148K views</span>
                     </div>
                     <h3 class="card-title">Venom: The Last Dance</h3>
                     <p class="card-meta">2024</p>
@@ -204,10 +191,6 @@
                         <span class="card-star">★</span>
                         <span>2.8</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>143K views</span>
-                    </div>
                     <h3 class="card-title">Fast X</h3>
                     <p class="card-meta">2023</p>
                 </div>
@@ -222,10 +205,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.2</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>139K views</span>
                     </div>
                     <h3 class="card-title">A Haunting In Venice</h3>
                     <p class="card-meta">2023</p>
@@ -242,10 +221,6 @@
                         <span class="card-star">★</span>
                         <span>3.0</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>116K views</span>
-                    </div>
                     <h3 class="card-title">Damsel</h3>
                     <p class="card-meta">2024</p>
                 </div>
@@ -260,10 +235,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>2.8</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>115K views</span>
                     </div>
                     <h3 class="card-title">Aquaman and The lost Kingdom</h3>
                     <p class="card-meta">2023</p>
@@ -281,10 +252,6 @@
                         <span class="card-star">★</span>
                         <span>3.1</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>86K views</span>
-                    </div>
                     <h3 class="card-title">The Conjuring: Last Rites</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -299,10 +266,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.1</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>60K views</span>
                     </div>
                     <h3 class="card-title">Terrifier 3</h3>
                     <p class="card-meta">2024</p>
@@ -319,10 +282,6 @@
                         <span class="card-star">★</span>
                         <span>2.8</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>59K views</span>
-                    </div>
                     <h3 class="card-title">Atlas</h3>
                     <p class="card-meta">2024</p>
                 </div>
@@ -338,10 +297,6 @@
                         <span class="card-star">★</span>
                         <span>2.8</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>30K views</span>
-                    </div>
                     <h3 class="card-title">Backett</h3>
                     <p class="card-meta">2021</p>
                 </div>
@@ -356,10 +311,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>4.1</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>9.4K views</span>
                     </div>
                     <h3 class="card-title">The Secret Agent</h3>
                     <p class="card-meta">2025</p>

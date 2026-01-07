@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popular Movies - MoviesVerse</title>
+    <title>Popular Movies</title>
+    <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="Style1.css">
 </head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
 <body>
-
-<!-- NAVBAR (Same as Home Page) -->
-
+<!-- NAVBAR -->
 <div class="navbar">
     <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
 
@@ -21,8 +28,19 @@
     <div class="nav-links">
         <a href="index.html">Movies</a>
         <a href="Watchlist.html">Watchlist</a>
-        <a href="Watched.html">Watched</a>
-        <a href="Sign_In.html">Sign In</a>
+        
+        <div class="profile-dropdown">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+            
+            <div class="dropdown-menu">
+                <a href="Profile.html">Profile</a>
+                <a href="Watched.html">Watched</a>
+                <a href="Favorite.html">Favorite Movies</a>
+                <a href="Settings.html">Settings</a>
+                <hr>
+                <a href="Sign_In.html" class="logout">Logout</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -51,10 +69,6 @@
                         <span class="card-star">★</span>
                         <span>4.5</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>3.1M views</span>
-                    </div>
                     <h3 class="card-title">Batman:The Dark Knight</h3>
                     <p class="card-meta">2008</p>
                 </div>
@@ -71,10 +85,6 @@
                         <span class="card-star">★</span>
                         <span>4.4</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>2.8M views</span>
-                    </div>
                     <h3 class="card-title">Inception</h3>
                     <p class="card-meta">2010</p>
                 </div>
@@ -89,10 +99,6 @@
                         <span class="card-star">★</span>
                         <span>4.3</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>2.5M views</span>
-                    </div>
                     <h3 class="card-title">Interstellar</h3>
                     <p class="card-meta">2014</p>
                 </div>
@@ -106,10 +112,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>4.2</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>1.4M views</span>
                     </div>
                     <h3 class="card-title">Avengers: Endgame</h3>
                     <p class="card-meta">2019</p>
@@ -127,10 +129,6 @@
                         <span class="card-star">★</span>
                         <span>4.1</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>986K views</span>
-                    </div>
                     <h3 class="card-title">Oppenheimer</h3>
                     <p class="card-meta">2023</p>
                 </div>
@@ -144,10 +142,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.8</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>281K views</span>
                     </div>
                     <h3 class="card-title">F1: The Movie</h3>
                     <p class="card-meta">2025</p>
@@ -166,10 +160,6 @@
                         <span class="card-star">★</span>
                         <span>3.8</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>936K views</span>
-                    </div>
                     <h3 class="card-title">Harry Potter and the Sorcerer's Stone</h3>
                     <p class="card-meta">2001</p>
                 </div>
@@ -184,10 +174,6 @@
                             <span class="card-star">★</span>
                             <span>3.7</span>
                         </div>
-                        <div class="card-view">
-                            <span class="fire">🔥</span>
-                            <span>89K views</span>
-                        </div>
                         <h3 class="card-title">Avatar: Fire and Ash</h3>
                         <p class="card-meta">2025</p>
                     </div>
@@ -201,10 +187,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.7</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>206K views</span>
                     </div>
                     <h3 class="card-title">Mission: Impossible - The Final Reckoning</h3>
                     <p class="card-meta">2025</p>
@@ -222,10 +204,6 @@
                         <span class="card-star">★</span>
                         <span>3.7</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>218K views</span>
-                    </div>
                     <h3 class="card-title">Frankenstein</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -241,10 +219,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.7</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>36K views</span>
                     </div>
                     <h3 class="card-title">Nuremberg</h3>
                     <p class="card-meta">2025</p>
@@ -262,10 +236,6 @@
                         <span class="card-star">★</span>
                         <span>3.6</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>66K views</span>
-                    </div>
                     <h3 class="card-title">Predator: Badlands</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -282,10 +252,6 @@
                         <span class="card-star">★</span>
                         <span>3.3</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>84K views</span>
-                    </div>
                     <h3 class="card-title">Black Bag</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -299,10 +265,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.3</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>2.8K views</span>
                     </div>
                     <h3 class="card-title">The Tiger</h3>
                     <p class="card-meta">2025</p>
@@ -320,10 +282,6 @@
                         <span class="card-star">★</span>
                         <span>3.3</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>28K views</span>
-                    </div>
                     <h3 class="card-title">Jay Kelly</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -339,10 +297,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>3.1</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>20K views</span>
                     </div>
                     <h3 class="card-title">Dracula</h3>
                     <p class="card-meta">2025</p>
@@ -360,10 +314,6 @@
                         <span class="card-star">★</span>
                         <span>3.0</span>
                     </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>368 views</span>
-                    </div>
                     <h3 class="card-title">Primate</h3>
                     <p class="card-meta">2025</p>
                 </div>
@@ -379,10 +329,6 @@
                     <div class="card-rating">
                         <span class="card-star">★</span>
                         <span>2.9</span>
-                    </div>
-                    <div class="card-view">
-                        <span class="fire">🔥</span>
-                        <span>169K views</span>
                     </div>
                     <h3 class="card-title">Jurassic World: Rebirth</h3>
                     <p class="card-meta">2025</p>

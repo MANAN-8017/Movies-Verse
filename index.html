@@ -7,33 +7,50 @@
     <link rel="stylesheet" href="Style.css">
 </head>
 <script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+
     function toggleWatchlist(btn) {
-    btn.classList.toggle("active");
-
-    const text = btn.querySelector(".text");
-
-    text.textContent = btn.classList.contains("active")
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
         ? "✔ Added to Watchlist"
         : "+ Add to Watchlist";
-}
+    }
 </script>
+
 <body>
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo"><a href="#" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
-
-    <div class="search-box">
-        <input type="text" placeholder="Search movies, TV shows...">
-        <button>Search</button>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+        
+        <div class="search-box">
+            <input type="text" placeholder="Search movies, TV shows...">
+            <button>Search</button>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">Movies</a>
+            <a href="Watchlist.html">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                
+                <div class="dropdown-menu">
+                    <a href="Profile.html">Profile</a>
+                    <a href="Watched.html">Watched</a>
+                    <a href="Favorite.html">Favorite Movies</a>
+                    <a href="Settings.html">Settings</a>
+                    <hr>
+                    <a href="Sign_In.html" class="logout">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="nav-links">
-        <a href="#">Movies</a>
-        <a href="Watchlist.html">Watchlist</a>
-        <a href="Watched.html">Watched</a>
-        <a href="Sign_In.html">Sign In</a>
-    </div>
-</div>
 
     <!-- Hero Section -->
     <section class="hero">

@@ -1,73 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Movie Details | MoviesVerse</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="Style.css">
-<link rel="stylesheet" href="Movie_detail.css">
+    <meta charset="UTF-8">
+    <title>Oppenheimer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="Movie_detail.css">
 </head>
 
-<!-- dynamic rating display -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".stars").forEach(container => {
-        const rating = parseFloat(container.dataset.rating);
-        container.innerHTML = "";
-
-        for (let i = 1; i <= 5; i++) {
-            if (rating >= i) {
-                container.innerHTML += '<span class="star filled">★</span>';
-            } else if (rating >= i - 0.5) {
-                container.innerHTML += '<span class="star half">★</span>';
-            } else {
-                container.innerHTML += '<span class="star">★</span>';
-            }
-        }
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
     });
-});
-</script>
-<script>
-function toggleLike(btn) {
-    btn.classList.toggle("active");
-
-    const icon = btn.querySelector(".icon");
-    const text = btn.querySelector(".text");
-
-    if (btn.classList.contains("active")) {
-        icon.textContent = "♥";
-        text.textContent = "Liked";
-    } else {
-        icon.textContent = "♡";
-        text.textContent = "Like";
+    function toggleLike(btn) {
+        btn.classList.toggle("active");
+        
+        const icon = btn.querySelector(".icon");
+        const text = btn.querySelector(".text");
+        
+        if (btn.classList.contains("active")) {
+            icon.textContent = "♥";
+            text.textContent = "Liked";
+        } else {
+            icon.textContent = "♡";
+            text.textContent = "Like";
+        }
     }
-}
-
-function toggleWatched(btn) {
-    btn.classList.toggle("active");
-
-    const text = btn.querySelector(".text");
-
-    text.textContent = btn.classList.contains("active")
+    
+    function toggleWatched(btn) {
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
         ? "Watched"
         : "Watch";
-}
-
-function toggleWatchlist(btn) {
-    btn.classList.toggle("active");
-
-    const text = btn.querySelector(".text");
-
-    text.textContent = btn.classList.contains("active")
+    }
+    
+    function toggleWatchlist(btn) {
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
         ? "Watchlisted"
         : "Watchlist";
-}
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".stars").forEach(container => {
+            const rating = parseFloat(container.dataset.rating);
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i) {
+                    container.innerHTML += '<span class="star filled">★</span>';
+                } else if (rating >= i - 0.5) {
+                    container.innerHTML += '<span class="star half">★</span>';
+                } else {
+                    container.innerHTML += '<span class="star">★</span>';
+                }
+            }
+        });
+    });
 </script>
-
 <body>
-
-<!-- NAVBAR -->
-<div class="navbar">
+    
+    <!-- NAVBAR -->
+    <div class="navbar">
     <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
 
     <div class="search-box">
@@ -78,8 +79,19 @@ function toggleWatchlist(btn) {
     <div class="nav-links">
         <a href="index.html">Movies</a>
         <a href="Watchlist.html">Watchlist</a>
-        <a href="Watched.html">Watched</a>
-        <a href="Sign_In.html">Sign In</a>
+        
+        <div class="profile-dropdown">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+            
+            <div class="dropdown-menu">
+                <a href="Profile.html">Profile</a>
+                <a href="Watched.html">Watched</a>
+                <a href="Favorite.html">Favorite Movies</a>
+                <a href="Settings.html">Settings</a>
+                <hr>
+                <a href="Sign_In.html" class="logout">Logout</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -110,7 +122,7 @@ function toggleWatchlist(btn) {
     <!-- RIGHT COLUMN -->
     <div class="movie-meta">
         <div class="poster">
-            <img src="/Data/Pics/fe748e176533255.64c6e08a621b1.jpg">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Oppenheimer Poster">
         </div>
 
         <div class="movie-info">
@@ -146,8 +158,6 @@ function toggleWatchlist(btn) {
         <span class="icon">🕒</span>
         <span class="text">Watchlist</span>
     </button>
-
-
 </div>
 
         </div>
@@ -160,13 +170,13 @@ function toggleWatchlist(btn) {
     <h2>Cast</h2>
     <div class="cast-grid">
         <div class="cast-card">
-            <img src="/Data/Cast/Oppenheimer/Cillian Murphy.jpg">
+            <img src="https://m.media-amazon.com/images/M/MV5BNWM3NTg0NGYtNTFmYS00OWY1LTlkNTgtNzZlMWY4OGRmMmEzXkEyXkFqcGc@._V1_CR1542,983,1114,1670_QL75_UX140_CR0,1,140,207_.jpg" alt="Cillian Murphy">
             <h4>Cillian Murphy</h4>
             <p>J. Robert Oppenheimer</p>
         </div>
 
         <div class="cast-card">
-            <img src="/Data/Cast/Oppenheimer/Emily Blunt.jpg">
+            <img src="https://www.hawtcelebs.com/wp-content/uploads/2018/10/emily-blunt-a-quiet-place-photoshoot-october-2018-7.jpg" alt="Emily Blunt">
             <h4>Emily Blunt</h4>
             <p>Kitty Oppenheimer</p>
         </div>
@@ -177,19 +187,19 @@ function toggleWatchlist(btn) {
             <p>Leslie Groves</p>
         </div>
                 <div class="cast-card">
-            <img src="/Data/Cast/Oppenheimer/Robert Downey Jr..jpg">
+            <img src="https://www.wallspedia.com/wp-content/uploads/2023/11/Robert-Downey-Jr-10.jpg" alt="Robert Downey Jr.">
             <h4>Robert Downey Jr.</h4>
             <p>Lewis Strauss</p>
         </div>
 
         <div class="cast-card">
-            <img src="/Data/Cast/Oppenheimer/Alden Ehreneich.jpg">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Alden Ehrenreich">
             <h4>Alden Ehrenreich</h4>
             <p>Senate Aide</p>
         </div>
 
         <div class="cast-card">
-            <img src="/Data/Cast/Oppenheimer/Scott Grimes.jpg">
+            <img src="https://m.media-amazon.com/images/M/MV5BMTg2NTg0NTI0Ml5BMl5BanBnXkFtZTYwNzM4Njc4._V1_FMjpg_UX1000_.jpg" alt="Scott Grimes">
             <h4>Scott Grimes</h4>
             <p>Counsel</p>
         </div>

@@ -2,12 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upcoming Movies - MoviesVerse</title>
+    <title>Upcoming Movies</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
     <link rel="stylesheet" href="Style1.css">
 </head>
-<body>
 
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
+<body>
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo"><a href="index.html" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -17,12 +25,23 @@
         <button>Search</button>
     </div>
 
-    <div class="nav-links">
-        <a href="index.html">Movies</a>
-        <a href="Watchlist.html">Watchlist</a>
-        <a href="Watched.html">Watched</a>
-        <a href="Sign_In.html">Sign In</a>
-    </div>
+        <div class="nav-links">
+            <a href="index.html">Movies</a>
+            <a href="Watchlist.html">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                
+                <div class="dropdown-menu">
+                    <a href="Profile.html">Profile</a>
+                    <a href="Watched.html">Watched</a>
+                    <a href="Favorite.html">Favorite Movies</a>
+                    <a href="Settings.html">Settings</a>
+                    <hr>
+                    <a href="Sign_In.html" class="logout">Logout</a>
+                </div>
+            </div>
+        </div>
 </div>
 
 <!-- HERO SECTION -->
@@ -144,17 +163,8 @@
                 </div>
             </div>
 
-            <!-- 12 -->
-            <div class="movie-card">
-                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGnKfewSzmMM2nwhMaufLlttZGY8rg3LusPQ&s" alt="Spider-Man: Beyond the Spider-Verse"></div>
-                <div class="card-info">
-                    <h3 class="card-title">Spider-Man: Beyond the Spider-Verse</h3>
-                    <p class="card-meta">June 2027</p>
-                </div>
-            </div>
-
             <!-- 3 row -->
-            <!-- 13 -->
+            <!-- 12 -->
             <div class="movie-card">
                 <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW5iLa_VZKoZgwlAx6Se_f6sY8GaPosotFYw&s" alt="A Quiet Place Part III"></div>
                 <div class="card-info">
@@ -163,16 +173,7 @@
                 </div>
             </div>
 
-            <!-- 14 -->
-            <div class="movie-card">
-                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BY2Y5ZjhhM2EtMDJhMy00YWEyLWE3NGYtNWZjNTM2YzAyODE4XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Man of Tomorrow"></div>
-                <div class="card-info">
-                    <h3 class="card-title">Man of Tomorrow</h3>
-                    <p class="card-meta">July 2027</p>
-                </div>
-            </div>
-
-            <!-- 15 -->
+            <!-- 13 -->
             <div class="movie-card">
                 <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BZDhhZjJlNjMtZjBlYy00ZGE0LTg5YzgtNDBlMTBmOThlOGNmXkEyXkFqcGc@._V1_.jpg" alt="The Shark That Roared"></div>
                 <div class="card-info">
@@ -182,7 +183,7 @@
             </div>
             
 
-            <!-- 16 -->
+            <!-- 14 -->
             <div class="movie-card">
                 <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BOTkwOTZlNWEtN2YxMS00MzY0LWExMzItN2RjMzYzZjFkZGJlXkEyXkFqcGc@._V1_.jpg" alt="The Batman : Part II"></div>
                 <div class="card-info">
@@ -192,22 +193,12 @@
             </div>
             
 
-            <!-- 17 -->
+            <!-- 15 -->
             <div class="movie-card">
                 <div class="card-poster"><img src="https://www.newdvdreleasedates.com/images/posters/avengers-secret-wars-2027.jpg" alt="Avengers: Secret Wars"></div>
                 <div class="card-info">
                     <h3 class="card-title">Avengers: Secret Wars</h3>
                     <p class="card-meta">December 2027</p>
-                </div>
-            </div>
-            
-
-            <!-- 18 -->
-            <div class="movie-card">
-                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4p3-u1JYjwfzAOk3vHCAnjhHMyChRO5P6qw&s" alt="The Resurrection of the Christ: Part One"></div>
-                <div class="card-info">
-                    <h3 class="card-title">The Resurrection of the Christ: Part One</h3>
-                    <p class="card-meta">TBA</p>
                 </div>
             </div>
 

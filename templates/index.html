@@ -1,0 +1,303 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoviesVerse - Movies, TV and Celebrities</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+
+    function toggleWatchlist(btn) {
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
+        ? "✔ Added to Watchlist"
+        : "+ Add to Watchlist";
+    }
+</script>
+
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+        
+        <div class="search-box">
+            <input type="text" placeholder="Search movies, TV shows...">
+            <button>Search</button>
+        </div>
+        
+        <div class="nav-links">
+            <a href="{% url 'index' %}">Movies</a>
+            <a href="{% url 'watchlist' %}">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                
+                <div class="dropdown-menu">
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="{% url 'watched' %}">Watched</a>
+                    <a href="{% url 'favourite' %}">Favourite Movies</a>
+                    <a href="{% url 'settings' %}">Settings</a>
+                    <hr>
+                    <a href="{% url 'logout' %}" class="logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2 class="hero-title">Featured Today</h2>
+            <div class="featured-movie">
+                <div class="movie-poster img"><a href="{% url 'oppenheimer' %}"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Oppenheimer"></a></div>
+                <div class="movie-info">
+                    <h1 class="movie-title">Oppenheimer</h1>
+                    <div class="rating">
+                        <span class="star">★</span>
+                        <span class="rating-value">4.1</span>
+                        <span class="rating-count">/5 (979K)</span>
+                    </div>
+                    <div class="movie-meta">2023 • 3h min • Action, Thriller</div>
+                    <p class="movie-description">
+                        A gripping tale of espionage and betrayal set in the shadows of a dystopian future. 
+                        When a skilled operative discovers a conspiracy that threatens global stability, 
+                        they must race against time to prevent catastrophe while questioning everything they've ever known.
+                    </p>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary"><a href="{% url 'oppenheimer' %}" style="text-decoration: none; color: black;">▶ Watch Trailer</a></button>
+                        <button class="btn btn-secondary" onclick="toggleWatchlist(this)">
+                            <span class="text">+ Add to Watchlist</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <main class="content">
+        <!-- TRENDING -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Trending Movies</h2>
+                <a href="{% url 'trending' %}" class="see-all">See all →</a>
+            </div>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://media.fstatic.com/H_LrSpwVLEBUA8IXNPTrQDrkku4=/350x525/smart/filters:format(webp)/media/movies/covers/2025/10/TSA_poster_inter.jpg" alt="The Secret Agent"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.1</span>
+                        </div>
+                        <h3 class="card-title">The Secret Agent</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://tse3.mm.bing.net/th/id/OIP.aEhm7J-eumF5SBPCD8VfQwHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Deadpool & Wolverine"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.3</span>
+                        </div>
+                        <h3 class="card-title">Deadpool & Wolverine</h3>
+                        <p class="card-meta">2024</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://images.sr.roku.com/idType/roku/context/global/id/7f9fe63648dd576d9c8fd8895003f8f8/https://image.roku.com/bh-uploads/production/assets/poster/2_3/None/1671546973181_aHR0cHM6Ly9zdGF0aWMtZGVsaXZlcnkuc3Iucm9rdS5jb20vMTYzZDhiNmUtYWE0ZS00NDQ5LWFhNWMtYTViZDU4MDM3MjRiL2ltYWdlcy9Ub3BfR3VuX19NYXZlcmlja184NTUzODBfUk9LVV9TVk9EX0JveGNvdmVyLmpwZw.jpg/magic/342x0/filters:format(webp):quality(80)" alt="Top Gun: Maverick"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.1</span>
+                        </div>
+                        <h3 class="card-title">Top Gun: Maverick</h3>
+                        <p class="card-meta">2024</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2024/12/final-destinations-bloodlines-poster.jpg" alt="Final Destination: Bloodlines"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.5</span>
+                        </div>
+                        <h3 class="card-title">Final Destination: Bloodlines</h3>
+                        <p class="card-meta">2024</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://imgs.search.brave.com/vDkiE8-XnS4o80pzy9E4N7aUVRqyKFGCbc-zBTGFqqs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vdGh1bWIv/OC84Yy9UaGVfU29j/aWFsX05ldHdvcmtf/ZmlsbV9wb3N0ZXIu/cG5nLzI1MHB4LVRo/ZV9Tb2NpYWxfTmV0/d29ya19maWxtX3Bv/c3Rlci5wbmc" alt="The Social Network"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.7</span>
+                        </div>
+                        <h3 class="card-title">The Social Network</h3>
+                        <p class="card-meta">2024</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://th.bing.com/th/id/R.8d8e4b01fca5e33ba530ca9c4bb937db?rik=6%2fNPm%2fyVyDIkRA&riu=http%3a%2f%2fwww.milwaukeeindependent.com%2fwp-content%2fuploads%2f2018%2f02%2fblackpanthermovie_09.jpg&ehk=A9rld%2fz%2bTzjWcFDW8XA%2b9zj5arGCm%2fXw9jHRpwtbrSQ%3d&risl=&pid=ImgRaw&r=0" alt="Black Panther"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.6</span>
+                        </div>
+                        <h3 class="card-title">Black Panther</h3>
+                        <p class="card-meta">2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Movies -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Popular Movies</h2>
+                <a href="{% url 'popular' %}" class="see-all">See all →</a>
+            </div>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://images.herzindagi.info/her-zindagi-english/images/2025/12/22/article/image/Avatar-Fire-and-Ash-Box-Office-Collection-Day-4-1766380602962.webp" alt="Avatar: Fire and Ash"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.7</span>
+                        </div>
+                        <h3 class="card-title">Avatar: Fire and Ash</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg" alt = "F1: The Movie"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.8</span>
+                        </div>
+                        <h3 class="card-title">F1: The Movie</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Batman: The Dark Knight"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.5</span>
+                        </div>
+                        <h3 class="card-title">Batman:The Dark Knight</h3>
+                        <p class="card-meta">2008</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png" alt="Interstellar"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.3</span>
+                        </div>
+                        <h3 class="card-title">Interstellar</h3>
+                        <p class="card-meta">2014</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://preview.redd.it/1sdabp4nt2m21.jpg?auto=webp&s=1d3793ac4d16c6dfc457da2dc65cff869221cc80" alt="Avengers: Endgame"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.2</span>
+                        </div>
+                        <h3 class="card-title">Avengers: Endgame</h3>
+                        <p class="card-meta">2019</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://th.bing.com/th/id/R.6f984b71f8edd87997da8bff41a27696?rik=PLFfBDMUqkqyFw&riu=http%3a%2f%2fftp.impawards.com%2f2025%2fposters%2fmission_impossible__the_final_reckoning_ver27.jpg&ehk=LoiIVfA2YL%2b9%2fRiG4xWQPuZYC4KLEK1Ka9s4My%2b%2fFLo%3d&risl=&pid=ImgRaw&r=0" alt="Mission: Impossible - The Final Reckoning"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.7</span>
+                        </div>
+                        <h3 class="card-title">Mission: Impossible - The Final Reckoning</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coming Soon -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Coming Soon</h2>
+                <a href="{% url 'coming_soon' %}" class="see-all">See all →</a>
+            </div>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://assets.mycast.io/posters/street-fighter-2026-fan-casting-poster-529379-large.jpg?1731297255" alt="Street Fighter"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">Street Fighter</h3>
+                        <p class="card-meta">2026</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://imgs.search.brave.com/ot_eLUbRvSIYtElFBjxjdVUZP8VWSoGPNEZUVSYuqEs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDE1MTMx/MTY3LndlYnA" alt="Avengers: Doomsday"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">Avengers: Doomsday</h3>
+                        <p class="card-meta">2026</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://juksun.com/wp-content/uploads/2023/12/Toxic-Movie-Poster.jpg" alt="Toxic"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">Toxic</h3>
+                        <p class="card-meta">2026</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://www.newdvdreleasedates.com/images/posters/spider-man-brand-new-day-2026.jpg" alt="Spider-Man: Brand New Day"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">Spider-Man: Brand New Day</h3>
+                        <p class="card-meta">2026</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BOTkwOTZlNWEtN2YxMS00MzY0LWExMzItN2RjMzYzZjFkZGJlXkEyXkFqcGc@._V1_.jpg" alt="The Batman : Part II"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">The Batman : Part II</h3>
+                        <p class="card-meta">June 2028</p>
+                    </div>
+                </div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://www.newdvdreleasedates.com/images/posters/avengers-secret-wars-2027.jpg" alt="Avengers: Secret Wars"></div>
+                    <div class="card-info">
+                        <h3 class="card-title">Avengers: Secret Wars</h3>
+                        <p class="card-meta">December 2027</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Movies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+</head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
+<body>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search movies, TV shows...">
+        <button>Search</button>
+    </div>
+
+        <div class="nav-links">
+            <a href="{% url 'index' %}">Movies</a>
+            <a href="{% url 'watchlist' %}">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                
+                <div class="dropdown-menu">
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="{% url 'watched' %}">Watched</a>
+                    <a href="{% url 'favourite' %}">Favourite Movies</a>
+                    <a href="{% url 'settings' %}">Settings</a>
+                    <hr>
+                    <a href="{% url 'sign_in' %}" class="logout">Logout</a>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h2 class="hero-title">Upcoming Movies</h2>
+        <p style="color:#ccc; margin-top:10px;">
+            Movies coming to theaters and streaming soon
+        </p>
+    </div>
+</section>
+
+<!-- Coming Soon -->
+<main class="content">
+    <section class="section">
+        <div class="movie-grid">
+
+            <!-- 1 row -->
+            <!-- 1 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://juksun.com/wp-content/uploads/2023/12/Toxic-Movie-Poster.jpg" alt="Toxic"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Toxic</h3>
+                    <p class="card-meta">March 2026</p>
+                </div>
+            </div>
+            
+            <!-- 2 -->
+             <div class="movie-card">
+                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIquNCjR-EJwESi7DJW0_YFwlbKt79uHM_KA&s" alt="Ready Or Not 2:Here I Come"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Ready Or Not 2:Here I Come</h3>
+                    <p class="card-meta">April 2026</p>
+                </div>
+            </div>
+
+            <!-- 3 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/I/71BokibfVUL.jpg" alt="Top Gun:Maverick 2"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Top Gun:Maverick 2</h3>
+                    <p class="card-meta">May 2026</p>
+                </div>
+            </div>
+
+            <!-- 4 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://www.newdvdreleasedates.com/images/posters/spider-man-brand-new-day-2026.jpg" alt="Spider-Man: Brand New Day"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Spider-Man: Brand New Day</h3>
+                    <p class="card-meta">July 2026</p>
+                </div>
+            </div>
+
+              <!-- 5 -->
+           <div class="movie-card">
+                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGwbmbZB31Ka6zPQP-XPGM6TqRIyYOnsoRpA&s" alt="The Odyssey"></div>
+                <div class="card-info">
+                    <h3 class="card-title">The Odyssey</h3>
+                    <p class="card-meta">July 2026</p>
+                </div>
+            </div>
+
+            
+            <!-- 6 -->
+        
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFHk8U90_Ye71-avsU6u43AWaTIAH2q_purw&s" alt="Insidious: The Bleeding World"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Insidious: The Bleeding World</h3>
+                    <p class="card-meta">August 2026</p>
+                </div>
+            </div>
+
+            <!-- 2 row -->
+            <!-- 7 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BYmI3YjJkN2ItY2ZmYS00Y2JhLTk2YTQtYzE5YWU5ODI1MzJmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Resident Evil"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Resident Evil</h3>
+                    <p class="card-meta">September 2026</p>
+                </div>
+            </div>
+
+            <!-- 8 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://assets.mycast.io/posters/street-fighter-2026-fan-casting-poster-529379-large.jpg?1731297255" alt="Street Fighter"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Street Fighter</h3>
+                    <p class="card-meta">October 2026</p>
+                </div>
+            </div>
+
+             <!-- 9 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://i.ytimg.com/vi/0Mb42A-1Xbs/oardefault.jpg?sqp=-oaymwEYCJUDENAFSFqQAgHyq4qpAwcIARUAAIhC&rs=AOn4CLAAuemtdenUTP7Z1qCK3327ZtYwiA" alt="The Magnetic Fighters"></div>
+                <div class="card-info">
+                    <h3 class="card-title">The Magnetic Fighters</h3>
+                    <p class="card-meta">November 2026</p>
+                </div>
+            </div>
+
+            <!-- 10 -->
+          
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BOTRhMWViY2QtNjlmNS00MDZmLThkNzEtNTk3MTcxMWZiZjM1XkEyXkFqcGc@._V1_.jpg" alt="Violent Night 2"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Violent Night 2</h3>
+                    <p class="card-meta">December 2026</p>
+                </div>
+            </div>
+
+            <!-- 11 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://imgs.search.brave.com/ot_eLUbRvSIYtElFBjxjdVUZP8VWSoGPNEZUVSYuqEs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDE1MTMx/MTY3LndlYnA" alt="Avengers: Doomsday"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Avengers: Doomsday</h3>
+                    <p class="card-meta">December 2026</p>
+                </div>
+            </div>
+
+            <!-- 3 row -->
+            <!-- 12 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW5iLa_VZKoZgwlAx6Se_f6sY8GaPosotFYw&s" alt="A Quiet Place Part III"></div>
+                <div class="card-info">
+                    <h3 class="card-title">A Quiet Place Part III</h3>
+                    <p class="card-meta">July 2027</p>
+                </div>
+            </div>
+
+            <!-- 13 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BZDhhZjJlNjMtZjBlYy00ZGE0LTg5YzgtNDBlMTBmOThlOGNmXkEyXkFqcGc@._V1_.jpg" alt="The Shark That Roared"></div>
+                <div class="card-info">
+                    <h3 class="card-title">The Shark That Roared</h3>
+                    <p class="card-meta">July 2027</p>
+                </div>
+            </div>
+            
+
+            <!-- 14 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BOTkwOTZlNWEtN2YxMS00MzY0LWExMzItN2RjMzYzZjFkZGJlXkEyXkFqcGc@._V1_.jpg" alt="The Batman : Part II"></div>
+                <div class="card-info">
+                    <h3 class="card-title">The Batman : Part II</h3>
+                    <p class="card-meta">November 2027</p>
+                </div>
+            </div>
+            
+
+            <!-- 15 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://www.newdvdreleasedates.com/images/posters/avengers-secret-wars-2027.jpg" alt="Avengers: Secret Wars"></div>
+                <div class="card-info">
+                    <h3 class="card-title">Avengers: Secret Wars</h3>
+                    <p class="card-meta">December 2027</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+
+</body>
+</html>

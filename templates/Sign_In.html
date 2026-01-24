@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In | MoviesVerse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+    </div>
+    
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>Sign In</h1>
+            
+            <form method="post" action="{% url 'sign_in_form' %}">
+                {% csrf_token %}
+
+                {% if message %}
+                    <div class="message" style="color: green;">{{ message }}</div>
+                {% endif %}
+
+                {% if error %}
+                    <div class="error-message" style="color: red; text-align: center;">{{ error }}</div><br>
+                {% endif %}
+
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+                
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+                
+                <button type="submit">Sign In</button>
+            </form>
+            
+            <div class="auth-links">
+                Don’t have an account?
+                <a href="{% url 'sign_up' %}">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

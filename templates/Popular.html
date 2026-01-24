@@ -1,0 +1,354 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popular Movies</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+</head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
+<body>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search movies, TV shows...">
+        <button>Search</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'index' %}">Movies</a>
+        <a href="{% url 'watchlist' %}">Watchlist</a>
+        
+        <div class="profile-dropdown">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+            
+            <div class="dropdown-menu">
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'watched' %}">Watched</a>
+                <a href="{% url 'favourite' %}">Favourite Movies</a>
+                <a href="{% url 'settings' %}">Settings</a>
+                <hr>
+                <a href="{% url 'sign_in' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h2 class="hero-title">Popular Movies</h2>
+        <p style="color:#ccc; margin-top:10px;">
+            Most popular movies right now
+        </p>
+    </div>
+</section>
+
+<!-- POPULAR MOVIES SECTION -->
+<main class="content">
+
+    <section class="section">
+        <div class="movie-grid">
+
+            <!-- Rating: 4.5 -->
+            <!-- 1 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Batman: The Dark Knight"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>4.5</span>
+                    </div>
+                    <h3 class="card-title">Batman:The Dark Knight</h3>
+                    <p class="card-meta">2008</p>
+                </div>
+            </div>
+
+            <!-- Rating: 4.4 -->
+            <!-- 2 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/I/71DwIcSgFcS.jpg" alt="Inception">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>4.4</span>
+                    </div>
+                    <h3 class="card-title">Inception</h3>
+                    <p class="card-meta">2010</p>
+                </div>
+            </div>
+
+            <!-- Rating: 4.3 -->
+            <!-- 3 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png" alt="Interstellar"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>4.3</span>
+                    </div>
+                    <h3 class="card-title">Interstellar</h3>
+                    <p class="card-meta">2014</p>
+                </div>
+            </div>
+
+            <!-- Rating: 4.2 -->
+            <!-- 4 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://preview.redd.it/1sdabp4nt2m21.jpg?auto=webp&s=1d3793ac4d16c6dfc457da2dc65cff869221cc80" alt="Avengers: Endgame"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>4.2</span>
+                    </div>
+                    <h3 class="card-title">Avengers: Endgame</h3>
+                    <p class="card-meta">2019</p>
+                </div>
+            </div>
+
+            <!-- Rating: 4.1 -->
+            <!-- 5 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <a href="{% url 'oppenheimer' %}"><img src="https://m.media-amazon.com/images/M/MV5BM2RmYmVmMzctMzc5Ny00MmNiLTgxMGUtYjk1ZDRhYjA2YTU0XkEyXkFqcGc@._V1_.jpg" alt="Oppenheimer"></a>
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>4.1</span>
+                    </div>
+                    <h3 class="card-title">Oppenheimer</h3>
+                    <p class="card-meta">2023</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.8 -->
+            <!-- 6 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg" alt = "F1: The Movie"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.8</span>
+                    </div>
+                    <h3 class="card-title">F1: The Movie</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- 2 row -->
+            <!-- Rating: 3.8 -->
+            <!-- 7 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BNTU1MzgyMDMtMzBlZS00YzczLThmYWEtMjU3YmFlOWEyMjE1XkEyXkFqcGc@._V1_.jpg" alt="Harry Potter and the Sorcerer's Stone">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.8</span>
+                    </div>
+                    <h3 class="card-title">Harry Potter and the Sorcerer's Stone</h3>
+                    <p class="card-meta">2001</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.7 -->
+            <!-- 8 -->
+            <div class="movie-card">
+                    <div class="card-poster"><img src="https://images.herzindagi.info/her-zindagi-english/images/2025/12/22/article/image/Avatar-Fire-and-Ash-Box-Office-Collection-Day-4-1766380602962.webp" alt="Avatar: Fire and Ash"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>3.7</span>
+                        </div>
+                        <h3 class="card-title">Avatar: Fire and Ash</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+            </div>
+            
+            <!-- Rating: 3.7 -->
+            <!-- 9 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://th.bing.com/th/id/R.6f984b71f8edd87997da8bff41a27696?rik=PLFfBDMUqkqyFw&riu=http%3a%2f%2fftp.impawards.com%2f2025%2fposters%2fmission_impossible__the_final_reckoning_ver27.jpg&ehk=LoiIVfA2YL%2b9%2fRiG4xWQPuZYC4KLEK1Ka9s4My%2b%2fFLo%3d&risl=&pid=ImgRaw&r=0" alt="Mission: Impossible - The Final Reckoning"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.7</span>
+                    </div>
+                    <h3 class="card-title">Mission: Impossible - The Final Reckoning</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.7 -->
+            <!-- 10 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BYzYzNDYxMTQtMTU4OS00MTdlLThhMTQtZjI4NGJmMTZmNmRiXkEyXkFqcGc@._V1_.jpg" alt="Frankenstein">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.7</span>
+                    </div>
+                    <h3 class="card-title">Frankenstein</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.7 -->
+            <!-- 11 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://static0.srcdn.com/wordpress/wp-content/uploads/2025/10/imgi_1_o6cmowttsyzbvqgfohc20h0ugsf.jpeg?w=1200&h=675&fit=crop" alt="Nuremberg">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.7</span>
+                    </div>
+                    <h3 class="card-title">Nuremberg</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.6 -->
+            <!-- 12 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BNTdjZGUxMTItNjRkNS00N2VhLWE4MjMtMjVhODMwMGIxNjUwXkEyXkFqcGc@._V1_.jpg" alt="Predator: Badlands">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.6</span>
+                    </div>
+                    <h3 class="card-title">Predator: Badlands</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            
+            <!-- 3 row  -->
+            <!-- Rating: 3.3 -->
+            <!-- 13 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://m.media-amazon.com/images/M/MV5BNzA1OWU4NDMtMDUxMC00NWI4LWJhYjUtYWQ0OGQ5MTc2NDRjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Black Bag"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.3</span>
+                    </div>
+                    <h3 class="card-title">Black Bag</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.3 -->
+             <!-- 14 -->
+            <div class="movie-card">
+                <div class="card-poster"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwX6ny3p2Q8OwYLNaDKiAtIk-Ih0Upq91WOQ&s" alt="The Tiger"></div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.3</span>
+                    </div>
+                    <h3 class="card-title">The Tiger</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.3 -->
+            <!-- 15 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BMWRlNDM1NjktZDkyYi00Zjk0LWE5MTQtNWEyNzMwODY1Njc5XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Jay Kelly">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.3</span>
+                    </div>
+                    <h3 class="card-title">Jay Kelly</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.1 -->
+            <!-- 16 --> 
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://i.etsystatic.com/16821137/r/il/e97ecb/4053633761/il_570xN.4053633761_hq41.jpg" alt="Dracula">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.1</span>
+                    </div>
+                    <h3 class="card-title">Dracula</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 3.0 -->
+            <!-- 17 --> 
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BOTg0N2U5NTYtYzU0Zi00MDI3LThlNDEtY2U1NWEwNjU3Y2QyXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Primate">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>3.0</span>
+                    </div>
+                    <h3 class="card-title">Primate</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+
+            <!-- Rating: 2.9 -->
+            <!-- 18 -->
+            <div class="movie-card">
+                <div class="card-poster">
+                    <img src="https://m.media-amazon.com/images/M/MV5BNjg2NTcwYWQtYzk4NS00MTJhLWEzZjItMzIxNjk3YzlkYzU0XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Jurassic World: Rebirth">
+                </div>
+                <div class="card-info">
+                    <div class="card-rating">
+                        <span class="card-star">★</span>
+                        <span>2.9</span>
+                    </div>
+                    <h3 class="card-title">Jurassic World: Rebirth</h3>
+                    <p class="card-meta">2025</p>
+                </div>
+            </div>
+  
+        </div>
+    </section>
+</main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+
+</body>
+</html>

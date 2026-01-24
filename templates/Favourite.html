@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Favourites - MovieVerse</title>
+    <link rel="stylesheet" href="{% static 'css/favourite.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">MovieVerse</div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search favourites...">
+        <button>Search</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'index' %}">Movies</a>
+        <a href="{% url 'watchlist' %}">Watchlist</a>
+        <a href="{% url 'favourite' %}" class="active">Favourites</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <h2 class="hero-title">Favourite Movies</h2>
+    </div>
+</section>
+
+<!-- FAVOURITE MOVIES -->
+<!-- <main class="content">
+<section class="section"> -->
+    
+    <main class="content">
+        <!-- TRENDING -->
+        <section class="section">
+            <!-- <div class="section-header">
+                <h2 class="section-title">Trending Movies</h2>
+                <a href="{% url 'trending' %}" class="see-all">See all →</a>
+            </div> -->
+            
+            
+            <div class="movie-grid">
+
+<!-- Movie Card Template -->
+<div class="movie-card">
+    <div class="card-poster"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png">
+        <div class="card-info">
+            <div class="card-rating">
+                <!-- <span class="heart-static">❤</span> -->
+                <span class="card-star">★</span>
+                <span>4.1</span>
+                <!-- <div class="star-rating">
+                    <span class="star-fill">★★★★★</span>
+                </div> -->
+                <!-- <span class="star-base">★★★★★</span> -->
+                 <h3 class="card-title">The Eye</h3>
+                 <p class="card-meta">2025</p>
+            </div>
+        </div>
+    </div>
+</div>
+                <div class="movie-card">
+                    <div class="card-poster"><img src="https://media.fstatic.com/H_LrSpwVLEBUA8IXNPTrQDrkku4=/350x525/smart/filters:format(webp)/media/movies/covers/2025/10/TSA_poster_inter.jpg" alt="The Secret Agent"></div>
+                    <div class="card-info">
+                        <div class="card-rating">
+                            <span class="card-star">★</span>
+                            <span>4.1</span>
+                        </div>
+                        <h3 class="card-title">The Secret Agent</h3>
+                        <p class="card-meta">2025</p>
+                    </div>
+                </div>
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="Data/Pics/ba.webp">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-4">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-5">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="Data/Pics/im.webp">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-3">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="Data/Pics/strange.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FkNDZiMzU2LTFmYTQtNDgwMS1iOWM5LTgxNTg2NDMxNjBmNi53ZWJw">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-4">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-5">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-3">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2024/12/final-destinations-bloodlines-poster.jpg">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-2">
+            <span class="star-fill">★★★★★</span>
+            <span class="star-base">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="Data/Pics/bp.avif">
+        <span class="heart-static">❤</span>
+
+        <div class="star-rating rating-4">
+            <span class="star-fill">★★★★★</span>
+            <!-- <span class="star-base">★★★★★</span> -->
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+</section>
+</main>
+
+<footer class="footer">
+    <p class="footer-text">© 2026 MovieVerse.com</p>
+</footer>
+
+</body>
+</html>

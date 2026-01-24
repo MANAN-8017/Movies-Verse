@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | MoviesVerse</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
+</head>
+
+<!-- {% if error %}
+<script>
+    alert("{{ error }}");
+</script>
+{% endif %} -->
+
+<body>
+
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+    </div>
+
+    
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>Sign Up</h1>
+            {% if error %}
+                <div class="error-message" style="color: red; text-align: center;">{{ error }}</div><br>
+            {% endif %}
+            <form method="post" action="{% url 'sign_up_form' %}">
+                {% csrf_token %}
+                <label>Full Name</label>
+                <input type="text" name="username" placeholder="Enter your name" required>
+
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Create a password" required>
+
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="Confirm password" required>
+
+                <button type="submit">Create Account</button>
+            </form>
+
+            <div class="auth-links">
+                Already have an account?
+                <a href="{% url 'sign_in' %}">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

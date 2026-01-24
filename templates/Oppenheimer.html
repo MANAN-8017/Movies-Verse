@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oppenheimer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/movie_detail.css' %}">
+</head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+    function toggleLike(btn) {
+        btn.classList.toggle("active");
+        
+        const icon = btn.querySelector(".icon");
+        const text = btn.querySelector(".text");
+        
+        if (btn.classList.contains("active")) {
+            icon.textContent = "♥";
+            text.textContent = "Liked";
+        } else {
+            icon.textContent = "♡";
+            text.textContent = "Like";
+        }
+    }
+    
+    function toggleWatched(btn) {
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
+        ? "Watched"
+        : "Watch";
+    }
+    
+    function toggleWatchlist(btn) {
+        btn.classList.toggle("active");
+        
+        const text = btn.querySelector(".text");
+        
+        text.textContent = btn.classList.contains("active")
+        ? "Watchlisted"
+        : "Watchlist";
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".stars").forEach(container => {
+            const rating = parseFloat(container.dataset.rating);
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 5; i++) {
+                if (rating >= i) {
+                    container.innerHTML += '<span class="star filled">★</span>';
+                } else if (rating >= i - 0.5) {
+                    container.innerHTML += '<span class="star half">★</span>';
+                } else {
+                    container.innerHTML += '<span class="star">★</span>';
+                }
+            }
+        });
+    });
+</script>
+<body>
+    
+    <!-- NAVBAR -->
+    <div class="navbar">
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search movies, TV shows...">
+        <button>Search</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="{% url 'index' %}">Movies</a>
+        <a href="{% url 'watchlist' %}">Watchlist</a>
+        <div class="profile-dropdown">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+            
+            <div class="dropdown-menu">
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'watched' %}">Watched</a>
+                <a href="{% url 'favourite' %}">Favourite Movies</a>
+                <a href="{% url 'settings' %}">Settings</a>
+                <hr>
+                <a href="{% url 'sign_in' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="movie-top">
+
+    <!-- LEFT COLUMN -->
+    <div class="left-column">
+
+        <div class="trailer-box">
+            <iframe
+                src="https://www.youtube.com/embed/uYPbbksJxIg"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- DESCRIPTION BELOW TRAILER -->
+        <div class="trailer-description">
+            <h2>Description</h2>
+            <p>
+                Oppenheimer is a gripping historical drama about J. Robert Oppenheimer, the physicist behind the atomic bomb. The film 
+        explores his scientific brilliance, the moral dilemmas of the Manhattan Project, and the lasting consequences of his decisions. 
+        With intense performances and striking visuals, it reflects on ambition, responsibility, and the cost of groundbreaking innovation.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="movie-meta">
+        <div class="poster">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Oppenheimer Poster">
+        </div>
+
+        <div class="movie-info">
+            <h1>Oppenheimer (2023)</h1>
+
+            <div class="genres">
+                <span>Biography</span>
+                <span>Drama</span>
+                <span>History</span>
+            </div>
+
+            <div class="details">
+                Release Date: 21 July 2023<br><br>
+                Language: English<br><br>
+                Runtime: 180 min<br><br>
+                Director: Christopher Nolan
+            </div>
+
+<div class="action-row">
+    <div class="action-btn rating">★ 4.1 / 5</div>
+
+    <button class="action-btn like-btn" onclick="toggleLike(this)">
+        <span class="icon">♡</span>
+        <span class="text">Like</span>
+    </button>
+
+    <button class="action-btn watch-btn" onclick="toggleWatched(this)">
+        <span class="icon">👁</span>
+        <span class="text">Watch</span>
+    </button>
+
+    <button class="action-btn list-btn" onclick="toggleWatchlist(this)">
+        <span class="icon">🕒</span>
+        <span class="text">Watchlist</span>
+    </button>
+</div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- CAST -->
+<div class="section">
+    <h2>Cast</h2>
+    <div class="cast-grid">
+        <div class="cast-card">
+            <img src="https://m.media-amazon.com/images/M/MV5BNWM3NTg0NGYtNTFmYS00OWY1LTlkNTgtNzZlMWY4OGRmMmEzXkEyXkFqcGc@._V1_CR1542,983,1114,1670_QL75_UX140_CR0,1,140,207_.jpg" alt="Cillian Murphy">
+            <h4>Cillian Murphy</h4>
+            <p>J. Robert Oppenheimer</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="https://www.hawtcelebs.com/wp-content/uploads/2018/10/emily-blunt-a-quiet-place-photoshoot-october-2018-7.jpg" alt="Emily Blunt">
+            <h4>Emily Blunt</h4>
+            <p>Kitty Oppenheimer</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.r2O3IUyW31Shru0nHtFpsQHaE7?rs=1&pid=ImgDetMain&o=7&rm=3">
+            <h4>Matt Damon</h4>
+            <p>Leslie Groves</p>
+        </div>
+                <div class="cast-card">
+            <img src="https://www.wallspedia.com/wp-content/uploads/2023/11/Robert-Downey-Jr-10.jpg" alt="Robert Downey Jr.">
+            <h4>Robert Downey Jr.</h4>
+            <p>Lewis Strauss</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Alden Ehrenreich">
+            <h4>Alden Ehrenreich</h4>
+            <p>Senate Aide</p>
+        </div>
+
+        <div class="cast-card">
+            <img src="https://m.media-amazon.com/images/M/MV5BMTg2NTg0NTI0Ml5BMl5BanBnXkFtZTYwNzM4Njc4._V1_FMjpg_UX1000_.jpg" alt="Scott Grimes">
+            <h4>Scott Grimes</h4>
+            <p>Counsel</p>
+        </div>
+    </div>
+</div>
+
+<!-- REVIEWS -->
+<div class="section">
+    <h2>Ratings & Reviews</h2>
+
+    <div class="review-summary">
+        Overall Rating: <span class="stars" data-rating="4.1"></span> 4.1 / 5 based on 1.2M reviews
+    </div>
+
+    <div class="review-card">
+        <strong>Sam</strong> <span class="stars" data-rating="3.5"></span> <p>Masterpiece. One of Nolan’s best works.</p>
+    </div>
+
+    <div class="review-card">
+        <strong>Sarah</strong> <span class="stars" data-rating="3"></span> <p>Slow pacing, but extremely powerful performances.</p>
+    </div>
+</div>
+
+<!-- ADD REVIEW -->
+
+<div class="section">
+    <h2>Add Your Review</h2>
+
+    <div class="review-form">
+        <form>
+            <label><strong>Your Rating:</strong></label><br><br>
+<!-- Dynamic Rating Display: -->
+<!-- star rating input: -->
+            <div class="star-rating">
+                <!-- 5 -->
+                <input type="radio" id="star5" name="rating" value="5">
+                <label for="star5"></label>
+
+                <input type="radio" id="star4half" name="rating" value="4.5">
+                <label for="star4half" class="half"></label>
+
+                <!-- 4 -->
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4"></label>
+
+                <input type="radio" id="star3half" name="rating" value="3.5">
+                <label for="star3half" class="half"></label>
+
+                <!-- 3 -->
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3"></label>
+
+                <input type="radio" id="star2half" name="rating" value="2.5">
+                <label for="star2half" class="half"></label>
+
+                <!-- 2 -->
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2"></label>
+
+                <input type="radio" id="star1half" name="rating" value="1.5">
+                <label for="star1half" class="half"></label>
+
+                <!-- 1 -->
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1"></label>
+
+                <input type="radio" id="starhalf" name="rating" value="0.5">
+                <label for="starhalf" class="half"></label>
+            </div>
+
+            <br><br>
+
+            <textarea placeholder="Write your review..."></textarea>
+
+            <br><br>
+
+            <button type="submit">Submit Review</button>
+        </form>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

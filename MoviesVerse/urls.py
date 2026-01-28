@@ -21,7 +21,7 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),
 
     # Public
-    path('coming_soon/', views.coming_soon, name='coming_soon'),
+    path('upcoming/', views.upcoming, name='upcoming'),
     path('oppenheimer/', views.oppenheimer, name='oppenheimer'),
     path('popular/', views.popular, name='popular'),
     path('trending/', views.trending, name='trending'),

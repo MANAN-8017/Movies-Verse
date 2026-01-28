@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 
 # Private
-def coming_soon(request):
+def upcoming(request):
     if not request.session.get('user_email'):
         return redirect('sign_in')    
-    return render(request, 'coming_soon.html')
+    return render(request, 'upcoming.html')
 
 # Private
 def favourite(request):

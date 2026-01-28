@@ -3,10 +3,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
 <body>
-    
-</body>
-</html>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+
+    <div class="search-box">
+        <input type="text" placeholder="Search movies, TV shows...">
+        <button>Search</button>
+    </div>
+
+        <div class="nav-links">
+            <a href="{% url 'index' %}">Movies</a>
+            <a href="{% url 'watchlist' %}">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                
+                <div class="dropdown-menu">
+                    <a href="{% url 'profile' %}">Profile</a>
+                    <a href="{% url 'watched' %}">Watched</a>
+                    <a href="{% url 'favourite' %}">Favourite Movies</a>
+                    <a href="{% url 'settings' %}">Settings</a>
+                    <hr>
+                    <a href="{% url 'logout' %}" class="logout">Logout</a>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h2 class="hero-title">Settings Page is Under Construction Error: 404</h2>
+        <p style="color:#ccc; margin-top:10px;">
+            Setting Page
+        </p>
+    </div>
+</section>

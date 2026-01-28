@@ -21,6 +21,11 @@ def trending(request):
     return render(request, 'trending.html')
 
 # Public
+def upcoming(request):
+    # email = request.session.get('user_email')
+    return render(request, 'upcoming.html')
+
+# Public
 def help(request):
     # email = request.session.get('user_email')
     return render(request, 'help.html')

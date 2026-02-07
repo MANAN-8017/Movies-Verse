@@ -3,26 +3,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Favourites - MovieVerse</title>
-    <link rel="stylesheet" href="{% static 'css/favourite.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watched Movies</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/favourite.css' %}">
 </head>
+
+<script>
+    document.addEventListener("click", function (e) {
+        const dropdown = document.querySelector(".profile-dropdown");
+        dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div class="logo">MovieVerse</div>
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
 
     <div class="search-box">
-        <input type="text" placeholder="Search favourites...">
+        <input type="text" placeholder="Search watched movies...">
         <button>Search</button>
     </div>
 
     <div class="nav-links">
         <a href="{% url 'index' %}">Movies</a>
         <a href="{% url 'watchlist' %}">Watchlist</a>
-        <a href="{% url 'favourite' %}" class="active">Favourites</a>
+        
+        <div class="profile-dropdown">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+
+        <div class="dropdown-menu">
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'watched' %}">Watched</a>
+            <a href="{% url 'favourite' %}">Favourite Movies</a>
+            <a href="{% url 'settings' %}">Settings</a>
+            <hr>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+        </div>
     </div>
+</div>
+
 </div>
 
 <!-- HERO -->
@@ -33,141 +56,115 @@
 </section>
 
 <!-- FAVOURITE MOVIES -->
-<!-- <main class="content">
-<section class="section"> -->
-    
-    <main class="content">
-        <!-- TRENDING -->
-        <section class="section">
-            <!-- <div class="section-header">
-                <h2 class="section-title">Trending Movies</h2>
-                <a href="{% url 'trending' %}" class="see-all">See all →</a>
-            </div> -->
-            
-            
-            <div class="movie-grid">
+<main class="content">
+<section class="section">
+<div class="movie-grid">
 
 <!-- Movie Card Template -->
 <div class="movie-card">
-    <div class="card-poster"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png">
-        <div class="card-info">
-            <div class="card-rating">
-                <!-- <span class="heart-static">❤</span> -->
-                <span class="card-star">★</span>
-                <span>4.1</span>
-                <!-- <div class="star-rating">
-                    <span class="star-fill">★★★★★</span>
-                </div> -->
-                <!-- <span class="star-base">★★★★★</span> -->
-                 <h3 class="card-title">The Eye</h3>
-                 <p class="card-meta">2025</p>
-            </div>
+    <div class="card-poster">
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png" alt="Interstellar">
+
+        <span class="heart-static"></span>
+        <div class="star-rating rating-5">
+            <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
-                <div class="movie-card">
-                    <div class="card-poster"><img src="https://media.fstatic.com/H_LrSpwVLEBUA8IXNPTrQDrkku4=/350x525/smart/filters:format(webp)/media/movies/covers/2025/10/TSA_poster_inter.jpg" alt="The Secret Agent"></div>
-                    <div class="card-info">
-                        <div class="card-rating">
-                            <span class="card-star">★</span>
-                            <span>4.1</span>
-                        </div>
-                        <h3 class="card-title">The Secret Agent</h3>
-                        <p class="card-meta">2025</p>
-                    </div>
-                </div>
+
 <div class="movie-card">
     <div class="card-poster">
-        <img src="Data/Pics/ba.webp">
-        <span class="heart-static">❤</span>
+        <img src="https://images.squarespace-cdn.com/content/v1/5b468551266c0757375ead0c/3c18667e-4854-458c-9c82-69b4bb5f9e5e/ba2.jpeg" alt="Black Adam">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-4">
-            <span class="star-fill">★★★★★</span>
             <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
 
 <div class="movie-card">
     <div class="card-poster">
-        <img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH">
-        <span class="heart-static">❤</span>
+        <img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH" alt="The Dark Knight">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-5">
-            <span class="star-fill">★★★★★</span>
             <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
 
 <div class="movie-card">
     <div class="card-poster">
-        <img src="Data/Pics/im.webp">
-        <span class="heart-static">❤</span>
-
-        <div class="star-rating rating-3">
-            <span class="star-fill">★★★★★</span>
-            <span class="star-base">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="Data/Pics/strange.cHJkLWVtcy1hc3NldHMvbW92aWVzL2FkNDZiMzU2LTFmYTQtNDgwMS1iOWM5LTgxNTg2NDMxNjBmNi53ZWJw">
-        <span class="heart-static">❤</span>
+        <img src="https://image.tmdb.org/t/p/original/rYy4MShKrZVXhiG4BLqwW1PeSOT.jpg" alt="Iron Man">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-4">
-            <span class="star-fill">★★★★★</span>
             <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
 
 <div class="movie-card">
     <div class="card-poster">
-        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg">
-        <span class="heart-static">❤</span>
-
-        <div class="star-rating rating-5">
-            <span class="star-fill">★★★★★</span>
-            <span class="star-base">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg">
-        <span class="heart-static">❤</span>
+        <img src="https://image.tmdb.org/t/p/original/77AK9mGHeXAa3Sz8vPhUkAOgwCc.jpg" alt="Doctor Strange">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-3">
-            <span class="star-fill">★★★★★</span>
             <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
 
 <div class="movie-card">
     <div class="card-poster">
-        <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2024/12/final-destinations-bloodlines-poster.jpg">
-        <span class="heart-static">❤</span>
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Dune">
+        <span class="heart-static"></span>
+
+        <div class="star-rating rating-4">
+            <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg" alt="Ad Astra">
+        <span class="heart-static"></span>
+
+        <div class="star-rating rating-3">
+            <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
+        </div>
+    </div>
+</div>
+
+<div class="movie-card">
+    <div class="card-poster">
+        <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2024/12/final-destinations-bloodlines-poster.jpg" alt="Final Destination">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-2">
-            <span class="star-fill">★★★★★</span>
             <span class="star-base">★★★★★</span>
+            <span class="star-fill">★★★★★</span>
         </div>
     </div>
 </div>
 
 <div class="movie-card">
     <div class="card-poster">
-        <img src="Data/Pics/bp.avif">
-        <span class="heart-static">❤</span>
+        <img src="https://th.bing.com/th/id/R.d7eeaca150a053adb14433b0ca257117?rik=YbnF9%2fQN6452mg&riu=http%3a%2f%2fcdn.collider.com%2fwp-content%2fuploads%2f2017%2f11%2fblack-panther-poster.jpg&ehk=X3mIKETm9eOvv8SmWICKqf1AIFrXH3annd6jZR1iVss%3d&risl=&pid=ImgRaw&r=0 alt="Black Panther">
+        <span class="heart-static"></span>
 
         <div class="star-rating rating-4">
+            <span class="star-base">★★★★★</span>
             <span class="star-fill">★★★★★</span>
-            <!-- <span class="star-base">★★★★★</span> -->
         </div>
     </div>
 </div>
@@ -179,8 +176,12 @@
 </main>
 
 <footer class="footer">
-    <p class="footer-text">© 2026 MovieVerse.com</p>
+    <div class="footer-links">
+        <a href="{% url 'help' %}" class="footer-link">Help</a>
+        <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+    </div>
+    <p class="footer-text">© 2026 MoviesVerse.com</p>
 </footer>
-
 </body>
 </html>

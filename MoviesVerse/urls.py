@@ -13,7 +13,6 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
 
     # Private
-    path('index/', views.index, name='index'),
     path('favourite/', views.favourite, name='favourite'),
     path('profile/', views.profile, name='profile'),
     path('watched/', views.watched, name='watched'),
@@ -21,8 +20,9 @@ urlpatterns = [
     path('settings/', views.settings, name='settings'),
 
     # Public
-    path('upcoming/', views.upcoming, name='upcoming'),
+    path('index/', views.index, name='index'),
     path('oppenheimer/', views.oppenheimer, name='oppenheimer'),
+    path('upcoming/', views.upcoming, name='upcoming'),
     path('popular/', views.popular, name='popular'),
     path('trending/', views.trending, name='trending'),
 

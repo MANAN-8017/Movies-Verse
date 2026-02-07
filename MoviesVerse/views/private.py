@@ -1,12 +1,6 @@
 from django.shortcuts import render, redirect
 
 # Private
-def upcoming(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')    
-    return render(request, 'upcoming.html')
-
-# Private
 def favourite(request):
     if not request.session.get('user_email'):
         return redirect('sign_in')

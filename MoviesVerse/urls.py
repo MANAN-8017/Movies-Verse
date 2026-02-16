@@ -1,6 +1,9 @@
 # MoviesVerse/urls.py
 
 from django.urls import path
+from django.conf.urls.static import static
+
+from mySite import settings
 from . import views
 
 urlpatterns = [
@@ -11,6 +14,8 @@ urlpatterns = [
     path('sign_in/', views.sign_in, name='sign_in'),
     path('sign_up/', views.sign_up, name='sign_up'),
     path('logout/', views.logout, name='logout'),
+    path('sign_up/submit/', views.sign_up_form, name='sign_up_form'),  # route for sign up form
+    path('sign_in/submit/', views.sign_in_form, name='sign_in_form'),  # route for login form
 
     # Private
     path('favourite/', views.favourite, name='favourite'),
@@ -30,8 +35,7 @@ urlpatterns = [
     path('help/', views.help, name='help'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
-
-
-    path('sign_up/submit/', views.sign_up_form, name='sign_up_form'),  # route for sign up form
-    path('sign_in/submit/', views.sign_in_form, name='sign_in_form'),  # route for login form
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

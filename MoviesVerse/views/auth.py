@@ -9,6 +9,7 @@ def sign_up_form(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm = request.POST.get('confirm_password')
+        profile_pic = request.FILES.get('profile_pic')
 
         if password != confirm:
             return render(request, 'sign_up.html', {'error': 'Passwords do not match'})
@@ -19,7 +20,8 @@ def sign_up_form(request):
         UserProfile.objects.create(
             username=username,
             email=email,
-            password=make_password(password)
+            password=make_password(password),
+            profile_pic=None
         )
 
         messages.success(request, 'Account created. Please sign in.')
@@ -31,6 +33,7 @@ def sign_in_form(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        profile_pic = request.FILES.get('profile_pic')
 
         user = UserProfile.objects.filter(email=email).first()
 

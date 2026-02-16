@@ -3,8 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - MoviesVerse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
 </head>
@@ -17,6 +18,7 @@
 </script>
 
 <body>
+
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -45,11 +47,78 @@
         </div>
 </div>
 
-<!-- HERO SECTION -->
-<section class="hero">
-    <div class="hero-content">
-        <h2 class="hero-title">Profile Page is Under Construction Error: 404</h2>
-        <p style="color:#ccc; margin-top:10px;">
-        </p>
+<!-- Profile Section -->
+<div class="content">
+    <div class="section">
+        <div class="section-header">
+            <h2 class="section-title">Account Settings</h2>
+        </div>
+
+        <div class="featured-movie" style="align-items:flex-start;">
+            
+            <!-- Avatar Change -->
+            <div class="movie-poster" style="width:250px;height:250px;">
+                <img src="https://via.placeholder.com/300x300" alt="Profile Picture">
+            </div>
+
+            <div class="movie-info">
+                <form method="POST" enctype="multipart/form-data">
+                    
+                    <div style="margin-bottom:25px;">
+                        <label>Change Profile Picture</label><br><br>
+                        <input type="file" name="avatar">
+                    </div>
+
+                    <div style="margin-bottom:25px;">
+                        <label>Username</label><br><br>
+                        <input type="text" name="username" placeholder="Enter username" style="width:100%;padding:10px;border-radius:4px;border:none;">
+                    </div>
+
+                    <div style="margin-bottom:25px;">
+                        <label>Email</label><br><br>
+                        <input type="email" name="email" placeholder="Enter email" style="width:100%;padding:10px;border-radius:4px;border:none;">
+                    </div>
+
+                    <hr style="margin:25px 0;border-color:#333;">
+
+                    <h3 style="margin-bottom:20px;">Change Password</h3>
+
+                    <div style="margin-bottom:20px;">
+                        <label>Current Password</label><br><br>
+                        <input type="password" name="current_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
+                    </div>
+
+                    <div style="margin-bottom:20px;">
+                        <label>New Password</label><br><br>
+                        <input type="password" name="new_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
+                    </div>
+
+                    <div style="margin-bottom:25px;">
+                        <label>Confirm New Password</label><br><br>
+                        <input type="password" name="confirm_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" type="submit">Save Changes</button>
+                        <button class="btn btn-secondary" type="reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</section>
+</div>
+
+
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-links">
+        <a class="footer-link" href="#">About</a>
+        <a class="footer-link" href="#">Contact</a>
+        <a class="footer-link" href="#">Privacy Policy</a>
+        <a class="footer-link" href="#">Terms</a>
+    </div>
+    <div class="footer-text">© 2026 MoviesVerse</div>
+</div>
+
+</body>
+</html>

@@ -39,7 +39,12 @@
             <a href="{% url 'watchlist' %}">Watchlist</a>
             
             <div class="profile-dropdown">
-                <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+                {% if user.profile_pic %}
+                    <img src="{{ user.profile_pic.url }}" class="profile-avatar">
+                {% else %}
+                    <img src="{% static 'images/default_pfp.jpg' %}" class="profile-avatar">
+                {% endif %}
+
                 
                 <div class="dropdown-menu">
                     <a href="{% url 'profile' %}">Profile</a>

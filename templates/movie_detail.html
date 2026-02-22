@@ -1,0 +1,197 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ movie.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/movie_detail.css' %}">
+</head>
+
+<script>
+document.addEventListener("click", function (e) {
+    const dropdown = document.querySelector(".profile-dropdown");
+    if(dropdown) dropdown.classList.toggle("active", dropdown.contains(e.target));
+});
+
+function toggleLike(btn){
+    btn.classList.toggle("active");
+    const icon = btn.querySelector(".icon");
+    const text = btn.querySelector(".text");
+    if(btn.classList.contains("active")){
+        icon.textContent="♥"; text.textContent="Liked";
+    }else{
+        icon.textContent="♡"; text.textContent="Like";
+    }
+}
+
+function toggleWatched(btn){
+    btn.classList.toggle("active");
+    const text = btn.querySelector(".text");
+    text.textContent = btn.classList.contains("active") ? "Watched":"Watch";
+}
+
+function toggleWatchlist(btn){
+    btn.classList.toggle("active");
+    const text = btn.querySelector(".text");
+    text.textContent = btn.classList.contains("active") ? "Watchlisted":"Watchlist";
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+    document.querySelectorAll(".stars").forEach(container=>{
+        const rating=parseFloat(container.dataset.rating);
+        container.innerHTML="";
+        for(let i=1;i<=5;i++){
+            if(rating>=i) container.innerHTML+='<span class="star filled">★</span>';
+            else if(rating>=i-0.5) container.innerHTML+='<span class="star half">★</span>';
+            else container.innerHTML+='<span class="star">★</span>';
+        }
+    });
+});
+</script>
+
+<body>
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+    <div class="logo"><a href="{% url 'index' %}" style="text-decoration:none;color:#f5c518;">MoviesVerse</a></div>
+
+```
+<div class="search-box">
+    <input type="text" placeholder="Search movies, TV shows...">
+    <button>Search</button>
+</div>
+
+<div class="nav-links">
+    <a href="{% url 'index' %}">Movies</a>
+    <a href="{% url 'watchlist' %}">Watchlist</a>
+    <div class="profile-dropdown">
+        <img src="{{ request.session.user_pic|default:'/static/images/default_pfp.jpg' }}" class="profile-avatar">
+        <div class="dropdown-menu">
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'watched' %}">Watched</a>
+            <a href="{% url 'favourite' %}">Favourite Movies</a>
+            <a href="{% url 'settings' %}">Settings</a>
+            <hr>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+    </div>
+</div>
+```
+
+</div>
+
+<div class="movie-top">
+
+```
+<!-- LEFT COLUMN -->
+<div class="left-column">
+
+    <div class="trailer-box">
+        {% if trailer %}
+        <iframe src="https://www.youtube.com/embed/{{ trailer }}" allowfullscreen></iframe>
+        {% else %}
+        <div style="color:white;text-align:center;padding:40px;">Trailer Not Available</div>
+        {% endif %}
+    </div>
+
+    <div class="trailer-description">
+        <h2>Description</h2>
+        <p>{{ movie.overview|default:"No description available." }}</p>
+    </div>
+
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="movie-meta">
+    <div class="poster">
+        {% if poster %}
+        <img src="{{ poster }}" alt="{{ movie.title }}">
+        {% else %}
+        <img src="{% static 'images/no_poster.jpg' %}">
+        {% endif %}
+    </div>
+
+    <div class="movie-info">
+        <h1>{{ movie.title }} ({{ movie.release_date|slice:":4" }})</h1>
+
+        <div class="genres">
+            {% for g in movie.genres %}
+                <span>{{ g.name }}</span>
+            {% empty %}
+                <span>Unknown</span>
+            {% endfor %}
+        </div>
+
+        <div class="details">
+            Release Date: {{ movie.release_date }}<br><br>
+            Language: {{ movie.original_language|upper }}<br><br>
+            Runtime: {{ movie.runtime }} min<br><br>
+            Rating: {{ movie.vote_average }}/10
+        </div>
+
+        <div class="action-row">
+            <div class="action-btn rating">★ {{ movie.vote_average|floatformat:1 }} / 10</div>
+
+            <button class="action-btn like-btn" onclick="toggleLike(this)">
+                <span class="icon">♡</span>
+                <span class="text">Like</span>
+            </button>
+
+            <button class="action-btn watch-btn" onclick="toggleWatched(this)">
+                <span class="icon">👁</span>
+                <span class="text">Watch</span>
+            </button>
+
+            <button class="action-btn list-btn" onclick="toggleWatchlist(this)">
+                <span class="icon">🕒</span>
+                <span class="text">Watchlist</span>
+            </button>
+        </div>
+
+    </div>
+</div>
+```
+
+</div>
+
+<!-- CAST -->
+
+<div class="section">
+    <h2>Cast</h2>
+    <div class="cast-grid">
+        {% for actor in movie.credits.cast|slice:":12" %}
+        <div class="cast-card">
+            {% if actor.profile_path %}
+            <img src="https://image.tmdb.org/t/p/w200{{ actor.profile_path }}">
+            {% else %}
+            <img src="{% static 'images/no_actor.png' %}">
+            {% endif %}
+            <h4>{{ actor.name }}</h4>
+            <p>{{ actor.character }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- PRODUCTION HOUSES -->
+
+<div class="section">
+<h2>Production Houses</h2>
+<div class="cast-grid">
+{% for company in movie.production_companies %}
+    <div class="cast-card">
+        {% if company.logo_path %}
+        <img src="https://image.tmdb.org/t/p/w200{{ company.logo_path }}">
+        {% else %}
+        <img src="{% static 'images/no_company.png' %}">
+        {% endif %}
+        <h4>{{ company.name }}</h4>
+        <p>{{ company.origin_country }}</p>
+    </div>
+{% endfor %}
+</div>

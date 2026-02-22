@@ -13,9 +13,7 @@ urlpatterns = [
     # Auth
     path('sign_in/', views.sign_in, name='sign_in'),
     path('sign_up/', views.sign_up, name='sign_up'),
-    path('logout/', views.logout, name='logout'),
-    path('sign_up/submit/', views.sign_up_form, name='sign_up_form'),  # route for sign up form
-    path('sign_in/submit/', views.sign_in_form, name='sign_in_form'),  # route for login form
+    path('logout/', views.logout_view, name='logout'),
 
     # Private
     path('favourite/', views.favourite, name='favourite'),
@@ -35,6 +33,8 @@ urlpatterns = [
     path('help/', views.help, name='help'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
+
+    path("movie/<int:movie_id>/", views.movie_detail, name="movie_detail"),
 ]
 
 if settings.DEBUG:

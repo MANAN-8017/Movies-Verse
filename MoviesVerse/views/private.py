@@ -1,37 +1,22 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
-# Private
+@login_required(login_url='sign_in')
 def favourite(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')
     return render(request, 'favourite.html')
 
-# Private
+@login_required(login_url='sign_in')
 def profile(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')
     return render(request, 'profile.html')
 
-# Private
+@login_required(login_url='sign_in')
 def settings(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')    
     return render(request, 'settings.html')
 
-def sign_in(request):
-    return render(request, 'sign_in.html')
-
-def sign_up(request):
-    return render(request, 'sign_up.html')
-
-# Private
+@login_required(login_url='sign_in')
 def watched(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')
     return render(request, 'watched.html')
 
-# Private
+@login_required(login_url='sign_in')
 def watchlist(request):
-    if not request.session.get('user_email'):
-        return redirect('sign_in')
     return render(request, 'watchlist.html')

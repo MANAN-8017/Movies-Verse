@@ -9,12 +9,6 @@
     <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
 </head>
 
-<!-- {% if error %}
-<script>
-    alert("{{ error }}");
-</script>
-{% endif %} -->
-
 <body>
 
     <div class="navbar">
@@ -28,7 +22,7 @@
             {% if error %}
                 <div class="error-message" style="color: red; text-align: center;">{{ error }}</div><br>
             {% endif %}
-            <form method="post" action="{% url 'sign_up_form' %}">
+            <form method="post">
                 {% csrf_token %}
                 <label>Full Name</label>
                 <input type="text" name="username" placeholder="Enter your name" required>

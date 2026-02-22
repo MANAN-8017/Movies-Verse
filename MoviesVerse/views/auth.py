@@ -1,50 +1,78 @@
 from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.utils.http import url_has_allowed_host_and_scheme
 from ..models import UserProfile
 
-def sign_up_form(request):
+def sign_up(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        confirm = request.POST.get('confirm_password')
-        profile_pic = request.FILES.get('profile_pic')
+        confirm_password = request.POST.get('confirm_password')
 
-        if password != confirm:
-            return render(request, 'sign_up.html', {'error': 'Passwords do not match'})
+        if password != confirm_password:
+            return render(request, 'sign_up.html', {
+                'error': 'Passwords do not match'
+            })
 
-        if UserProfile.objects.filter(email=email).exists():
-            return render(request, 'sign_up.html', {'error': 'Email already exists'})
+        if User.objects.filter(email=email).exists():
+            return render(request, 'sign_up.html', {
+                'error': 'Email already exists'
+            })
 
-        UserProfile.objects.create(
+        user = User.objects.create_user(
             username=username,
             email=email,
-            password=make_password(password),
-            profile_pic=None
+            password=password
         )
 
-        messages.success(request, 'Account created. Please sign in.')
+        UserProfile.objects.create(user=user)
+
         return redirect('sign_in')
 
     return render(request, 'sign_up.html')
 
-def sign_in_form(request):
+
+def sign_in(request):
+    next_url = request.GET.get('next')
+
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        profile_pic = request.FILES.get('profile_pic')
+        next_url_post = request.POST.get('next')
 
-        user = UserProfile.objects.filter(email=email).first()
+        try:
+            user_obj = User.objects.get(email=email)
+            user = authenticate(
+                request,
+                username=user_obj.username,
+                password=password
+            )
+        except User.DoesNotExist:
+            user = None
 
-        if user and check_password(password, user.password):
-            request.session['user_email'] = user.email
+        if user is not None:
+            login(request, user)
+
+            if next_url_post and url_has_allowed_host_and_scheme(
+                next_url_post,
+                allowed_hosts={request.get_host()}
+            ):
+                return redirect(next_url_post)
+
             return redirect('index')
 
-        return render(request, 'sign_in.html', {'error': 'Invalid credentials'})
+        return render(request, 'sign_in.html', {
+            'error': 'Invalid email or password',
+            'next': next_url
+        })
 
-    return render(request, 'sign_in.html')
+    return render(request, 'sign_in.html', {
+        'next': next_url
+    })
 
-def logout(request):
-    request.session.flush()
+
+def logout_view(request):
+    logout(request)
     return redirect('sign_in')

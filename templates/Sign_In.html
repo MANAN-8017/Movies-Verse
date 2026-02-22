@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
 </head>
+
 <body>
     <div class="navbar">
         <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -17,8 +18,9 @@
         <div class="auth-card">
             <h1>Sign In</h1>
             
-            <form method="post" action="{% url 'sign_in_form' %}">
+            <form method="post">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next|default:'' }}">
 
                 {% if message %}
                     <div class="message" style="color: green;">{{ message }}</div>

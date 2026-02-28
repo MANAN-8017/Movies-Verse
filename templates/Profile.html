@@ -4,35 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - MoviesVerse</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>{{ request.user.username }} - MoviesVerse Profile</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 </head>
-
 <script>
     document.addEventListener("click", function (e) {
         const dropdown = document.querySelector(".profile-dropdown");
         dropdown.classList.toggle("active", dropdown.contains(e.target));
     });
 </script>
-
 <body>
-
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
-
-    <div class="search-box">
-        <input type="text" placeholder="Search movies, TV shows...">
-        <button>Search</button>
-    </div>
-
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+        <div class="search-box">
+            <input type="text" placeholder="Search movies, TV shows...">
+            <button>Search</button>
+        </div>
         <div class="nav-links">
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -46,80 +40,379 @@
                 </div>
             </div>
         </div>
-</div>
+    </div>
 
-<!-- Profile Section -->
-<div class="content">
-    <div class="section">
-        <div class="section-header">
-            <h2 class="section-title">Account Settings</h2>
-        </div>
-
-        <div class="featured-movie" style="align-items:flex-start;">
-            
-            <!-- Avatar Change -->
-            <div class="movie-poster" style="width:250px;height:250px;">
-                <img src="https://via.placeholder.com/300x300" alt="Profile Picture">
+    <!-- ── PROFILE HERO BANNER ── -->
+    <div class="profile-banner">
+        <div class="banner-overlay"></div>
+        <div class="profile-hero-content">
+            <div class="profile-hero-avatar-wrap">
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                    <img src="{{ request.user.profile.profile_pic.url }}" class="profile-hero-avatar" alt="Profile">
+                {% else %}
+                    <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-hero-avatar" alt="Default Profile">
+                {% endif %}
+                <div class="cinephile-badge" title="Cinephile">🎬</div>
             </div>
-
-            <div class="movie-info">
-                <form method="POST" enctype="multipart/form-data">
-                    
-                    <div style="margin-bottom:25px;">
-                        <label>Change Profile Picture</label><br><br>
-                        <input type="file" name="avatar">
-                    </div>
-
-                    <div style="margin-bottom:25px;">
-                        <label>Username</label><br><br>
-                        <input type="text" name="username" placeholder="Enter username" style="width:100%;padding:10px;border-radius:4px;border:none;">
-                    </div>
-
-                    <div style="margin-bottom:25px;">
-                        <label>Email</label><br><br>
-                        <input type="email" name="email" placeholder="Enter email" style="width:100%;padding:10px;border-radius:4px;border:none;">
-                    </div>
-
-                    <hr style="margin:25px 0;border-color:#333;">
-
-                    <h3 style="margin-bottom:20px;">Change Password</h3>
-
-                    <div style="margin-bottom:20px;">
-                        <label>Current Password</label><br><br>
-                        <input type="password" name="current_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
-                    </div>
-
-                    <div style="margin-bottom:20px;">
-                        <label>New Password</label><br><br>
-                        <input type="password" name="new_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
-                    </div>
-
-                    <div style="margin-bottom:25px;">
-                        <label>Confirm New Password</label><br><br>
-                        <input type="password" name="confirm_password" style="width:100%;padding:10px;border-radius:4px;border:none;">
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" type="submit">Save Changes</button>
-                        <button class="btn btn-secondary" type="reset">Reset</button>
-                    </div>
-                </form>
+            <div class="profile-hero-info">
+                <h1 class="profile-hero-name">Nirali</h1>
+                <div class="profile-hero-handle">@nirali374</div>
+                <div class="profile-hero-bio">Cinephile</div>
+                <div class="profile-hero-meta">
+                    <span>🎭 Favourite: Action</span>
+                    <span>📅 Joined January 2026</span>
+                </div>
+            </div>
+            <div class="profile-hero-actions">
+                <a href="{% url 'settings' %}" class="btn-edit-profile">✎ Edit Profile</a>
             </div>
         </div>
     </div>
-</div>
 
-
-<!-- Footer -->
-<div class="footer">
-    <div class="footer-links">
-        <a class="footer-link" href="#">About</a>
-        <a class="footer-link" href="#">Contact</a>
-        <a class="footer-link" href="#">Privacy Policy</a>
-        <a class="footer-link" href="#">Terms</a>
+    <!-- ── STATS ROW ── -->
+    <div class="stats-row-wrap">
+        <div class="stats-row">
+            <div class="stat-pill">
+                <span class="stat-num">{{ total_watched|default:"0" }}</span>
+                <span class="stat-label">Movies Watched</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-pill">
+                <span class="stat-num">{{ watchlist_count|default:"0" }}</span>
+                <span class="stat-label">Watchlist</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-pill">
+                <span class="stat-num">{{ favourites_count|default:"0" }}</span>
+                <span class="stat-label">Favourites</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-pill">
+                <span class="stat-num">{{ ratings_count|default:"0" }}</span>
+                <span class="stat-label">Ratings</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-pill">
+                <span class="stat-num">{{ comments_count|default:"0" }}</span>
+                <span class="stat-label">Reviews</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-pill">
+                <span class="stat-num">{{ likes_count|default:"0" }}</span>
+                <span class="stat-label">Likes Given</span>
+            </div>
+        </div>
     </div>
-    <div class="footer-text">© 2026 MoviesVerse</div>
-</div>
 
+    <!-- ── TIME TRACKER CARD ── -->
+    <div class="profile-body">
+
+        <div class="time-tracker-card">
+            <div class="time-tracker-label">⏱ Total Time Spent Watching</div>
+            <div class="time-tracker-values">
+                <div class="time-unit">
+                    <span class="time-num" id="t-years">{{ time_years|default:"0" }}</span>
+                    <span class="time-text">yrs</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-unit">
+                    <span class="time-num" id="t-months">{{ time_months|default:"0" }}</span>
+                    <span class="time-text">mo</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-unit">
+                    <span class="time-num" id="t-days">{{ time_days|default:"0" }}</span>
+                    <span class="time-text">days</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-unit">
+                    <span class="time-num" id="t-hours">{{ time_hours|default:"0" }}</span>
+                    <span class="time-text">hrs</span>
+                </div>
+            </div>
+            <div class="time-tracker-sub">Across {{ total_watched|default:"0" }} films • Avg {{ avg_runtime|default:"~118" }} min per film</div>
+        </div>
+
+        <!-- ── TAB NAV ── -->
+        <div class="profile-tabs">
+            <button class="tab-btn active" data-tab="currently-watching">▶ Watching</button>
+            <button class="tab-btn" data-tab="watchlist-tab">🎯 Watchlist</button>
+            <button class="tab-btn" data-tab="watched-tab">✅ Watched</button>
+            <button class="tab-btn" data-tab="favourites-tab">❤️ Favourites</button>
+            <button class="tab-btn" data-tab="ratings-tab">⭐ Ratings</button>
+            <button class="tab-btn" data-tab="comments-tab">💬 Reviews</button>
+            <button class="tab-btn" data-tab="likes-tab">👍 Likes</button>
+            <button class="tab-btn" data-tab="history-tab">🔍 Search History</button>
+        </div>
+
+        <!-- ── CURRENTLY WATCHING ── -->
+        <div id="currently-watching" class="tab-content active-tab">
+            <div class="section-label">Currently Watching</div>
+            {% if currently_watching %}
+                <div class="profile-movie-grid">
+                    {% for movie in currently_watching %}
+                    <div class="profile-movie-card watching-card">
+                        <div class="card-poster-wrap">
+                            <a href="{% url 'movie_detail' movie.tmdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="profile-card-img">
+                            </a>
+                            <div class="watching-tag">▶ Watching</div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar-fill" style="width: {{ movie.progress|default:0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="profile-card-info">
+                            <div class="profile-card-title">{{ movie.title }}</div>
+                            <div class="profile-card-meta">{{ movie.progress|default:0 }}% complete</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">🍿</span>
+                    <p>No movies in progress right now.</p>
+                    <a href="{% url 'index' %}" class="btn-gold-sm">Browse Movies</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── WATCHLIST ── -->
+        <div id="watchlist-tab" class="tab-content">
+            <div class="section-label">My Watchlist <span class="count-badge">{{ watchlist_count|default:"0" }}</span></div>
+            {% if watchlist_movies %}
+                <div class="profile-movie-grid">
+                    {% for movie in watchlist_movies %}
+                    <div class="profile-movie-card">
+                        <div class="card-poster-wrap">
+                            <a href="{% url 'movie_detail' movie.tmdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="profile-card-img">
+                            </a>
+                        </div>
+                        <div class="profile-card-info">
+                            <div class="profile-card-title">{{ movie.title }}</div>
+                            <div class="profile-card-meta">{{ movie.release_year }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">📋</span>
+                    <p>Your watchlist is empty. Start adding movies!</p>
+                    <a href="{% url 'index' %}" class="btn-gold-sm">Explore Movies</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── WATCHED ── -->
+        <div id="watched-tab" class="tab-content">
+            <div class="section-label">Watched Movies <span class="count-badge">{{ total_watched|default:"0" }}</span></div>
+            {% if watched_movies %}
+                <div class="profile-movie-grid">
+                    {% for movie in watched_movies %}
+                    <div class="profile-movie-card">
+                        <div class="card-poster-wrap">
+                            <a href="{% url 'movie_detail' movie.tmdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="profile-card-img">
+                            </a>
+                            <div class="watched-tick">✓</div>
+                        </div>
+                        <div class="profile-card-info">
+                            <div class="profile-card-title">{{ movie.title }}</div>
+                            <div class="profile-card-meta">{{ movie.watched_on|date:"M d, Y" }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">🎥</span>
+                    <p>No watched movies logged yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── FAVOURITES ── -->
+        <div id="favourites-tab" class="tab-content">
+            <div class="section-label">Favourite Movies <span class="count-badge">{{ favourites_count|default:"0" }}</span></div>
+            {% if favourite_movies %}
+                <div class="profile-movie-grid">
+                    {% for movie in favourite_movies %}
+                    <div class="profile-movie-card">
+                        <div class="card-poster-wrap">
+                            <a href="{% url 'movie_detail' movie.tmdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="profile-card-img">
+                            </a>
+                            <div class="fav-heart">❤️</div>
+                        </div>
+                        <div class="profile-card-info">
+                            <div class="profile-card-title">{{ movie.title }}</div>
+                            <div class="profile-card-meta">{{ movie.release_year }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">❤️</span>
+                    <p>No favourites yet. Heart movies you love!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── RATINGS ── -->
+        <div id="ratings-tab" class="tab-content">
+            <div class="section-label">My Ratings <span class="count-badge">{{ ratings_count|default:"0" }}</span></div>
+            {% if rated_movies %}
+                <div class="ratings-list">
+                    {% for item in rated_movies %}
+                    <div class="rating-row">
+                        <a href="{% url 'movie_detail' item.movie.tmdb_id %}" class="rating-poster">
+                            <img src="{{ item.movie.poster }}" alt="{{ item.movie.title }}">
+                        </a>
+                        <div class="rating-info">
+                            <div class="rating-title">{{ item.movie.title }}</div>
+                            <div class="rating-year">{{ item.movie.release_year }}</div>
+                            <div class="rating-date">Rated on {{ item.rated_on|date:"M d, Y" }}</div>
+                        </div>
+                        <div class="rating-stars-display">
+                            {% for i in "12345" %}
+                                <span class="{% if forloop.counter <= item.rating %}star-filled{% else %}star-empty{% endif %}">★</span>
+                            {% endfor %}
+                            <span class="rating-val">{{ item.rating }}/5</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">⭐</span>
+                    <p>You haven't rated any movies yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── REVIEWS / COMMENTS ── -->
+        <div id="comments-tab" class="tab-content">
+            <div class="section-label">My Reviews <span class="count-badge">{{ comments_count|default:"0" }}</span></div>
+            {% if user_comments %}
+                <div class="reviews-list">
+                    {% for comment in user_comments %}
+                    <div class="review-card">
+                        <a href="{% url 'movie_detail' comment.movie.tmdb_id %}" class="review-poster-mini">
+                            <img src="{{ comment.movie.poster }}" alt="{{ comment.movie.title }}">
+                        </a>
+                        <div class="review-body">
+                            <div class="review-movie-title">
+                                <a href="{% url 'movie_detail' comment.movie.tmdb_id %}">{{ comment.movie.title }}</a>
+                            </div>
+                            <div class="review-stars">
+                                {% for i in "12345" %}
+                                    <span class="{% if comment.rating and forloop.counter <= comment.rating %}star-filled{% else %}star-empty{% endif %}">★</span>
+                                {% endfor %}
+                            </div>
+                            <p class="review-text">{{ comment.text }}</p>
+                            <div class="review-meta">
+                                <span>{{ comment.created_at|date:"M d, Y" }}</span>
+                                <span>👍 {{ comment.likes|default:"0" }} likes</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">💬</span>
+                    <p>You haven't written any reviews yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── LIKES ── -->
+        <div id="likes-tab" class="tab-content">
+            <div class="section-label">Movies You Liked <span class="count-badge">{{ likes_count|default:"0" }}</span></div>
+            {% if liked_movies %}
+                <div class="profile-movie-grid">
+                    {% for movie in liked_movies %}
+                    <div class="profile-movie-card">
+                        <div class="card-poster-wrap">
+                            <a href="{% url 'movie_detail' movie.tmdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}" class="profile-card-img">
+                            </a>
+                            <div class="like-badge">👍</div>
+                        </div>
+                        <div class="profile-card-info">
+                            <div class="profile-card-title">{{ movie.title }}</div>
+                            <div class="profile-card-meta">{{ movie.release_year }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">👍</span>
+                    <p>No liked movies yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- ── SEARCH HISTORY ── -->
+        <div id="history-tab" class="tab-content">
+            <div class="section-label-row">
+                <div class="section-label">Search History</div>
+                <button class="btn-outline-sm" onclick="clearSearchHistory()">🗑 Clear All</button>
+            </div>
+            {% if search_history %}
+                <div class="history-list">
+                    {% for item in search_history %}
+                    <div class="history-row">
+                        <span class="history-icon">🔍</span>
+                        <div class="history-info">
+                            <span class="history-query">{{ item.query }}</span>
+                            <span class="history-time">{{ item.searched_at|timesince }} ago</span>
+                        </div>
+                        <a href="{% url 'index' %}?q={{ item.query|urlencode }}" class="btn-history-search">Search again</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <span class="empty-icon">🔍</span>
+                    <p>No search history recorded yet.</p>
+                </div>
+            {% endif %}
+        </div>
+
+    </div><!-- /profile-body -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active-tab'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active-tab');
+            });
+        });
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transition = 'width 1s ease';
+                }
+            });
+        });
+        document.querySelectorAll('.genre-bar-fill').forEach(bar => observer.observe(bar));
+    </script>
 </body>
 </html>

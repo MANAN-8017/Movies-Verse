@@ -3,29 +3,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - MoviesVerse</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-
 <script>
     document.addEventListener("click", function (e) {
         const dropdown = document.querySelector(".profile-dropdown");
         dropdown.classList.toggle("active", dropdown.contains(e.target));
     });
+function toggleAccordion(btn) {
+    const item = btn.closest('.accordion-item');
+    const isOpen = item.classList.contains('open');
+    btn.closest('.settings-section').querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+    }
+
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(el => {
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 300);
+        });
+    }, 4000);
 </script>
-
 <body>
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
-
-    <div class="search-box">
-        <input type="text" placeholder="Search movies, TV shows...">
-        <button>Search</button>
-    </div>
-
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+        <div class="search-box">
+            <input type="text" placeholder="Search movies, TV shows...">
+            <button>Search</button>
+        </div>
         <div class="nav-links">
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
@@ -44,14 +54,243 @@
                 </div>
             </div>
         </div>
-</div>
-
-<!-- HERO SECTION -->
-<section class="hero">
-    <div class="hero-content">
-        <h2 class="hero-title">Settings Page is Under Construction Error: 404</h2>
-        <p style="color:#ccc; margin-top:10px;">
-            Setting Page
-        </p>
     </div>
-</section>
+
+    <div class="settings-page">
+        <!-- Sidebar -->
+        <aside class="settings-sidebar">
+            <div class="sidebar-header">
+                <div class="user-avatar-wrap">
+                    {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                        <img src="{{ request.user.profile.profile_pic.url }}" class="sidebar-avatar" alt="Profile">
+                    {% else %}
+                        <img src="{% static 'images/default_pfp.jpeg' %}" class="sidebar-avatar" alt="Default Profile">
+                    {% endif %}
+                </div>
+                <div class="sidebar-username">Nirali</div>
+                <div class="sidebar-email">@nirali374</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="settings-main">
+
+            <!-- ── ACCOUNT ── -->
+            <section id="account" class="settings-section active-section">
+                <h2 class="section-heading"><span class="heading-bar"></span>Account Settings</h2>
+
+                <!-- Profile Picture -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">🖼️</span>
+                            <div>
+                                <div class="acc-title">Profile Picture</div>
+                                <div class="acc-subtitle">Update your avatar</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="pfp-update-wrap">
+                            <div class="pfp-preview-container">
+                                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                                    <img src="{{ request.user.profile.profile_pic.url }}" class="pfp-preview" id="pfp-preview-img" alt="Current Picture">
+                                {% else %}
+                                    <img src="{% static 'images/default_pfp.jpeg' %}" class="pfp-preview" id="pfp-preview-img" alt="Default Picture">
+                                {% endif %}
+                                <div class="pfp-overlay" onclick="document.getElementById('setting-pfp-input').click()">
+                                    <span>Change Photo</span>
+                                </div>
+                            </div>
+                            <div class="pfp-instructions">
+                                <p>Upload a new profile picture.</p>
+                                <p class="hint">JPG, PNG or GIF — max 5MB. Square images work best.</p>
+                                <form method="POST" enctype="multipart/form-data" action="{% url 'settings' %}">
+                                    {% csrf_token %}
+                                    <input type="file" id="setting-pfp-input" name="profile_pic" accept="image/*" style="display:none" onchange="previewPfp(event)">
+                                    <button type="button" class="btn-outline" onclick="document.getElementById('setting-pfp-input').click()">Choose File</button>
+                                    <button type="submit" class="btn-gold" name="update-profile_pic">Save Picture</button>
+                                </form>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+
+                <!-- Change Username -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">✏️</span>
+                            <div>
+                                <div class="acc-title">Change Username</div>
+                                <div class="acc-subtitle">Currently: Nirali</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form">
+                            {% csrf_token %}
+                            <label>New Username</label>
+                            <input type="text" name="new_username" placeholder="Enter new username" class="settings-input">
+                            <label>Current Password</label>
+                            <input type="password" name="password" placeholder="Confirm with password" class="settings-input">
+                            <button type="submit" class="btn-gold" name="update-username">Update Username</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Email -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">📧</span>
+                            <div>
+                                <div class="acc-title">Change Email</div>
+                                <div class="acc-subtitle">Currently: nirali374@gmail.com</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form">
+                            {% csrf_token %}
+                            <label>New Email Address</label>
+                            <input type="email" name="new_email" placeholder="Enter new email" class="settings-input">
+                            <label>Current Password</label>
+                            <input type="password" name="password" placeholder="Confirm with password" class="settings-input">
+                            <button type="submit" class="btn-gold" name="update-email">Update Email</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bio / Display Name -->
+                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">📝</span>
+                            <div>
+                                <div class="acc-title">Bio & Display Name</div>
+                                <div class="acc-subtitle">Tell the world about yourself</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form">
+                            {% csrf_token %}
+                            <label>Display Name</label>
+                            <input type="text" name="display_name" placeholder="How you appear to others" class="settings-input" value="Nirali">
+                            <label>Bio</label>
+                            <textarea name="bio" class="settings-textarea" placeholder="A short bio about your movie tastes...">cinephile</textarea>
+                            <label>Favourite Genre</label>
+                            <select name="fav_genre" class="settings-select">
+                                <option value="">Select genre...</option>
+                                <option value="action">Action</option>
+                                <option value="thriller">Thriller</option>
+                                <option value="horror">Horror</option>
+                                <option value="comedy">Comedy</option>
+                                <option value="drama">Drama</option>
+                                <option value="scifi">Sci-Fi</option>
+                                <option value="romance">Romance</option>
+                                <option value="animation">Animation</option>
+                                <option value="documentary">Documentary</option>
+                            </select>
+                            <button type="submit" class="btn-gold" name="update-display_name">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+
+                                <div class="accordion-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">🔑</span>
+                            <div>
+                                <div class="acc-title">Change Password</div>
+                                <div class="acc-subtitle">Use a strong, unique password</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form">
+                            {% csrf_token %}
+                            <label>Current Password</label>
+                            <input type="password" name="current_password" placeholder="Your current password" class="settings-input">
+                            <label>New Password</label>
+                            <input type="password" name="new_password" placeholder="At least 8 characters" class="settings-input" id="new-pass" oninput="checkStrength(this.value)">
+                            <div class="password-strength">
+                                <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+                                <span class="strength-label" id="strength-label">—</span>
+                            </div>
+                            <label>Confirm New Password</label>
+                            <input type="password" name="confirm_password" placeholder="Repeat new password" class="settings-input">
+                            <button type="submit" class="btn-gold" name="update-password">Update Password</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="accordion-item danger-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">🚫</span>
+                            <div>
+                                <div class="acc-title">Deactivate Account</div>
+                                <div class="acc-subtitle">Temporarily disable your account</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <p class="danger-text">Your account will be hidden. You can reactivate it at any time by logging back in.</p>
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form">
+                            {% csrf_token %}
+                            <label>Enter your password to confirm</label>
+                            <input type="password" name="deactivate_password" placeholder="Your current password" class="settings-input">
+                            <button type="submit" class="btn-danger-outline" name="deactivate-account">Deactivate Account</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="accordion-item danger-item">
+                    <button class="accordion-trigger" onclick="toggleAccordion(this)">
+                        <div class="acc-left">
+                            <span class="acc-icon">💀</span>
+                            <div>
+                                <div class="acc-title">Delete Account</div>
+                                <div class="acc-subtitle">Permanently erase all your data</div>
+                            </div>
+                        </div>
+                        <span class="acc-arrow">›</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="danger-warning-box">
+                            ⚠️ <strong>This action is irreversible.</strong> All your watchlists, ratings, reviews, watch history, and profile data will be permanently deleted. There is no undo.
+                        </div>
+                        <form method="POST" action="{% url 'settings' %}" class="settings-form" onsubmit="return confirmDelete()">
+                            {% csrf_token %}
+                            <label>Type your Email to confirm: <strong>{{ request.user.username }}</strong></label>
+                            <input type="text" name="email_confirm" placeholder="Enter your email" class="settings-input">
+                            <label>Enter your password</label>
+                            <input type="password" name="password" placeholder="Your current password" class="settings-input">
+                            <button type="submit" class="btn-danger" name="delete-account">Delete My Account Forever</button>
+                        </form>
+                    </div>
+                </div>
+        </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+</body>
+</html>

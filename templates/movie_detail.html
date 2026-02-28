@@ -60,28 +60,38 @@ document.addEventListener("DOMContentLoaded",()=>{
 <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration:none;color:#f5c518;">MoviesVerse</a></div>
 
-```
 <div class="search-box">
     <input type="text" placeholder="Search movies, TV shows...">
     <button>Search</button>
 </div>
 
-<div class="nav-links">
-    <a href="{% url 'index' %}">Movies</a>
-    <a href="{% url 'watchlist' %}">Watchlist</a>
-    <div class="profile-dropdown">
-        <img src="{{ request.session.user_pic|default:'/static/images/default_pfp.jpg' }}" class="profile-avatar">
-        <div class="dropdown-menu">
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'watched' %}">Watched</a>
-            <a href="{% url 'favourite' %}">Favourite Movies</a>
-            <a href="{% url 'settings' %}">Settings</a>
-            <hr>
-            <a href="{% url 'logout' %}" class="logout">Logout</a>
+    <div class="nav-links">
+        <a href="{% url 'index' %}">Movies</a>
+        <a href="{% url 'watchlist' %}">Watchlist</a>
+        
+        <div class="profile-dropdown">
+
+            {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
+            {% endif %}
+                
+                <div class="dropdown-menu">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'profile' %}">Profile</a>
+                        <a href="{% url 'watched' %}">Watched</a>
+                        <a href="{% url 'favourite' %}">Favourite Movies</a>
+                        <a href="{% url 'settings' %}">Settings</a>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="logout">Logout</a>
+                    {% else %}
+                        <a href="{% url 'sign_in' %}">Login</a>
+                        <a href="{% url 'sign_up' %}">Create new account</a>
+                    {% endif %}
+                </div>
         </div>
     </div>
-</div>
-```
 
 </div>
 

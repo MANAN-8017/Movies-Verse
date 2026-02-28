@@ -31,16 +31,26 @@
         <a href="{% url 'watchlist' %}">Watchlist</a>
         
         <div class="profile-dropdown">
-            <img src="https://tse2.mm.bing.net/th/id/OIP.eOfqxGdd1QY-wIFMJvIR-QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Profile" class="profile-avatar">
+
+            {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
+            {% endif %}
             
-            <div class="dropdown-menu">
-                <a href="{% url 'profile' %}">Profile</a>
-                <a href="{% url 'watched' %}">Watched</a>
-                <a href="{% url 'favourite' %}">Favourite Movies</a>
-                <a href="{% url 'settings' %}">Settings</a>
-                <hr>
-                <a href="{% url 'logout' %}" class="logout">Logout</a>
-            </div>
+                <div class="dropdown-menu">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'profile' %}">Profile</a>
+                        <a href="{% url 'watched' %}">Watched</a>
+                        <a href="{% url 'favourite' %}">Favourite Movies</a>
+                        <a href="{% url 'settings' %}">Settings</a>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="logout">Logout</a>
+                    {% else %}
+                        <a href="{% url 'sign_in' %}">Login</a>
+                        <a href="{% url 'sign_up' %}">Create new account</a>
+                    {% endif %}
+                </div>
         </div>
     </div>
 </div>

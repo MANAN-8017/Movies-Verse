@@ -26,7 +26,7 @@
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -47,7 +47,7 @@
         <div class="banner-overlay"></div>
         <div class="profile-hero-content">
             <div class="profile-hero-avatar-wrap">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-hero-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-hero-avatar" alt="Default Profile">
@@ -55,12 +55,12 @@
                 <div class="cinephile-badge" title="Cinephile">🎬</div>
             </div>
             <div class="profile-hero-info">
-                <h1 class="profile-hero-name">Nirali</h1>
-                <div class="profile-hero-handle">@nirali374</div>
-                <div class="profile-hero-bio">Cinephile</div>
+                <h1 class="profile-hero-name">{{ request.user.profile.display_name|default:request.user.username }}</h1>
+                <div class="profile-hero-handle">@{{ request.user.username }}</div>
+                <div class="profile-hero-bio">{{ request.user.profile.bio|default:"No bio yet. Edit your profile to add one." }}</div>
                 <div class="profile-hero-meta">
-                    <span>🎭 Favourite: Action</span>
-                    <span>📅 Joined January 2026</span>
+                    <span>🎭 Favourite: {{ request.user.profile.fav_genre|default:"Not set"|capfirst }}</span>
+                    <span>📅 Joined {{ request.user.date_joined|date:"F Y" }}</span>
                 </div>
             </div>
             <div class="profile-hero-actions">

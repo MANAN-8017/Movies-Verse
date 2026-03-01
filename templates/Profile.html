@@ -26,7 +26,7 @@
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -47,7 +47,7 @@
         <div class="banner-overlay"></div>
         <div class="profile-hero-content">
             <div class="profile-hero-avatar-wrap">
-                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-hero-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-hero-avatar" alt="Default Profile">
@@ -158,7 +158,7 @@
                             </a>
                             <div class="watching-tag">▶ Watching</div>
                             <div class="progress-bar-wrap">
-                                <div class="progress-bar-fill" style="width: {{ movie.progress|default:0 }}%"></div>
+                                <!-- <div class="progress-bar-fill" style="width: {{ movie.progress|default:0 }}%"></div> -->
                             </div>
                         </div>
                         <div class="profile-card-info">

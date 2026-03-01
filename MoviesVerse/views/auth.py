@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils.http import url_has_allowed_host_and_scheme
-from ..models import UserProfile
 
 def sign_up(request):
     if request.method == 'POST':

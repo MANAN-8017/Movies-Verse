@@ -40,7 +40,7 @@ function toggleAccordion(btn) {
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -61,17 +61,27 @@ function toggleAccordion(btn) {
         <aside class="settings-sidebar">
             <div class="sidebar-header">
                 <div class="user-avatar-wrap">
-                    {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                    {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                         <img src="{{ request.user.profile.profile_pic.url }}" class="sidebar-avatar" alt="Profile">
                     {% else %}
                         <img src="{% static 'images/default_pfp.jpeg' %}" class="sidebar-avatar" alt="Default Profile">
                     {% endif %}
                 </div>
-                <div class="sidebar-username">Nirali</div>
-                <div class="sidebar-email">@nirali374</div>
+                <div class="sidebar-username">{{ request.user.profile.display_name }}</div>
+                <div class="sidebar-email">@{{ request.user.username }}</div>
             </div>
         </aside>
 
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <span class="alert-text">{{ message }}</span>
+            <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
         <!-- Main Content -->
         <main class="settings-main">
 
@@ -94,7 +104,7 @@ function toggleAccordion(btn) {
                     <div class="accordion-body">
                         <div class="pfp-update-wrap">
                             <div class="pfp-preview-container">
-                                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                                     <img src="{{ request.user.profile.profile_pic.url }}" class="pfp-preview" id="pfp-preview-img" alt="Current Picture">
                                 {% else %}
                                     <img src="{% static 'images/default_pfp.jpeg' %}" class="pfp-preview" id="pfp-preview-img" alt="Default Picture">
@@ -124,7 +134,7 @@ function toggleAccordion(btn) {
                             <span class="acc-icon">✏️</span>
                             <div>
                                 <div class="acc-title">Change Username</div>
-                                <div class="acc-subtitle">Currently: Nirali</div>
+                                <div class="acc-subtitle">Currently: {{ request.user.username }}</div>
                             </div>
                         </div>
                         <span class="acc-arrow">›</span>
@@ -148,7 +158,7 @@ function toggleAccordion(btn) {
                             <span class="acc-icon">📧</span>
                             <div>
                                 <div class="acc-title">Change Email</div>
-                                <div class="acc-subtitle">Currently: nirali374@gmail.com</div>
+                                <div class="acc-subtitle">Currently: {{ request.user.email }}</div>
                             </div>
                         </div>
                         <span class="acc-arrow">›</span>
@@ -181,9 +191,9 @@ function toggleAccordion(btn) {
                         <form method="POST" action="{% url 'settings' %}" class="settings-form">
                             {% csrf_token %}
                             <label>Display Name</label>
-                            <input type="text" name="display_name" placeholder="How you appear to others" class="settings-input" value="Nirali">
+                            <input type="text" name="display_name" placeholder="How you appear to others" class="settings-input" value="{{ request.user.profile.display_name }}">
                             <label>Bio</label>
-                            <textarea name="bio" class="settings-textarea" placeholder="A short bio about your movie tastes...">cinephile</textarea>
+                            <textarea name="bio" class="settings-textarea" placeholder="A short bio about your movie tastes...">{{ request.user.profile.bio }}</textarea>
                             <label>Favourite Genre</label>
                             <select name="fav_genre" class="settings-select">
                                 <option value="">Select genre...</option>

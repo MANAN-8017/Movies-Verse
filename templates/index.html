@@ -6,24 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoviesVerse - Movies, TV and Celebrities</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
-<script>
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
-        dropdown.classList.toggle("active", dropdown.contains(e.target));
-    });
-
-    function toggleWatchlist(btn) {
-        btn.classList.toggle("active");
-        
-        const text = btn.querySelector(".text");
-        
-        text.textContent = btn.classList.contains("active")
-        ? "✔ Added to Watchlist"
-        : "+ Add to Watchlist";
-    }
-</script>
-
+</style>
 <body>
     <!-- NAVBAR -->
     <div class="navbar">
@@ -39,14 +24,13 @@
             <a href="{% url 'watchlist' %}">Watchlist</a>
             
             <div class="profile-dropdown">
-
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
-                    <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
-                {% else %}
-                    <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
-                {% endif %}
-
                 
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
+            {% endif %}
+
                 <div class="dropdown-menu">
                     {% if request.user.is_authenticated %}
                         <a href="{% url 'profile' %}">Profile</a>
@@ -69,15 +53,20 @@
         <div class="hero-content">
             <h2 class="hero-title">Featured Today</h2>
             <div class="featured-movie">
-                <div class="movie-poster img"><a href="{% url 'oppenheimer' %}"><img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Oppenheimer"></a></div>
+                <div class="movie-poster img">
+                    <a href="{% url 'movie_detail' 'tt15398776' %}">
+                        <img src="{{ trending_movies.0.poster }}" alt="{{ trending_movies.0.title }}">
+                    </a>
+                </div>
+
                 <div class="movie-info">
-                    <h1 class="movie-title">Oppenheimer</h1>
+                    <h1 class="movie-title">{{ trending_movies.0.title }}</h1>
                     <div class="rating">
                         <span class="star">★</span>
-                        <span class="rating-value">4.1</span>
-                        <span class="rating-count">/5 (979K)</span>
+                        <span class="rating-value">{{ trending_movies.0.vote_average|floatformat:1 }}</span>
+                        <span class="rating-count">/5 ({{ trending_movies.0.vote_count }}K)</span>
                     </div>
-                    <div class="movie-meta">2023 • 3h min • Action, Thriller</div>
+                    <div class="movie-meta">2023 • 3h • Action, Thriller</div>
                     <p class="movie-description">
                         A gripping tale of espionage and betrayal set in the shadows of a dystopian future. 
                         When a skilled operative discovers a conspiracy that threatens global stability, 
@@ -85,7 +74,7 @@
                     </p>
                     <div class="action-buttons">
                         <button class="btn btn-primary"><a href="{% url 'oppenheimer' %}" style="text-decoration: none; color: black;">▶ Watch Trailer</a></button>
-                        <button class="btn btn-secondary" onclick="toggleWatchlist(this)">
+                        <button class="btn btn-secondary" onclick="toggleWatchlist_index(this)">
                             <span class="text">+ Add to Watchlist</span>
                         </button>
                     </div>

@@ -53,8 +53,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mySite.urls'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = 'sign_in'
 
 TEMPLATES = [
     {

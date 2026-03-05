@@ -7,17 +7,9 @@
     <title>Watched Movies</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/favourite.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
-
-<script>
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
-        dropdown.classList.toggle("active", dropdown.contains(e.target));
-    });
-</script>
-
 <body>
-
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -33,7 +25,7 @@
         
         <div class="profile-dropdown">
 
-            {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                 <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
             {% else %}
                 <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -48,7 +40,6 @@
         </div>
         </div>
     </div>
-</div>
 </div>
 
 </div>

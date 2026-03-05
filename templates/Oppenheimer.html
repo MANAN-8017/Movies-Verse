@@ -7,67 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/movie_detail.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
-
-<script>
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
-        dropdown.classList.toggle("active", dropdown.contains(e.target));
-    });
-    function toggleLike(btn) {
-        btn.classList.toggle("active");
-        
-        const icon = btn.querySelector(".icon");
-        const text = btn.querySelector(".text");
-        
-        if (btn.classList.contains("active")) {
-            icon.textContent = "♥";
-            text.textContent = "Liked";
-        } else {
-            icon.textContent = "♡";
-            text.textContent = "Like";
-        }
-    }
-    
-    function toggleWatched(btn) {
-        btn.classList.toggle("active");
-        
-        const text = btn.querySelector(".text");
-        
-        text.textContent = btn.classList.contains("active")
-        ? "Watched"
-        : "Watch";
-    }
-    
-    function toggleWatchlist(btn) {
-        btn.classList.toggle("active");
-        
-        const text = btn.querySelector(".text");
-        
-        text.textContent = btn.classList.contains("active")
-        ? "Watchlisted"
-        : "Watchlist";
-    }
-    
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll(".stars").forEach(container => {
-            const rating = parseFloat(container.dataset.rating);
-            container.innerHTML = "";
-
-            for (let i = 1; i <= 5; i++) {
-                if (rating >= i) {
-                    container.innerHTML += '<span class="star filled">★</span>';
-                } else if (rating >= i - 0.5) {
-                    container.innerHTML += '<span class="star half">★</span>';
-                } else {
-                    container.innerHTML += '<span class="star">★</span>';
-                }
-            }
-        });
-    });
-</script>
 <body>
-    
     <!-- NAVBAR -->
     <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
@@ -83,7 +25,7 @@
         
         <div class="profile-dropdown">
 
-            {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                 <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
             {% else %}
                 <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">

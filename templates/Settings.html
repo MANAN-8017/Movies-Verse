@@ -7,27 +7,10 @@
     <title>Settings - MoviesVerse</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/settings.css' %}">
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
-<script>
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
-        dropdown.classList.toggle("active", dropdown.contains(e.target));
-    });
-function toggleAccordion(btn) {
-    const item = btn.closest('.accordion-item');
-    const isOpen = item.classList.contains('open');
-    btn.closest('.settings-section').querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-    }
-
-    setTimeout(() => {
-        document.querySelectorAll('.alert').forEach(el => {
-            el.style.opacity = '0';
-            setTimeout(() => el.remove(), 300);
-        });
-    }, 4000);
-</script>
 <body>
     <!-- NAVBAR -->
     <div class="navbar">
@@ -40,7 +23,7 @@ function toggleAccordion(btn) {
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                     <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
                 {% else %}
                     <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
@@ -61,17 +44,27 @@ function toggleAccordion(btn) {
         <aside class="settings-sidebar">
             <div class="sidebar-header">
                 <div class="user-avatar-wrap">
-                    {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
-                        <img src="{{ request.user.profile.profile_pic.url }}" class="sidebar-avatar" alt="Profile">
-                    {% else %}
-                        <img src="{% static 'images/default_pfp.jpeg' %}" class="sidebar-avatar" alt="Default Profile">
-                    {% endif %}
+                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                    <img src="{{ request.user.profile.profile_pic.url }}" class="sidebar-avatar" alt="Profile">
+                {% else %}
+                    <img src="{% static 'images/default_pfp.jpeg' %}" class="sidebar-avatar" alt="Default Profile">
+                {% endif %}
                 </div>
                 <div class="sidebar-username">{{ request.user.profile.display_name }}</div>
                 <div class="sidebar-email">@{{ request.user.username }}</div>
             </div>
         </aside>
 
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <span class="alert-text">{{ message }}</span>
+            <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
         <!-- Main Content -->
         <main class="settings-main">
 
@@ -94,7 +87,7 @@ function toggleAccordion(btn) {
                     <div class="accordion-body">
                         <div class="pfp-update-wrap">
                             <div class="pfp-preview-container">
-                                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
+                                {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                                     <img src="{{ request.user.profile.profile_pic.url }}" class="pfp-preview" id="pfp-preview-img" alt="Current Picture">
                                 {% else %}
                                     <img src="{% static 'images/default_pfp.jpeg' %}" class="pfp-preview" id="pfp-preview-img" alt="Default Picture">

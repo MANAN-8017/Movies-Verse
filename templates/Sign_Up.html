@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/sign_in.css' %}">
 </head>
-
 <body>
-
     <div class="navbar">
         <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
     </div>
@@ -24,8 +22,18 @@
             {% endif %}
             <form method="post">
                 {% csrf_token %}
-                <label>Full Name</label>
+
+                <label>First Name</label>
+                <input type="text" name="first_name" placeholder="Enter your first name" required>
+                
+                <label>Last Name</label>
+                <input type="text" name="last_name" placeholder="Enter your last name" required>
+
+                <label>Username</label>
                 <input type="text" name="username" placeholder="Enter your name" required>
+
+                <label>Display Name</label>
+                <input type="text" name="display_name" placeholder="Enter your display name"
 
                 <label>Email</label>
                 <input type="email" name="email" placeholder="Enter your email" required>

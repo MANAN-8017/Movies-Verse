@@ -10,7 +10,7 @@
     <script src="{% static 'js/script.js' %}"></script>
 </head>
 <body>
-    <!-- NAVBAR -->
+    <!-- NAVBAR Of TMDB -->
     <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
 
@@ -54,11 +54,8 @@
     <div class="left-column">
 
         <div class="trailer-box">
-            <iframe 
-                width="100%" 
-                height="400"
-                src="https://www.youtube.com/embed/{{ movie.trailer }}"
-                frameborder="0"
+            <iframe
+                src="https://www.youtube.com/embed/{{ movie.trailer_key }}?autoplay=0&controls=1"
                 allowfullscreen>
             </iframe>
         </div>

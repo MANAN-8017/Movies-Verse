@@ -7,13 +7,8 @@
     <title>{{ request.user.username }} - MoviesVerse Profile</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
 </head>
-<script>
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
-        dropdown.classList.toggle("active", dropdown.contains(e.target));
-    });
-</script>
 <body>
     <!-- NAVBAR -->
     <div class="navbar">
@@ -26,11 +21,11 @@
             <a href="{% url 'index' %}">Movies</a>
             <a href="{% url 'watchlist' %}">Watchlist</a>
             <div class="profile-dropdown">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
-                    <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
-                {% else %}
-                    <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
-                {% endif %}
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
+            {% endif %}
                 <div class="dropdown-menu">
                         <a href="{% url 'watched' %}">Watched</a>
                         <a href="{% url 'favourite' %}">Favourite Movies</a>
@@ -47,11 +42,11 @@
         <div class="banner-overlay"></div>
         <div class="profile-hero-content">
             <div class="profile-hero-avatar-wrap">
-                {% if request.user.profile.profile_pic and request.user.profile.profile_pic.url %}
-                    <img src="{{ request.user.profile.profile_pic.url }}" class="profile-hero-avatar" alt="Profile">
-                {% else %}
-                    <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-hero-avatar" alt="Default Profile">
-                {% endif %}
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-hero-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-hero-avatar" alt="Default Profile">
+            {% endif %}
                 <div class="cinephile-badge" title="Cinephile">🎬</div>
             </div>
             <div class="profile-hero-info">

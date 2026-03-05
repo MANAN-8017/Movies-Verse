@@ -1,19 +1,22 @@
+import os
 from urllib import request
 from ..models import *
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
-@login_required(login_url='sign_in')
+User = get_user_model()
+@login_required
 def favourite(request):
     return render(request, 'favourite.html')
 
-@login_required(login_url='sign_in')
+@login_required
 def profile(request):
-    return render(request, 'profile.html')
+    return render(request, "profile.html")
 
-@login_required(login_url='sign_in')
+@login_required
 def settings(request):
 
     if request.method == "POST":
@@ -23,8 +26,13 @@ def settings(request):
         if "update-profile_pic" in request.POST:
             if "profile_pic" in request.FILES:
                 profile.profile_pic = request.FILES["profile_pic"]
-                profile.save()
-                messages.success(request, "Profile picture updated successfully.")
+                if not profile.profile_pic.name.endswith(('.jpg', '.jpeg', '.png')):
+                    messages.error(request, "Invalid file type. Please upload a JPG, JPEG, or PNG file.")
+                elif profile.profile_pic.size > 5 * 1024 * 1024:
+                    messages.error(request, "File size exceeds the 5MB limit.")
+                else:
+                    profile.save()
+                    messages.success(request, "Profile picture updated successfully.")
 
         # Username
         if "update-username" in request.POST:
@@ -118,10 +126,10 @@ def settings(request):
 
     return render(request, "settings.html")
 
-@login_required(login_url='sign_in')
+@login_required
 def watched(request):
     return render(request, 'watched.html')
 
-@login_required(login_url='sign_in')
+@login_required
 def watchlist(request):
     return render(request, 'watchlist.html')

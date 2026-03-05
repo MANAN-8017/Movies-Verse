@@ -33,7 +33,8 @@ urlpatterns = [
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
 
-    path("movie/<int:movie_id>/", views.movie_detail, name="movie_detail"),
+    path("search/", views.search_movies, name="search_movies"),
+    path("movie/<str:movie_id>/", views.movie_detail, name="movie_detail"),
 ]
 
 if settings.DEBUG:

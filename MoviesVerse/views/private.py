@@ -8,11 +8,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 @login_required
 def favourite(request):
-    return render(request, 'favourite.html')
+    return render(request, 'user/favourite.html')
 
 @login_required
 def profile(request):
-    return render(request, "profile.html")
+    return render(request, "user/profile.html")
 
 @login_required
 def settings(request):
@@ -122,7 +122,7 @@ def settings(request):
 
         return redirect("settings")
 
-    return render(request, "settings.html")
+    return render(request, "user/settings.html")
 
 @login_required
 def watched(request):
@@ -130,4 +130,4 @@ def watched(request):
 
 @login_required
 def watchlist(request):
-    return render(request, 'watchlist.html')
+    return render(request, 'user/watchlist.html')

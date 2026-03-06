@@ -22,11 +22,20 @@ class ProductionHouse(models.Model):
 
     contact_number = models.CharField(max_length=20, blank=True)
 
+    email = models.EmailField(unique=True, null=True, blank=True)
+    password = models.CharField(max_length=128, null=True, blank=True)  # will store hashed password
+    
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self.save()
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     def __str__(self):
         return self.name
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_pic = models.ImageField(

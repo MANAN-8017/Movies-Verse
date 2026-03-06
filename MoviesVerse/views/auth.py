@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.http import url_has_allowed_host_and_scheme
-
+from django.contrib.auth.hashers import check_password  as django_check_password
 
 def validate_name(name):
     pattern = r'^[A-Za-z ]+$'
@@ -105,6 +105,17 @@ def sign_in(request):
         email = request.POST.get('email').strip().lower()
         password = request.POST.get('password')
         next_url_post = request.POST.get('next')
+        
+        # ProductionHouse auth
+        try:
+            production_house = ProductionHouse.objects.get(email__iexact=email)
+            if django_check_password(password, production_house.password):
+                request.session['production_house_id'] = production_house.id
+                request.session['is_production_house'] = True
+                return redirect('production_house_dashboard')
+        except ProductionHouse.DoesNotExist:
+            pass
+
 
         try:
             user_obj = User.objects.get(email__iexact=email)

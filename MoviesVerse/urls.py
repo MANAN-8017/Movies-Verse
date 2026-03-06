@@ -32,6 +32,11 @@ urlpatterns = [
 
     path("search/", views.search_movies, name="search_movies"),
     path("movie/<str:imdb_id>/", views.movie_detail, name="movie_detail"),
+    
+     #production house
+    path('production_house_dashboard/', views.production_house_dashboard, name='production_house_dashboard'),
+    path('production_analytics/', views.production_analytics, name='production_analytics'),
+    path('add_promotion/', views.add_promotion, name='add_promotion'),
 ]
 
 if settings.DEBUG:

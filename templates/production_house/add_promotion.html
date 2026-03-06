@@ -1,0 +1,444 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Promotion — {{ production.name }} | MoviesVerse</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production_profile.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'index' %}" style="text-decoration:none;color:#f5c518;">MoviesVerse</a>
+        <span class="prod-badge">Production</span>
+    </div>
+    <div class="nav-links" style="display:flex;align-items:center;gap:24px;">
+        <a href="{% url 'production_house_dashboard' %}" style="color:#aaa;text-decoration:none;font-size:14px;">Dashboard</a>
+        <a href="{% url 'production_analytics' %}" style="color:#aaa;text-decoration:none;font-size:14px;">Analytics</a>
+        <div class="profile-dropdown" id="navDropdown">
+            {% if production.logo %}
+                <img src="{{ production.logo.url }}" class="profile-avatar" alt="Logo">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
+            {% endif %}
+            <div class="dropdown-menu">
+                <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
+                <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="up-header">
+    <div class="up-header-bg"></div>
+    <div class="up-header-content">
+        <div class="up-breadcrumb">
+            <a href="{% url 'production_house_dashboard' %}">{{ production.name }}</a>
+            <span>›</span>
+            <span>Upload Promotion</span>
+        </div>
+        <h1 class="up-page-title">Upload Promotion</h1>
+        <p class="up-page-sub">Add trailers, posters, teasers and behind-the-scenes content to promote your films.</p>
+    </div>
+</div>
+
+
+<main class="up-body">
+    <div class="up-layout">
+
+        <!-- ── LEFT: FORM ── -->
+        <div class="up-form-col">
+            <form method="POST" enctype="multipart/form-data" id="promoForm" action="{% url 'add_promotion' %}">
+                {% csrf_token %}
+
+                <!-- STEP 1: Type selector -->
+                <div class="up-section">
+                    <div class="up-section-label">
+                        <span class="up-step-num">01</span>
+                        Promotion Type
+                    </div>
+                    <div class="up-type-grid">
+                        <label class="up-type-card active" data-type="trailer">
+                            <input type="radio" name="promo_type" value="trailer" checked hidden>
+                            <div class="up-type-icon">🎬</div>
+                            <div class="up-type-name">Trailer</div>
+                            <div class="up-type-desc">Official trailers & teasers</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                        <label class="up-type-card" data-type="poster">
+                            <input type="radio" name="promo_type" value="poster" hidden>
+                            <div class="up-type-icon">🖼</div>
+                            <div class="up-type-name">Poster</div>
+                            <div class="up-type-desc">Movie posters & key art</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                        <label class="up-type-card" data-type="bts">
+                            <input type="radio" name="promo_type" value="bts" hidden>
+                            <div class="up-type-icon">🎥</div>
+                            <div class="up-type-name">Behind the Scenes</div>
+                            <div class="up-type-desc">Making-of & featurettes</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                        <label class="up-type-card" data-type="clip">
+                            <input type="radio" name="promo_type" value="clip" hidden>
+                            <div class="up-type-icon">✂️</div>
+                            <div class="up-type-name">Clip</div>
+                            <div class="up-type-desc">Exclusive clips & snippets</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                        <label class="up-type-card" data-type="interview">
+                            <input type="radio" name="promo_type" value="interview" hidden>
+                            <div class="up-type-icon">🎤</div>
+                            <div class="up-type-name">Interview</div>
+                            <div class="up-type-desc">Cast & crew interviews</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                        <label class="up-type-card" data-type="banner">
+                            <input type="radio" name="promo_type" value="banner" hidden>
+                            <div class="up-type-icon">📣</div>
+                            <div class="up-type-name">Banner / Ad</div>
+                            <div class="up-type-desc">Campaign banners & ads</div>
+                            <div class="up-type-check">✓</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Link to film -->
+                <div class="up-section">
+                    <div class="up-section-label">
+                        <span class="up-step-num">02</span>
+                        Link to Film
+                    </div>
+                    <div class="up-field">
+                        <label class="up-label">Select Movie *</label>
+                        <select name="movie" class="up-select" required>
+                            <option value="" disabled selected>— Choose a film from your catalog —</option>
+                            {% for movie in movies %}
+                                <option value="{{ movie.id }}">{{ movie.title }} ({{ movie.release_date|slice:":4" }})</option>
+                            {% empty %}
+                                <option disabled>No films available — add a film first</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Basic info -->
+                <div class="up-section">
+                    <div class="up-section-label">
+                        <span class="up-step-num">03</span>
+                        Promotion Details
+                    </div>
+
+                    <div class="up-field">
+                        <label class="up-label">Title *</label>
+                        <input type="text" name="title" class="up-input" placeholder="e.g. Official Trailer — The Secret Agent" required maxlength="120">
+                        <span class="up-hint">Max 120 characters</span>
+                    </div>
+
+                    <div class="up-field">
+                        <label class="up-label">Description</label>
+                        <textarea name="description" class="up-textarea" rows="4"
+                            placeholder="Briefly describe this promotion — what audiences can expect..."></textarea>
+                    </div>
+
+                    <div class="up-two-fields">
+                        <div class="up-field">
+                            <label class="up-label">Release / Premiere Date</label>
+                            <input type="date" name="release_date" class="up-input">
+                        </div>
+                        <div class="up-field">
+                            <label class="up-label">Language</label>
+                            <select name="language" class="up-select">
+                                <option value="en">English</option>
+                                <option value="hi">Hindi</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="up-field">
+                        <label class="up-label">Tags <span class="up-optional">(optional)</span></label>
+                        <input type="text" name="tags" class="up-input" placeholder="action, thriller, 2025 — comma separated">
+                    </div>
+                </div>
+
+                <!-- STEP 4: File upload -->
+                <div class="up-section">
+                    <div class="up-section-label">
+                        <span class="up-step-num">04</span>
+                        Upload Media
+                    </div>
+
+                    <div class="up-field">
+                        <label class="up-label">Primary File <span class="up-file-hint" id="fileHint">(Video: MP4, MOV · Max 2GB)</span></label>
+                        <div class="up-dropzone" id="mainDrop" onclick="document.getElementById('mainFile').click()">
+                            <input type="file" id="mainFile" name="media_file" hidden accept="video/*,image/*">
+                            <div class="up-drop-inner" id="mainDropInner">
+                                <div class="up-drop-icon" id="mainDropIcon">⬆</div>
+                                <div class="up-drop-title">Drag & drop or click to browse</div>
+                                <div class="up-drop-sub" id="mainDropSub">MP4, MOV, AVI, MKV up to 2GB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="up-field">
+                        <label class="up-label">Thumbnail Image <span class="up-optional">(optional)</span></label>
+                        <div class="up-thumb-zone" id="thumbDrop" onclick="document.getElementById('thumbFile').click()">
+                            <input type="file" id="thumbFile" name="thumbnail" hidden accept="image/*">
+                            <div id="thumbPreviewWrap" class="up-thumb-preview-wrap">
+                                <div class="up-thumb-placeholder">
+                                    <span>🖼</span>
+                                    <span>Upload thumbnail</span>
+                                    <span class="up-drop-sub">JPG, PNG, WEBP · Max 5MB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Visibility -->
+                <div class="up-section">
+                    <div class="up-section-label">
+                        <span class="up-step-num">05</span>
+                        Visibility & Settings
+                    </div>
+
+                    <div class="up-two-fields">
+                        <div class="up-field">
+                            <label class="up-label">Visibility</label>
+                            <select name="visibility" class="up-select">
+                                <option value="public">🌐 Public</option>
+                                <option value="followers">👥 Followers Only</option>
+                                <option value="private">🔒 Private (Draft)</option>
+                            </select>
+                        </div>
+                        <div class="up-field">
+                            <label class="up-label">Priority</label>
+                            <select name="priority" class="up-select">
+                                <option value="normal">Normal</option>
+                                <option value="featured">⭐ Featured</option>
+                                <option value="pinned">📌 Pinned</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="up-toggles">
+                        <label class="up-toggle-row">
+                            <div class="up-toggle-info">
+                                <div class="up-toggle-title">Allow Comments</div>
+                                <div class="up-toggle-sub">Let users comment on this promotion</div>
+                            </div>
+                            <div class="up-toggle-switch">
+                                <input type="checkbox" name="allow_comments" id="toggleComments" checked>
+                                <span class="up-toggle-slider"></span>
+                            </div>
+                        </label>
+                        <label class="up-toggle-row">
+                            <div class="up-toggle-info">
+                                <div class="up-toggle-title">Send Notification</div>
+                                <div class="up-toggle-sub">Notify followers when this goes live</div>
+                            </div>
+                            <div class="up-toggle-switch">
+                                <input type="checkbox" name="notify_followers" id="toggleNotify" checked>
+                                <span class="up-toggle-slider"></span>
+                            </div>
+                        </label>
+                        <label class="up-toggle-row">
+                            <div class="up-toggle-info">
+                                <div class="up-toggle-title">Feature on Studio Page</div>
+                                <div class="up-toggle-sub">Show this in the promotions spotlight</div>
+                            </div>
+                            <div class="up-toggle-switch">
+                                <input type="checkbox" name="feature_on_page" id="toggleFeature">
+                                <span class="up-toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit bar -->
+                <div class="up-submit-bar">
+                    <a href="{% url 'production_house_dashboard' %}" class="up-btn-cancel">Cancel</a>
+                    <button type="submit" class="up-btn-submit" id="submitBtn">
+                        <span class="up-submit-icon">⬆</span>
+                        Publish Promotion
+                    </button>
+                </div>
+
+            </form>
+        </div><!-- /form col -->
+
+
+        <!-- ── RIGHT: PREVIEW + TIPS ── -->
+        <div class="up-preview-col">
+
+            <div class="up-preview-sticky">
+                <div class="up-preview-label">Live Preview</div>
+                <div class="up-preview-card">
+                    <div class="up-preview-media" id="previewMedia">
+                        <div class="up-preview-placeholder">
+                            <span>🎬</span>
+                            <span>Preview will appear here</span>
+                        </div>
+                        <img id="previewImg" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px 8px 0 0;">
+                    </div>
+                    <div class="up-preview-info">
+                        <div class="up-preview-type-badge" id="previewTypeBadge">Trailer</div>
+                        <div class="up-preview-title" id="previewTitle">Your promotion title…</div>
+                        <div class="up-preview-studio">{{ production.name }}</div>
+                        <div class="up-preview-meta" id="previewMeta">Fill in the details above</div>
+                    </div>
+                </div>
+
+                <div class="up-tips-card">
+                    <div class="up-tips-title">📋 Upload Guidelines</div>
+                    <ul class="up-tips-list">
+                        <li><span class="tip-bullet">✓</span> Use 1920×1080 or higher for videos</li>
+                        <li><span class="tip-bullet">✓</span> Thumbnail ratio: 16:9 recommended</li>
+                        <li><span class="tip-bullet">✓</span> Max trailer size: 2GB (MP4/MOV preferred)</li>
+                        <li><span class="tip-bullet">✓</span> Max poster/image: 5MB (JPG/PNG/WEBP)</li>
+                        <li><span class="tip-bullet">✓</span> Use descriptive titles for better discovery</li>
+                        <li><span class="tip-bullet">✓</span> Add tags to improve searchability</li>
+                    </ul>
+                </div>
+
+                {% if promotions %}
+                <div class="up-existing-promos">
+                    <div class="up-tips-title">📣 Your Recent Promotions</div>
+                    {% for promo in promotions|slice:":3" %}
+                    <div class="up-existing-row">
+                        <span class="up-existing-type {{ promo.type }}">{{ promo.type|capfirst }}</span>
+                        <span class="up-existing-title">{{ promo.title|truncatechars:30 }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div><!-- /preview col -->
+
+    </div><!-- /layout -->
+</main>
+
+
+<footer class="footer">
+    <div class="footer-links">
+        <a href="{% url 'help' %}" class="footer-link">Help</a>
+        <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+    </div>
+    <p class="footer-text">© 2026 MoviesVerse — Production Panel</p>
+</footer>
+
+
+<script>
+/* ── Navbar dropdown ── */
+document.addEventListener('click', e => {
+    const dd = document.getElementById('navDropdown');
+    if (dd) dd.classList.toggle('active', dd.contains(e.target));
+});
+
+/* ── Type card selection ── */
+document.querySelectorAll('.up-type-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.up-type-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+
+        const type = card.dataset.type;
+        const hint = document.getElementById('fileHint');
+        const sub  = document.getElementById('mainDropSub');
+        const mainFile = document.getElementById('mainFile');
+
+        const isImage = ['poster','banner'].includes(type);
+        if (isImage) {
+            hint.textContent = '(Image: JPG, PNG, WEBP · Max 5MB)';
+            sub.textContent  = 'JPG, PNG, WEBP up to 5MB';
+            mainFile.accept  = 'image/*';
+        } else {
+            hint.textContent = '(Video: MP4, MOV · Max 2GB)';
+            sub.textContent  = 'MP4, MOV, AVI, MKV up to 2GB';
+            mainFile.accept  = 'video/*';
+        }
+
+        const badgeMap = { trailer:'🎬 Trailer', poster:'🖼 Poster', bts:'🎥 BTS',
+                           clip:'✂️ Clip', interview:'🎤 Interview', banner:'📣 Banner' };
+        document.getElementById('previewTypeBadge').textContent = badgeMap[type] || type;
+    });
+});
+
+/* ── Live title preview ── */
+document.querySelector('[name="title"]').addEventListener('input', function() {
+    const el = document.getElementById('previewTitle');
+    el.textContent = this.value || 'Your promotion title…';
+});
+
+/* ── Drag & drop main zone ── */
+const mainDrop = document.getElementById('mainDrop');
+const mainFile = document.getElementById('mainFile');
+const mainDropInner = document.getElementById('mainDropInner');
+const mainDropIcon  = document.getElementById('mainDropIcon');
+
+['dragenter','dragover'].forEach(ev => mainDrop.addEventListener(ev, e => {
+    e.preventDefault(); mainDrop.classList.add('drag-over');
+}));
+['dragleave','drop'].forEach(ev => mainDrop.addEventListener(ev, e => {
+    e.preventDefault(); mainDrop.classList.remove('drag-over');
+    if (ev === 'drop' && e.dataTransfer.files.length) handleMainFile(e.dataTransfer.files[0]);
+}));
+mainFile.addEventListener('change', () => {
+    if (mainFile.files.length) handleMainFile(mainFile.files[0]);
+});
+
+function handleMainFile(file) {
+    const sizeMB = (file.size / (1024*1024)).toFixed(1);
+    mainDropIcon.textContent = '✅';
+    mainDropInner.querySelector('.up-drop-title').textContent = file.name;
+    mainDropInner.querySelector('.up-drop-sub').textContent   = `${sizeMB} MB · ${file.type}`;
+    mainDrop.classList.add('has-file');
+
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const img = document.getElementById('previewImg');
+            img.src = e.target.result;
+            img.style.display = 'block';
+            document.querySelector('.up-preview-placeholder').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('previewMeta').textContent = `${file.name} · ${sizeMB}MB`;
+    }
+}
+
+/* ── Thumbnail drop ── */
+const thumbFile = document.getElementById('thumbFile');
+const thumbPreviewWrap = document.getElementById('thumbPreviewWrap');
+
+thumbFile.addEventListener('change', () => {
+    if (!thumbFile.files.length) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        thumbPreviewWrap.innerHTML = `<img src="${e.target.result}" class="up-thumb-preview-img" alt="Thumbnail">`;
+    };
+    reader.readAsDataURL(thumbFile.files[0]);
+});
+
+/* ── Submit loading state ── */
+document.getElementById('promoForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="up-spinner"></span> Uploading…';
+});
+</script>
+</body>
+</html>

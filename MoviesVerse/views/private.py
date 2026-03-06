@@ -1,5 +1,3 @@
-import os
-from urllib import request
 from ..models import *
 from django.contrib.auth.models import User
 from django.contrib import messages

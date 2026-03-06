@@ -1,9 +1,7 @@
-# MoviesVerse/urls.py
-
+from . import views
+from mySite import settings
 from django.urls import path
 from django.conf.urls.static import static
-from mySite import settings
-from . import views
 
 urlpatterns = [
     # Default
@@ -23,10 +21,9 @@ urlpatterns = [
 
     # Public
     path('index/', views.index, name='index'),
-    path('oppenheimer/', views.oppenheimer, name='oppenheimer'),
-    path('upcoming/', views.upcoming, name='upcoming'),
-    path('popular/', views.popular, name='popular'),
     path('trending/', views.trending, name='trending'),
+    path('popular/', views.popular, name='popular'),
+    path('upcoming/', views.upcoming, name='upcoming'),
 
     # Legal
     path('help/', views.help, name='help'),
@@ -34,7 +31,7 @@ urlpatterns = [
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
 
     path("search/", views.search_movies, name="search_movies"),
-    path("movie/<str:movie_id>/", views.movie_detail, name="movie_detail"),
+    path("movie/<str:imdb_id>/", views.movie_detail, name="movie_detail"),
 ]
 
 if settings.DEBUG:

@@ -27,8 +27,9 @@
                 <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
             {% endif %}
             <div class="dropdown-menu">
-                <a href="{% url 'production_house_dashboard' %}">🎬 Company Profile</a>
-                <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
+                <a href="#">⚙️ Settings</a>
+                <a href="{% url 'my_promotions' %}">📣 My Promotions</a>
                 <hr>
                 <a href="{% url 'logout' %}" class="logout">Logout</a>
             </div>

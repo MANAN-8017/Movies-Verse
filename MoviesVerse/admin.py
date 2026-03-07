@@ -11,6 +11,7 @@ admin.site.register(Rating)
 admin.site.register(Comment)
 admin.site.register(Like)
 admin.site.register(SearchHistory)
+admin.site.register(Promotion)
 
 admin.site.site_header = "MoviesVerse Admin"
 admin.site.index_title = "Admin Dashboard"

@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Promotions — {{ production.name }} | MoviesVerse</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'index' %}" style="text-decoration:none; color:#f5c518;">MoviesVerse</a>
+        <span class="prod-badge">Production</span>
+    </div>
+    <div class="nav-links" style="display:flex; align-items:center; gap:24px;">
+        <a href="{% url 'production_house_dashboard' %}" style="color:#aaa; text-decoration:none; font-size:14px;">Dashboard</a>
+        <a href="{% url 'production_analytics' %}" style="color:#aaa; text-decoration:none; font-size:14px;">Analytics</a>
+        <div class="profile-dropdown" id="prodDropdown">
+            {% if production.logo %}
+                <img src="{{ production.logo.url }}" class="profile-avatar" alt="Logo">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
+            {% endif %}
+            <div class="dropdown-menu">
+                <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
+                <a href="#">⚙️ Settings</a>
+                <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<section class="analytics-header">
+    <div class="analytics-header-bg"></div>
+    <div class="analytics-header-content">
+        <div class="analytics-breadcrumb">
+            <a href="{% url 'production_house_dashboard' %}">{{ production.name }}</a>
+            <span>›</span>
+            <span>My Promotions</span>
+        </div>
+        <h1 class="analytics-title">My Promotions</h1>
+        <p class="analytics-subtitle">All promotional content uploaded by {{ production.name }}</p>
+    </div>
+</section>
+
+<!-- ── MAIN ── -->
+<main class="prod-content">
+
+    <!-- Top bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h2 class="section-title">
+            All Promotions
+            <span style="font-size:14px; color:#aaa; font-weight:normal;">— {{ promotions|length }} total</span>
+        </h2>
+        <a href="{% url 'add_promotion' %}" class="btn btn-primary" style="text-decoration:none; padding:10px 20px; font-size:14px;">
+            + Upload New
+        </a>
+    </div>
+
+    <!-- Promotions grid -->
+    {% if promotions %}
+    <div class="movie-grid prod-movie-grid">
+        {% for promo in promotions %}
+        <div class="prod-movie-card">
+
+            <!-- Thumbnail -->
+            <div class="prod-card-poster">
+                {% if promo.thumbnail %}
+                    <img src="{{ promo.thumbnail.url }}" alt="{{ promo.title }}">
+                {% else %}
+                    <div style="width:100%; height:100%; background:#1a1a1a; display:flex; align-items:center; justify-content:center; font-size:36px;">
+                        {% if promo.promo_type == 'trailer' %}🎬
+                        {% elif promo.promo_type == 'poster' %}🖼
+                        {% elif promo.promo_type == 'bts' %}🎥
+                        {% elif promo.promo_type == 'clip' %}✂️
+                        {% elif promo.promo_type == 'interview' %}🎤
+                        {% elif promo.promo_type == 'banner' %}📣
+                        {% else %}📁
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Type badge -->
+                <div class="status-badge released" style="text-transform:capitalize;">
+                    {{ promo.promo_type }}
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="prod-card-info">
+                <div class="prod-card-title">{{ promo.title }}</div>
+                <div class="prod-card-meta">
+                    <span>{{ promo.release_date|default:"No date" }}</span>
+                    <span style="color:#aaa; font-size:12px;">{{ promo.language|upper }}</span>
+                </div>
+                {% if promo.tags %}
+                <div style="margin-top:6px; font-size:11px; color:#666;">
+                    🏷 {{ promo.tags }}
+                </div>
+                {% endif %}
+                {% if promo.media_file %}
+                <div style="margin-top:8px;">
+                    <a href="{{ promo.media_file.url }}" target="_blank"
+                       style="font-size:12px; color:#f5c518; text-decoration:none;">
+                        ▶ View Media
+                    </a>
+                </div>
+                {% endif %}
+                        <!-- Edit & Delete -->
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <a href="{% url 'edit_promotion' promo.id %}"
+                        style="font-size:12px; color:#f5c518; text-decoration:none; border:1px solid #f5c518; padding:4px 10px; border-radius:4px;">
+                            ✎ Edit
+                        </a>
+                        <form method="POST" action="{% url 'delete_promotion' promo.id %}" 
+                            onsubmit="return confirm('Delete this promotion?')">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    style="font-size:12px; color:#ff4444; background:none; border:1px solid #ff4444; padding:4px 10px; border-radius:4px; cursor:pointer;">
+                                🗑 Delete
+                            </button>
+                        </form>
+                    </div>
+            </div>
+            
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty state -->
+    <div style="text-align:center; padding:80px 20px; color:#aaa;">
+        <div style="font-size:48px; margin-bottom:16px;">📣</div>
+        <h3 style="color:#fff; margin-bottom:8px;">No promotions yet</h3>
+        <p style="margin-bottom:24px;">Upload your first trailer, poster or campaign.</p>
+    </div>
+    {% endif %}
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div class="footer-links">
+        <a href="{% url 'help' %}" class="footer-link">Help</a>
+        <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+    </div>
+    <p class="footer-text">© 2026 MoviesVerse — Production Panel</p>
+</footer>
+
+<script>
+    document.addEventListener("click", function(e) {
+        const dropdown = document.getElementById("prodDropdown");
+        if (dropdown) dropdown.classList.toggle("active", dropdown.contains(e.target));
+    });
+</script>
+</body>
+</html>

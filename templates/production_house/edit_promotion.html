@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Promotion — {{ production.name }} | MoviesVerse</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production_profile.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'index' %}" style="text-decoration:none;color:#f5c518;">MoviesVerse</a>
+        <span class="prod-badge">Production</span>
+    </div>
+    <div class="nav-links" style="display:flex;align-items:center;gap:24px;">
+        <a href="{% url 'production_house_dashboard' %}" style="color:#aaa;text-decoration:none;font-size:14px;">Dashboard</a>
+        <a href="{% url 'production_analytics' %}" style="color:#aaa;text-decoration:none;font-size:14px;">Analytics</a>
+        <div class="profile-dropdown" id="navDropdown">
+            {% if production.logo %}
+                <img src="{{ production.logo.url }}" class="profile-avatar" alt="Logo">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
+            {% endif %}
+            <div class="dropdown-menu">
+                <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
+                <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <a href="{% url 'my_promotions' %}">📣 My Promotions</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<div class="up-header">
+    <div class="up-header-bg"></div>
+    <div class="up-header-content">
+        <div class="up-breadcrumb">
+            <a href="{% url 'production_house_dashboard' %}">{{ production.name }}</a>
+            <span>›</span>
+            <a href="{% url 'my_promotions' %}">My Promotions</a>
+            <span>›</span>
+            <span>Edit</span>
+        </div>
+        <h1 class="up-page-title">Edit Promotion</h1>
+        <p class="up-page-sub">Update the details of your promotion.</p>
+    </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="up-body">
+    <div style="max-width:720px; margin:0 auto; padding: 32px 24px;">
+        <form method="POST" enctype="multipart/form-data" id="editForm" action="{% url 'edit_promotion' promo.id %}">
+            {% csrf_token %}
+
+            <!-- STEP 1: Promotion Type -->
+            <div class="up-section">
+                <div class="up-section-label">
+                    <span class="up-step-num">01</span>
+                    Promotion Type
+                </div>
+                <div class="up-type-grid">
+                    <label class="up-type-card {% if promo.promo_type == 'trailer' %}active{% endif %}" data-type="trailer">
+                        <input type="radio" name="promo_type" value="trailer" {% if promo.promo_type == 'trailer' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">🎬</div>
+                        <div class="up-type-name">Trailer</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                    <label class="up-type-card {% if promo.promo_type == 'poster' %}active{% endif %}" data-type="poster">
+                        <input type="radio" name="promo_type" value="poster" {% if promo.promo_type == 'poster' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">🖼</div>
+                        <div class="up-type-name">Poster</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                    <label class="up-type-card {% if promo.promo_type == 'bts' %}active{% endif %}" data-type="bts">
+                        <input type="radio" name="promo_type" value="bts" {% if promo.promo_type == 'bts' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">🎥</div>
+                        <div class="up-type-name">BTS</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                    <label class="up-type-card {% if promo.promo_type == 'clip' %}active{% endif %}" data-type="clip">
+                        <input type="radio" name="promo_type" value="clip" {% if promo.promo_type == 'clip' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">✂️</div>
+                        <div class="up-type-name">Clip</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                    <label class="up-type-card {% if promo.promo_type == 'interview' %}active{% endif %}" data-type="interview">
+                        <input type="radio" name="promo_type" value="interview" {% if promo.promo_type == 'interview' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">🎤</div>
+                        <div class="up-type-name">Interview</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                    <label class="up-type-card {% if promo.promo_type == 'banner' %}active{% endif %}" data-type="banner">
+                        <input type="radio" name="promo_type" value="banner" {% if promo.promo_type == 'banner' %}checked{% endif %} hidden>
+                        <div class="up-type-icon">📣</div>
+                        <div class="up-type-name">Banner</div>
+                        <div class="up-type-check">✓</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 2: Title & Description -->
+            <div class="up-section">
+                <div class="up-section-label">
+                    <span class="up-step-num">02</span>
+                    Promotion Details
+                </div>
+                <div class="up-field">
+                    <label class="up-label">Title *</label>
+                    <input type="text" name="title" class="up-input"
+                           value="{{ promo.title }}"
+                           required maxlength="120">
+                    <span class="up-hint">Max 120 characters</span>
+                </div>
+                <div class="up-field">
+                    <label class="up-label">Description</label>
+                    <textarea name="description" class="up-textarea" rows="4">{{ promo.description }}</textarea>
+                </div>
+            </div>
+
+            <!-- STEP 3: Release Date & Language -->
+            <div class="up-section">
+                <div class="up-section-label">
+                    <span class="up-step-num">03</span>
+                    Release Info
+                </div>
+                <div class="up-two-fields">
+                    <div class="up-field">
+                        <label class="up-label">Release / Premiere Date</label>
+                        <input type="date" name="release_date" class="up-input"
+                               value="{{ promo.release_date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="up-field">
+                        <label class="up-label">Language</label>
+                        <select name="language" class="up-select">
+                            <option value="en" {% if promo.language == 'en' %}selected{% endif %}>English</option>
+                            <option value="hi" {% if promo.language == 'hi' %}selected{% endif %}>Hindi</option>
+                            <option value="es" {% if promo.language == 'es' %}selected{% endif %}>Spanish</option>
+                            <option value="fr" {% if promo.language == 'fr' %}selected{% endif %}>French</option>
+                            <option value="ja" {% if promo.language == 'ja' %}selected{% endif %}>Japanese</option>
+                            <option value="ko" {% if promo.language == 'ko' %}selected{% endif %}>Korean</option>
+                            <option value="other" {% if promo.language == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: Tags -->
+            <div class="up-section">
+                <div class="up-section-label">
+                    <span class="up-step-num">04</span>
+                    Tags
+                </div>
+                <div class="up-field">
+                    <label class="up-label">Tags <span class="up-optional">(optional)</span></label>
+                    <input type="text" name="tags" class="up-input"
+                           value="{{ promo.tags }}"
+                           placeholder="action, thriller, 2025 — comma separated">
+                </div>
+            </div>
+
+            <!-- STEP 5: File Upload -->
+            <div class="up-section">
+                <div class="up-section-label">
+                    <span class="up-step-num">05</span>
+                    Upload Media
+                </div>
+
+                <!-- Current media file -->
+                {% if promo.media_file %}
+                <div class="up-field" style="margin-bottom:8px;">
+                    <label class="up-label">Current Media File</label>
+                    <a href="{{ promo.media_file.url }}" target="_blank"
+                       style="color:#f5c518; font-size:13px;">
+                        ▶ View current file
+                    </a>
+                    <span style="color:#555; font-size:12px;"> — upload a new file below to replace it</span>
+                </div>
+                {% endif %}
+
+                <div class="up-field">
+                    <label class="up-label">
+                        Replace Media File <span class="up-optional">(optional)</span>
+                    </label>
+                    <div class="up-dropzone" id="mainDrop" onclick="document.getElementById('mainFile').click()">
+                        <input type="file" id="mainFile" name="media_file" hidden accept="video/*,image/*">
+                        <div class="up-drop-inner" id="mainDropInner">
+                            <div class="up-drop-icon" id="mainDropIcon">⬆</div>
+                            <div class="up-drop-title">Drag & drop or click to browse</div>
+                            <div class="up-drop-sub" id="mainDropSub">MP4, MOV, AVI, MKV up to 2GB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current thumbnail -->
+                {% if promo.thumbnail %}
+                <div class="up-field" style="margin-bottom:8px;">
+                    <label class="up-label">Current Thumbnail</label>
+                    <img src="{{ promo.thumbnail.url }}" alt="Current thumbnail"
+                         style="width:120px; border-radius:6px; margin-top:6px; display:block;">
+                    <span style="color:#555; font-size:12px;">Upload a new one below to replace it</span>
+                </div>
+                {% endif %}
+
+                <div class="up-field">
+                    <label class="up-label">Replace Thumbnail <span class="up-optional">(optional)</span></label>
+                    <div class="up-thumb-zone" id="thumbDrop" onclick="document.getElementById('thumbFile').click()">
+                        <input type="file" id="thumbFile" name="thumbnail" hidden accept="image/*">
+                        <div id="thumbPreviewWrap" class="up-thumb-preview-wrap">
+                            <div class="up-thumb-placeholder">
+                                <span>🖼</span>
+                                <span>Upload new thumbnail</span>
+                                <span class="up-drop-sub">JPG, PNG, WEBP · Max 5MB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="up-submit-bar">
+                <a href="{% url 'my_promotions' %}" class="up-btn-cancel">Cancel</a>
+                <button type="submit" class="up-btn-submit" id="submitBtn">
+                    💾 Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div class="footer-links">
+        <a href="{% url 'help' %}" class="footer-link">Help</a>
+        <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+    </div>
+    <p class="footer-text">© 2026 MoviesVerse — Production Panel</p>
+</footer>
+
+<script>
+document.addEventListener('click', e => {
+    const dd = document.getElementById('navDropdown');
+    if (dd) dd.classList.toggle('active', dd.contains(e.target));
+});
+
+/* Type card selection */
+document.querySelectorAll('.up-type-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.up-type-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+    });
+});
+
+/* Drag & drop main zone */
+const mainDrop      = document.getElementById('mainDrop');
+const mainFile      = document.getElementById('mainFile');
+const mainDropInner = document.getElementById('mainDropInner');
+const mainDropIcon  = document.getElementById('mainDropIcon');
+
+['dragenter','dragover'].forEach(ev => mainDrop.addEventListener(ev, e => {
+    e.preventDefault(); mainDrop.classList.add('drag-over');
+}));
+['dragleave','drop'].forEach(ev => mainDrop.addEventListener(ev, e => {
+    e.preventDefault(); mainDrop.classList.remove('drag-over');
+    if (ev === 'drop' && e.dataTransfer.files.length) handleMainFile(e.dataTransfer.files[0]);
+}));
+mainFile.addEventListener('change', () => {
+    if (mainFile.files.length) handleMainFile(mainFile.files[0]);
+});
+
+function handleMainFile(file) {
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    mainDropIcon.textContent = '✅';
+    mainDropInner.querySelector('.up-drop-title').textContent = file.name;
+    mainDropInner.querySelector('.up-drop-sub').textContent   = `${sizeMB} MB · ${file.type}`;
+    mainDrop.classList.add('has-file');
+}
+
+/* Thumbnail preview */
+const thumbFile        = document.getElementById('thumbFile');
+const thumbPreviewWrap = document.getElementById('thumbPreviewWrap');
+
+thumbFile.addEventListener('change', () => {
+    if (!thumbFile.files.length) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        thumbPreviewWrap.innerHTML = `<img src="${e.target.result}" class="up-thumb-preview-img" alt="Thumbnail">`;
+    };
+    reader.readAsDataURL(thumbFile.files[0]);
+});
+
+/* Submit loading state */
+document.getElementById('editForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Saving…';
+});
+</script>
+</body>
+</html>

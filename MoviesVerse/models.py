@@ -159,3 +159,42 @@ class SearchHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} searched '{self.query}'"
+    
+class Promotion(models.Model):
+    PROMO_TYPE_CHOICES = [
+        ('trailer', 'Trailer'),
+        ('poster', 'Poster'),
+        ('bts', 'Behind the Scenes'),
+        ('clip', 'Clip'),
+        ('interview', 'Interview'),
+        ('banner', 'Banner / Ad'),
+    ]
+
+    LANGUAGE_CHOICES = [
+        ('en', 'English'),
+        ('hi', 'Hindi'),
+        ('es', 'Spanish'),
+        ('fr', 'French'),
+        ('ja', 'Japanese'),
+        ('ko', 'Korean'),
+        ('other', 'Other'),
+    ]
+
+    production_house = models.ForeignKey(
+        ProductionHouse, on_delete=models.CASCADE, related_name='promotions'
+    )
+    promo_type  = models.CharField(max_length=20, choices=PROMO_TYPE_CHOICES, default='trailer')
+    title       = models.CharField(max_length=120)
+    description = models.TextField(blank=True)
+    release_date = models.DateField(null=True, blank=True)
+    language    = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='en')
+    tags        = models.CharField(max_length=300, blank=True)
+    media_file  = models.FileField(upload_to='promotions/media/', null=True, blank=True)
+    thumbnail   = models.ImageField(upload_to='promotions/thumbnails/', null=True, blank=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.production_house.name} — {self.title}"

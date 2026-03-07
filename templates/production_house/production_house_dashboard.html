@@ -29,8 +29,9 @@
                 <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
             {% endif %}
             <div class="dropdown-menu">
-                {% comment %} <a href="{% url 'production_profile' %}">🎬 Company Profile</a> {% endcomment %}
+                <a href="#">⚙️ Settings</a>
                 <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <a href="{% url 'my_promotions' %}">📣 My Promotions</a>
                 <hr>
                 <a href="{% url 'logout' %}" class="logout">Logout</a>
             </div>
@@ -96,22 +97,17 @@
 <div class="kpi-bar-wrap">
     <div class="kpi-bar">
         <div class="kpi-item">
-            <span class="kpi-num">{{ movies|length|default:"0" }}</span>
+            <span class="kpi-num">{{ total_films|default:"0" }}</span>
             <span class="kpi-label">Total Films</span>
         </div>
         <div class="kpi-divider"></div>
         <div class="kpi-item">
-            <span class="kpi-num">{{ total_views|default:"0" }}M</span>
-            <span class="kpi-label">Total Views</span>
-        </div>
-        <div class="kpi-divider"></div>
-        <div class="kpi-item">
-            <span class="kpi-num">{{ avg_rating|default:"0.0" }}</span>
+            <span class="kpi-num">{{ avg_rating }}</span>
             <span class="kpi-label">Avg Rating</span>
         </div>
         <div class="kpi-divider"></div>
         <div class="kpi-item">
-            <span class="kpi-num">{{ total_watchlists|default:"0" }}K</span>
+            <span class="kpi-num">{{ total_watchlists|default:"0" }}</span>
             <span class="kpi-label">Watchlisted</span>
         </div>
         <div class="kpi-divider"></div>
@@ -147,7 +143,7 @@
                 </div>
                 <span class="action-arrow">→</span>
             </div>
-            <div class="action-card" onclick="window.location.href='#'">
+            <div class="action-card" onclick="window.location.href='{% url 'add_promotion' %}'">
                 <div class="action-icon">📣</div>
                 <div class="action-text">
                     <div class="action-title">Upload Promotion</div>
@@ -155,11 +151,11 @@
                 </div>
                 <span class="action-arrow">→</span>
             </div>
-            <div class="action-card" onclick="window.location.href='#'">
+            <div class="action-card" onclick="window.location.href='{% url 'my_promotions' %}'">
                 <div class="action-icon">🎭</div>
                 <div class="action-text">
-                    <div class="action-title">Manage Cast</div>
-                    <div class="action-sub">Actors, directors & crew</div>
+                    <div class="action-title">My Promotions</div>
+                    <div class="action-sub">Manage your content</div>
                 </div>
                 <span class="action-arrow">→</span>
             </div>
@@ -179,7 +175,7 @@
 
         <div class="movie-grid prod-movie-grid">
             {% for movie in movies %}
-            <div class="prod-movie-card" data-status="{{ movie.status|default:'released' }}">
+            <div class="prod-movie-card" data-status="{{ movie.status }}">
                 <div class="prod-card-poster">
                     <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}">
                     {% comment %} <div class="prod-card-overlay">
@@ -189,11 +185,6 @@
                             <button class="card-action-btn" title="Promote">📣</button>
                         </div>
                     </div> {% endcomment %}
-                    {% if movie.status == 'upcoming' %}
-                        <div class="status-badge upcoming">Upcoming</div>
-                    {% else %}
-                        <div class="status-badge released">Released</div>
-                    {% endif %}
                 </div>
                 <div class="prod-card-info">
                     <div class="prod-card-title">{{ movie.title }}</div>

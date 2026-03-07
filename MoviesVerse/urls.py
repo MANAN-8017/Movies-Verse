@@ -37,6 +37,9 @@ urlpatterns = [
     path('production_house_dashboard/', views.production_house_dashboard, name='production_house_dashboard'),
     path('production_analytics/', views.production_analytics, name='production_analytics'),
     path('add_promotion/', views.add_promotion, name='add_promotion'),
+    path('my_promotions/', views.my_promotions, name='my_promotions'),
+    path('promotion/delete/<int:promo_id>/', views.delete_promotion, name='delete_promotion'),
+    path('promotion/edit/<int:promo_id>/', views.edit_promotion, name='edit_promotion'),
 ]
 
 if settings.DEBUG:

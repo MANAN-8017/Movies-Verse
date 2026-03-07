@@ -1,8 +1,9 @@
 import requests
 from .utils.movie_cache import *
+from django.conf import settings
 from django.core.cache import cache
 
-OMDB_API_KEY = "5fde9780"
+OMDB_API_KEY = settings.OMDB_API_KEY
 BASE_OMDB = "http://www.omdbapi.com/"
 
 def build_movie_data_omdb(data):
@@ -63,8 +64,6 @@ def fetch_from_omdb(imdb_id):
 
         movie = build_movie_data_omdb(data)
         merged_movie = merge_movie_data(cached_movie, movie)
-
-        cache.set(cache_key, merged_movie, timeout=60*60*24)
 
         return merged_movie
 

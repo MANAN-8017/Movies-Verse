@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
 from MoviesVerse.models import Favourite, ProductionHouse
-import requests
-from MoviesVerse.services.production_service import fetch_movies_by_company
-from MoviesVerse.services.tmdb_movie_service import BASE_TMDB, TMDB_API_KEY, merge_movie_data
 from MoviesVerse.models import Movie, Watchlist, Favourite
+from MoviesVerse.services.production_service import fetch_movies_by_company
 
+@login_required
 def production_house_dashboard(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -23,6 +21,7 @@ def production_house_dashboard(request):
         'movies': movies,
     })
 
+@login_required
 def production_analytics(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -66,7 +65,7 @@ def production_analytics(request):
         'total_favourites': total_favourites,
     })
 
-
+@login_required
 def add_promotion(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:

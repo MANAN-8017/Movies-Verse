@@ -36,13 +36,13 @@ def index(request):
 
     trending_movies = [get_movies(i) for i in trending_ids]
     popular_movies = [get_movies(i) for i in popular_ids]
-    extra_movies = [get_movies(i) for i in more_ids]
+    # extra_movies = [get_movies(i) for i in more_ids]
 
     context = {
         "featured_movie": featured_movie,
         "trending_movies": trending_movies,
         "popular_movies": popular_movies,
-        "extra_movies": extra_movies,
+        # "extra_movies": extra_movies,
     }
 
     return render(request, "index.html", context)
@@ -53,20 +53,19 @@ def trending(request):
         "tt1825683",   # Black Panther
         "tt1745960",   # Top Gun: Maverick
         "tt6263850",   # Deadpool & Wolverine
-        "tt1285016",   # The Social Network (original — no confirmed 2024 version)
-        "tt1136617",   # The Killer (2023)
-        "tt5592244",   # The Guilty (2021)
-        "tt5109286",   # Final Destination: Bloodlines
+        "tt1285016",   # The Social Network
+        "tt1136617",   # The Killer
+        "tt9421570",   # The Guilty
+        "tt9619824",   # Final Destination: Bloodlines
         "tt16366836",  # Venom: The Last Dance
         "tt5433140",   # Fast X
         "tt22687790",  # A Haunting in Venice
         "tt13452446",  # Damsel
         "tt9663764",   # Aquaman and the Lost Kingdom
-        "tt14627658",  # The Conjuring: Last Rites
-        "tt2356777",   # Terrifier 3
+        "tt22898462",  # The Conjuring: Last Rites
         "tt26736843",  # Atlas
-        "tt13211194",  # Backett (Beckett – correct spelling)
-        "tt14627620"   # The Secret Agent
+        "tt10230994",  # Beckett
+        "tt27847051"   # The Secret Agent
     ]
 
     movies = [get_movies(i) for i in ids]
@@ -80,24 +79,23 @@ def trending(request):
 def popular(request):
 
     ids = [
-        "tt0468569",  # Batman: The Dark Knight (2008)
-        "tt1375666",  # Inception (2010)
-        "tt0816692",  # Interstellar (2014)
-        "tt4154796",  # Avengers: Endgame (2019)
-        "tt15398776", # Oppenheimer (2023)
-        "tt0241527",  # Harry Potter and the Sorcerer's Stone (2001)
-        # None,         # F1: The Movie (no confirmed IMDb page yet)
-        # None,         # Avatar: Fire and Ash (not officially released yet)
-        # None,         # Mission: Impossible - The Final Reckoning (unreleased)
-        # None,         # Frankenstein (2025 — multiple projects, no confirmed listing)
-        # None,         # Nuremberg (2025 — no finalized IMDb entry)
-        # None,         # Predator: Badlands (unreleased / no stable IMDb ID yet)
-        # None,         # Black Bag (2025 — not finalized listing)
-        # None,         # The Tiger (2025 — ambiguous title, no confirmed listing)
-        # None,         # Jay Kelly (2025 — no confirmed IMDb entry)
-        # None,         # Dracula (2025 — multiple projects, no confirmed ID)
-        # None,         # Primate (2025 — no confirmed IMDb page)
-        # None          # Jurassic World: Rebirth (2025 — not released yet)
+        "tt0468569",  # Batman: The Dark Knight
+        "tt1375666",  # Inception
+        "tt0816692",  # Interstellar
+        "tt4154796",  # Avengers: Endgame
+        "tt15398776", # Oppenheimer
+        "tt0241527",  # Harry Potter and the Sorcerer's Stone
+        "tt16311594", # F1: The Movie
+        "tt1757678",  # Avatar: Fire and Ash
+        "tt9603208",  # Mission: Impossible - The Final Reckoning
+        "tt1312221",  # Frankenstein
+        "tt29567915", # Nuremberg
+        "tt31227572", # Predator: Badlands
+        "tt30988739", # Black Bag
+        "tt30446847", # Jay Kelly
+        "tt31434030", # Dracula
+        "tt33028778", # Primate
+        "tt31036941"  # Jurassic World: Rebirth
     ]
 
     movies = [get_movies(i) for i in ids]

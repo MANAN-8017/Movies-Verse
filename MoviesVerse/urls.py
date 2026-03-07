@@ -13,30 +13,30 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     # Private
-    path('favourite/', views.favourite, name='favourite'),
     path('profile/', views.profile, name='profile'),
     path('watched/', views.watched, name='watched'),
+    path('favourite/', views.favourite, name='favourite'),
     path('watchlist/', views.watchlist, name='watchlist'),
-    path('settings/', views.settings, name='settings'),
+    path('settings/', views.settings_page, name='settings'),
 
     # Public
     path('index/', views.index, name='index'),
-    path('trending/', views.trending, name='trending'),
     path('popular/', views.popular, name='popular'),
+    path('trending/', views.trending, name='trending'),
     path('upcoming/', views.upcoming, name='upcoming'),
 
     # Legal
     path('help/', views.help, name='help'),
-    path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
+    path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
 
     path("search/", views.search_movies, name="search_movies"),
     path("movie/<str:imdb_id>/", views.movie_detail, name="movie_detail"),
     
      #production house
-    path('production_house_dashboard/', views.production_house_dashboard, name='production_house_dashboard'),
-    path('production_analytics/', views.production_analytics, name='production_analytics'),
     path('add_promotion/', views.add_promotion, name='add_promotion'),
+    path('production_analytics/', views.production_analytics, name='production_analytics'),
+    path('production_house_dashboard/', views.production_house_dashboard, name='production_house_dashboard'),
 ]
 
 if settings.DEBUG:

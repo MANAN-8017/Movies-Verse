@@ -1,13 +1,14 @@
 from termcolor import colored
 from .utils.movie_cache import *
+from django.conf import settings
 from django.core.cache import cache
 from ..services.omdb_movie_service import *
 from ..services.tmdb_movie_service import *
 
-OMDB_API_KEY = "5fde9780"
+OMDB_API_KEY = settings.OMDB_API_KEY
 BASE_OMDB = "http://www.omdbapi.com/"
 
-TMDB_API_KEY = "d640e3df64686129c3144ad6b3f247cd"
+TMDB_API_KEY = settings.TMDB_API_KEY
 BASE_TMDB = "https://api.themoviedb.org/3"
     
 def get_movies(imdb_id):
@@ -15,29 +16,36 @@ def get_movies(imdb_id):
     cache_key = f"movie_{imdb_id}"
     cached_movie = cache.get(cache_key)
 
-    if cached_movie:
-        if cached_movie.get("actors") and cached_movie.get("backdrop"):
-            print(colored(f"{cached_movie.get('title')} is already fully cached including TMDB data", 'green'))
-            return cached_movie
+    if cached_movie and cached_movie.get("actors") and cached_movie.get("backdrop"):
+        print(colored(f"{cached_movie.get('title')} is fully cached (OMDB + TMDB)", "green"))
+        return cached_movie
 
-    print(f"Fetching for {imdb_id} from OMDB...")
-    movie = fetch_from_omdb(imdb_id)
+    movie = None
+
+    if cached_movie:
+        print(colored(f"Using cached OMDB data for {cached_movie.get('title')}", "blue"))
+        movie = cached_movie
+    else:
+        print(f"Fetching data for {imdb_id} from OMDB...")
+        movie = fetch_from_omdb(imdb_id)
+
+        if movie:
+            print(colored(f"Successfully fetched {movie.get('title')} from OMDB", "blue"))
+        else:
+            print(colored("OMDB failed. Trying TMDB only...", "red"))
+
+    print(colored("Trying TMDB for extra data...", "yellow"))
+
+    tmdb_movie = fetch_from_tmdb(imdb_id)
+
+    if tmdb_movie:
+        movie = tmdb_movie
+        print(colored(f"TMDB enrichment successful for {movie.get('title')}", "green"))
+    else:
+        print(colored("TMDB did not return additional data", "red"))
 
     if movie:
-        print(f"Trying TMDB for {movie.get('title')}'s extra data...")
-    else:
-        print(colored("Couldn't fetch data from OMDB!", 'red'))
-        print("Fetching data from TMDB...")
-    
-    movie = fetch_from_tmdb(imdb_id)
-
-    if movie and movie.get("actors"):
-        print(colored(f"TMDB data successfully merged for {movie.get('title')}", 'green'))
-    else:
-        if movie: 
-            print(colored(f"TMDB did NOT return extra data for {movie.get('title')}", 'red'))
-        else:
-            print(colored(f"Movie not found using id: {imdb_id}", 'red'))
+        cache.set(cache_key, movie, timeout=60*60*24)
 
     return movie
 

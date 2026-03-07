@@ -1,7 +1,9 @@
 
 import requests
-from django.core.cache import cache
-from MoviesVerse.services.tmdb_movie_service import BASE_TMDB, TMDB_API_KEY, merge_movie_data
+from django.conf import settings
+
+TMDB_API_KEY = settings.TMDB_API_KEY
+BASE_TMDB = "https://api.themoviedb.org/3"
 
 def fetch_movies_by_company(tmdb_company_id):
     try:

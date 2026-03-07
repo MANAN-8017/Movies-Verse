@@ -103,7 +103,7 @@
                     <div class="card-info">
                         <div class="card-rating">
                             <span class="card-star">★</span>
-                            <span>{{ movie.rating }}</span>
+                            <span>{{ movie.rating|floatformat:1 }}</span>
                         </div>
                         <h3 class="card-title">{{ movie.title }}</h3>
                         <p class="card-meta">{{ movie.year }}</p>
@@ -128,7 +128,7 @@
                     <div class="card-info">
                         <div class="card-rating">
                             <span class="card-star">★</span>
-                            <span>{{ movie.rating }}</span>
+                            <span>{{ movie.rating|floatformat:1 }}</span>
                         </div>
                         <h3 class="card-title">{{ movie.title }}</h3>
                         <p class="card-meta">{{ movie.year }}</p>

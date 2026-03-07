@@ -1,8 +1,10 @@
+import time
 import requests
+from django.conf import settings
 from .utils.movie_cache import *
 from django.core.cache import cache
 
-TMDB_API_KEY = "d640e3df64686129c3144ad6b3f247cd"
+TMDB_API_KEY = settings.TMDB_API_KEY
 BASE_TMDB = "https://api.themoviedb.org/3"
 
 def build_movie_data_tmdb(movie):
@@ -53,7 +55,7 @@ def build_movie_data_tmdb(movie):
 
     movie_data = {
         "imdb_id": clean(movie.get("imdb_id")),
-        "tmdb_id": movie.get("tmdb_id"),
+        "tmdb_id": movie.get("id"),
         "title": clean(movie.get("title")),
         "overview": clean(movie.get("overview")),
         "genres": genres,
@@ -72,58 +74,61 @@ def build_movie_data_tmdb(movie):
     }
 
     return movie_data
-    
+
 def fetch_from_tmdb(imdb_id):
 
     cache_key = f"movie_{imdb_id}"
     cached_movie = cache.get(cache_key)
 
-    try:
-        response = requests.get(
-            f"{BASE_TMDB}/find/{imdb_id}",
-            params={
-                "api_key": TMDB_API_KEY,
-                "external_source": "imdb_id"
-            },
-            timeout=5
-        )
+    for attempt in range(3):
+        try:
+            response = requests.get(
+                f"{BASE_TMDB}/find/{imdb_id}",
+                params={
+                    "api_key": TMDB_API_KEY,
+                    "external_source": "imdb_id"
+                },
+                timeout=5
+            )
 
-        if response.status_code != 200:
-            return cached_movie
+            if response.status_code != 200:
+                return cached_movie
 
-        data = response.json()
+            data = response.json()
+            results = data.get("movie_results", [])
 
-        results = data.get("movie_results", [])
-        if not results:
-            return cached_movie
+            if not results:
+                return cached_movie
 
-        movie_id = results[0]["id"]
+            movie_id = results[0]["id"]
 
-        details = requests.get(
-            f"{BASE_TMDB}/movie/{movie_id}",
-            params={
-                "api_key": TMDB_API_KEY,
-                "append_to_response": "videos,credits"
-            },
-            timeout=5
-        )
+            details = requests.get(
+                f"{BASE_TMDB}/movie/{movie_id}",
+                params={
+                    "api_key": TMDB_API_KEY,
+                    "append_to_response": "videos,credits"
+                },
+                timeout=5
+            )
 
-        if details.status_code != 200:
-            return cached_movie
+            if details.status_code != 200:
+                return cached_movie
 
-        movie = details.json()
+            movie = details.json()
+            movie["imdb_id"] = imdb_id
 
-        movie["tmdb_id"] = movie_id
+            tmdb_data = build_movie_data_tmdb(movie)
+            merged_movie = merge_movie_data(cached_movie, tmdb_data)
 
-        tmdb_data = build_movie_data_tmdb(movie)
-        merged_movie = merge_movie_data(cached_movie, tmdb_data)
+            return merged_movie
 
-        cache.set(cache_key, merged_movie, timeout=60*60*24)
+        except requests.RequestException as e:
+            print(f"TMDB attempt {attempt+1} failed:", e)
 
-        return merged_movie
-
-    except requests.RequestException:
-        return cached_movie
+            if attempt < 2:
+                time.sleep(1)
+            else:
+                return cached_movie
     
 def search_tmdb_movies(movie_name):
     try:

@@ -1,0 +1,272 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — {{ production.name }} | MoviesVerse</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production.css' %}">
+    <link rel="stylesheet" href="{% static 'css/production_setting.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'index' %}" style="text-decoration:none; color:#f5c518;">MoviesVerse</a>
+        <span class="prod-badge">Production</span>
+    </div>
+    <div class="nav-links" style="display:flex; align-items:center; gap:24px;">
+        <a href="{% url 'production_house_dashboard' %}" style="color:#aaa; text-decoration:none; font-size:14px;">Dashboard</a>
+        <a href="{% url 'production_analytics' %}" style="color:#aaa; text-decoration:none; font-size:14px;">Analytics</a>
+        <div class="profile-dropdown" id="navDropdown">
+            {% if production.logo %}
+                <img src="{{ production.logo.url }}" class="profile-avatar" alt="Logo">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Logo">
+            {% endif %}
+            <div class="dropdown-menu">
+                <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
+                <a href="{% url 'production_analytics' %}">📊 Analytics</a>
+                <a href="{% url 'my_promotions' %}">📣 My Promotions</a>
+                <a href="{% url 'production_settings' %}">⚙️ Settings</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<section class="analytics-header">
+    <div class="analytics-header-bg"></div>
+    <div class="analytics-header-content">
+        <div class="analytics-breadcrumb">
+            <a href="{% url 'production_house_dashboard' %}">{{ production.name }}</a>
+            <span>›</span>
+            <span>Settings</span>
+        </div>
+        <h1 class="analytics-title">Settings</h1>
+        <p class="analytics-subtitle">Manage your production house profile and account.</p>
+    </div>
+</section>
+
+<!-- ── MAIN ── -->
+<main class="st-main">
+
+    {% if success %}
+    <div class="st-alert st-alert-success">✅ {{ success }}</div>
+    {% endif %}
+    {% if error %}
+    <div class="st-alert st-alert-error">❌ {{ error }}</div>
+    {% endif %}
+
+    <!-- CARD 1: Basic Info -->
+    <div class="st-card">
+        <div class="st-card-head">
+            <div class="st-card-icon">🏢</div>
+            <div>
+                <div class="st-card-title">Basic Information</div>
+                <div class="st-card-sub">Update your studio's public details</div>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="basic_info">
+            <div class="st-card-body">
+                <div class="st-field">
+                    <label class="st-label">Production House Name</label>
+                    <input type="text" name="name" class="st-input" value="{{ production.name }}" required>
+                </div>
+                <div class="st-field">
+                    <label class="st-label">Headquarters</label>
+                    <input type="text" name="headquarters" class="st-input"
+                           value="{{ production.headquarters }}"
+                           placeholder="e.g. Mumbai, Maharashtra, India">
+                </div>
+                <div class="st-row">
+                    <div class="st-field">
+                        <label class="st-label">Founded Year</label>
+                        <input type="number" name="founded_year" class="st-input"
+                               value="{{ production.founded_year }}"
+                               placeholder="e.g. 1976" min="1800" max="2099">
+                    </div>
+                    <div class="st-field">
+                        <label class="st-label">Contact Number</label>
+                        <input type="text" name="contact_number" class="st-input"
+                               value="{{ production.contact_number }}"
+                               placeholder="e.g. +91 22 6179 0100">
+                    </div>
+                </div>
+            </div>
+            <div class="st-card-foot">
+                <button type="submit" class="st-btn-save">💾 Save Info</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- CARD 2: Logo -->
+    <div class="st-card">
+        <div class="st-card-head">
+            <div class="st-card-icon">🖼</div>
+            <div>
+                <div class="st-card-title">Studio Logo</div>
+                <div class="st-card-sub">Upload or replace your production house logo</div>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="logo">
+            <div class="st-card-body">
+                <div class="st-logo-row">
+                    <div class="st-logo-current">
+                        {% if production.logo %}
+                            <img src="{{ production.logo.url }}" alt="Logo" class="st-logo-img">
+                        {% else %}
+                            <div class="st-logo-empty">🎬</div>
+                        {% endif %}
+                        <div class="st-logo-badge">Current</div>
+                    </div>
+                    <div class="st-logo-right">
+                        <p class="st-logo-hint">JPG, PNG or WEBP · Max 5MB · Square recommended</p>
+                        <div class="st-upload-zone" id="logoDrop"
+                             onclick="document.getElementById('logoFile').click()">
+                            <input type="file" id="logoFile" name="logo" hidden accept="image/*">
+                            <div id="logoPreviewWrap" class="st-upload-inner">
+                                <span class="st-upload-icon">⬆</span>
+                                <span class="st-upload-title">Click to upload new logo</span>
+                                <span class="st-upload-sub">or drag & drop here</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="st-card-foot">
+                <button type="submit" class="st-btn-save">💾 Save Logo</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- CARD 3: Password -->
+    <div class="st-card">
+        <div class="st-card-head">
+            <div class="st-card-icon">🔒</div>
+            <div>
+                <div class="st-card-title">Change Password</div>
+                <div class="st-card-sub">Update your account password</div>
+            </div>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="password">
+            <div class="st-card-body">
+                <div class="st-field">
+                    <label class="st-label">Current Password</label>
+                    <div class="st-input-wrap">
+                        <input type="password" name="current_password" id="pwd0"
+                               class="st-input" placeholder="Enter your current password" required>
+                        <button type="button" class="st-eye" onclick="togglePwd('pwd0', this)">👁</button>
+                    </div>
+                </div>
+                <div class="st-field">
+                    <label class="st-label">New Password</label>
+                    <div class="st-input-wrap">
+                        <input type="password" name="new_password" id="pwd1"
+                               class="st-input" placeholder="Enter new password"
+                               required oninput="checkStrength(this.value)">
+                        <button type="button" class="st-eye" onclick="togglePwd('pwd1', this)">👁</button>
+                    </div>
+                    <div class="st-strength-bar"><div class="st-strength-fill" id="strengthFill"></div></div>
+                    <div class="st-strength-hint" id="strengthHint"></div>
+                </div>
+                <div class="st-field">
+                    <label class="st-label">Confirm New Password</label>
+                    <div class="st-input-wrap">
+                        <input type="password" name="confirm_password" id="pwd2"
+                               class="st-input" placeholder="Repeat new password" required>
+                        <button type="button" class="st-eye" onclick="togglePwd('pwd2', this)">👁</button>
+                    </div>
+                </div>
+            </div>
+            <div class="st-card-foot">
+                <button type="submit" class="st-btn-save">🔒 Change Password</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+    <div class="footer-links">
+        <a href="{% url 'help' %}" class="footer-link">Help</a>
+        <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+        <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+    </div>
+    <p class="footer-text">© 2026 MoviesVerse — Production Panel</p>
+</footer>
+
+<script>
+document.addEventListener('click', e => {
+    const dd = document.getElementById('navDropdown');
+    if (dd) dd.classList.toggle('active', dd.contains(e.target));
+});
+
+function togglePwd(id, btn) {
+    const input = document.getElementById(id);
+    const isText = input.type === 'text';
+    input.type = isText ? 'password' : 'text';
+    btn.style.opacity = isText ? '0.4' : '1';
+}
+
+function checkStrength(val) {
+    const fill = document.getElementById('strengthFill');
+    const hint = document.getElementById('strengthHint');
+    let score = 0;
+    if (val.length >= 6)  score++;
+    if (val.length >= 10) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const map = [
+        { w: '0%',   color: '#333',    label: '' },
+        { w: '25%',  color: '#e74c3c', label: 'Weak' },
+        { w: '50%',  color: '#f39c12', label: 'Fair' },
+        { w: '75%',  color: '#3498db', label: 'Good' },
+        { w: '100%', color: '#2ecc71', label: 'Strong' },
+    ];
+    const s = map[Math.min(score, 4)];
+    fill.style.width      = s.w;
+    fill.style.background = s.color;
+    hint.textContent      = s.label;
+    hint.style.color      = s.color;
+}
+
+const logoDrop = document.getElementById('logoDrop');
+const logoFile = document.getElementById('logoFile');
+
+['dragenter','dragover'].forEach(ev => logoDrop.addEventListener(ev, e => {
+    e.preventDefault(); logoDrop.classList.add('drag-over');
+}));
+['dragleave','drop'].forEach(ev => logoDrop.addEventListener(ev, e => {
+    e.preventDefault(); logoDrop.classList.remove('drag-over');
+    if (ev === 'drop' && e.dataTransfer.files.length) handleLogo(e.dataTransfer.files[0]);
+}));
+logoFile.addEventListener('change', () => {
+    if (logoFile.files.length) handleLogo(logoFile.files[0]);
+});
+
+function handleLogo(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('logoPreviewWrap').innerHTML =
+            `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;border-radius:8px;" alt="Preview">`;
+    };
+    reader.readAsDataURL(file);
+    logoDrop.classList.add('has-file');
+}
+</script>
+</body>
+</html>

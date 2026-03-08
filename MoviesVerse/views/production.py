@@ -1,10 +1,14 @@
-from datetime import date
-from MoviesVerse.models import *
+from datetime import date, datetime
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from MoviesVerse.services.production_service import fetch_movies_by_company
 
-@login_required
+from MoviesVerse.models import Favourite, ProductionHouse, Promotion
+import requests
+from MoviesVerse.services.production_service import fetch_movies_by_company
+from MoviesVerse.services.tmdb_movie_service import BASE_TMDB, TMDB_API_KEY, merge_movie_data
+from MoviesVerse.models import Movie, Watchlist, Favourite
+
 def production_house_dashboard(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -38,8 +42,9 @@ def production_house_dashboard(request):
         'total_films': total_films,
         'upcoming_count': upcoming_count,
     })
+    
 
-@login_required
+            
 def production_analytics(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -83,7 +88,7 @@ def production_analytics(request):
         'total_favourites': total_favourites,
     })
 
-@login_required
+    
 def add_promotion(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -118,6 +123,7 @@ def add_promotion(request):
         'production': production_house,
     })
     
+    
 def my_promotions(request):
     ph_id = request.session.get('production_house_id')
     if not ph_id:
@@ -130,6 +136,7 @@ def my_promotions(request):
         'production': production_house,
         'promotions': promotions,
     })
+    
 
 def delete_promotion(request, promo_id):
     ph_id = request.session.get('production_house_id')
@@ -143,6 +150,7 @@ def delete_promotion(request, promo_id):
 
     promotion.delete()
     return redirect('my_promotions')
+
 
 def edit_promotion(request, promo_id):
     ph_id = request.session.get('production_house_id')
@@ -173,4 +181,58 @@ def edit_promotion(request, promo_id):
     return render(request, 'production_house/edit_promotion.html', {
         'production': promotion.production_house,
         'promo': promotion,
+    })
+    
+    
+def production_settings(request):
+    ph_id = request.session.get('production_house_id')
+    if not ph_id:
+        return redirect('sign_in')
+
+    production_house = ProductionHouse.objects.get(id=ph_id)
+    error = None
+    success = None
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        # ── Basic Info ──
+        if action == 'basic_info':
+            production_house.name = request.POST.get('name', '').strip()
+            production_house.headquarters = request.POST.get('headquarters', '').strip()
+            production_house.founded_year = request.POST.get('founded_year') or None
+            production_house.contact_number = request.POST.get('contact_number', '').strip()
+            production_house.save()
+            success = 'Basic info updated successfully.'
+
+        # ── Logo ──
+        elif action == 'logo':
+            if request.FILES.get('logo'):
+                production_house.logo = request.FILES['logo']
+                production_house.save()
+                success = 'Logo updated successfully.'
+            else:
+                error = 'Please select a logo file.'
+
+        # ── Password ──
+        elif action == 'password':
+            current_password  = request.POST.get('current_password')
+            new_password      = request.POST.get('new_password')
+            confirm_password  = request.POST.get('confirm_password')
+
+            if not django_check_password(current_password, production_house.password):
+                error = 'Current password is incorrect.'
+            elif new_password != confirm_password:
+                error = 'New passwords do not match.'
+            elif len(new_password) < 6:
+                error = 'New password must be at least 6 characters.'
+            else:
+                production_house.password = make_password(new_password)
+                production_house.save()
+                success = 'Password changed successfully.'
+
+    return render(request, 'production_house/production_setting.html', {
+        'production': production_house,
+        'error': error,
+        'success': success,
     })

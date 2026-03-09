@@ -28,7 +28,7 @@
             {% endif %}
             <div class="dropdown-menu">
                 <a href="{% url 'production_house_dashboard' %}">🎬 Dashboard</a>
-                <a href="#">⚙️ Settings</a>
+                <a href="{% url 'production_settings' %}">⚙️ Settings</a>
                 <a href="{% url 'production_analytics' %}">📊 Analytics</a>
                 <hr>
                 <a href="{% url 'logout' %}" class="logout">Logout</a>

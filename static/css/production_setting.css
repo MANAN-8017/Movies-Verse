@@ -1,0 +1,412 @@
+/* =============================================
+   production_settings.css — MoviesVerse
+   Used by: production_settings.html
+   ============================================= */
+
+/* ════════════════════════════════════════
+   PAGE WRAPPER
+════════════════════════════════════════ */
+.st-main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ════════════════════════════════════════
+   ALERT BANNERS
+════════════════════════════════════════ */
+.st-alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.st-alert-success {
+    background: #0b2e0b;
+    border: 1px solid #1a5c1a;
+    color: #4caf50;
+}
+
+.st-alert-error {
+    background: #2e0b0b;
+    border: 1px solid #5c1a1a;
+    color: #f44336;
+}
+
+/* ════════════════════════════════════════
+   SETTINGS CARD
+════════════════════════════════════════ */
+.st-card {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.st-card:hover {
+    border-color: #2a2a2a;
+}
+
+/* Card header */
+.st-card-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 28px;
+    background: #0d0d0d;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.st-card-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(245, 197, 24, 0.07);
+    border: 1px solid rgba(245, 197, 24, 0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.st-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.st-card-sub {
+    font-size: 12px;
+    color: #555;
+    margin-top: 3px;
+}
+
+/* Card body */
+.st-card-body {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Card footer */
+.st-card-foot {
+    padding: 16px 28px;
+    background: #0d0d0d;
+    border-top: 1px solid #1a1a1a;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ════════════════════════════════════════
+   FORM FIELDS
+════════════════════════════════════════ */
+.st-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.st-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #bbb;
+    letter-spacing: 0.3px;
+}
+
+.st-input {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.st-input:focus {
+    border-color: rgba(245, 197, 24, 0.5);
+    box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.07);
+}
+
+.st-input::placeholder {
+    color: #333;
+}
+
+/* Two-column row */
+.st-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* ════════════════════════════════════════
+   PASSWORD INPUT WITH EYE TOGGLE
+════════════════════════════════════════ */
+.st-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.st-input-wrap .st-input {
+    padding-right: 44px;
+}
+
+.st-eye {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+
+.st-eye:hover {
+    opacity: 1;
+}
+
+/* Password strength bar */
+.st-strength-bar {
+    height: 4px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.st-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    background: #333;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.st-strength-hint {
+    font-size: 11px;
+    color: #555;
+    margin-top: 4px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* ════════════════════════════════════════
+   LOGO SECTION
+════════════════════════════════════════ */
+.st-logo-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.st-logo-current {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.st-logo-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #2a2a2a;
+    display: block;
+}
+
+.st-logo-empty {
+    width: 90px;
+    height: 90px;
+    border-radius: 12px;
+    background: #0d0d0d;
+    border: 2px solid #252525;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.st-logo-badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #444;
+    font-weight: 700;
+}
+
+.st-logo-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.st-logo-hint {
+    font-size: 12px;
+    color: #444;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Upload drop zone */
+.st-upload-zone {
+    border: 2px dashed #2a2a2a;
+    border-radius: 10px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    background: #0a0a0a;
+    transition: border-color 0.2s, background 0.2s;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.st-upload-zone:hover,
+.st-upload-zone.drag-over {
+    border-color: rgba(245, 197, 24, 0.4);
+    background: rgba(245, 197, 24, 0.03);
+}
+
+.st-upload-zone.has-file {
+    border-color: rgba(46, 204, 113, 0.4);
+    background: rgba(46, 204, 113, 0.03);
+}
+
+.st-upload-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+}
+
+.st-upload-icon {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.st-upload-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #aaa;
+}
+
+.st-upload-sub {
+    font-size: 11px;
+    color: #444;
+}
+
+/* ════════════════════════════════════════
+   SAVE BUTTON
+════════════════════════════════════════ */
+.st-btn-save {
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    background: #f5c518;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.st-btn-save:hover {
+    background: #ffd740;
+    transform: translateY(-1px);
+}
+
+.st-btn-save:disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 768px) {
+    .st-main        { padding: 24px 16px 60px; }
+    .st-row         { grid-template-columns: 1fr; }
+    .st-card-body   { padding: 20px 16px; }
+    .st-card-head   { padding: 16px 20px; }
+    .st-card-foot   { padding: 14px 20px; }
+    .st-logo-row    { flex-direction: column; }
+    .st-btn-save    { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+    .st-card-title  { font-size: 18px; }
+}
+
+/* ════════════════════════════════════════
+   CANCEL BUTTON
+════════════════════════════════════════ */
+.st-btn-cancel {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: #666;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+.st-btn-cancel:hover {
+    border-color: #444;
+    color: #aaa;
+}
+
+/* ════════════════════════════════════════
+   MOVIE POSTER PREVIEW
+════════════════════════════════════════ */
+.st-poster-preview {
+    width: 120px;
+    height: 180px;
+    border-radius: 10px;
+    background: #0d0d0d;
+    border: 2px solid #252525;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}

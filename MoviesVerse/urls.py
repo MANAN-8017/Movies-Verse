@@ -41,6 +41,7 @@ urlpatterns = [
     path('promotion/delete/<int:promo_id>/', views.delete_promotion, name='delete_promotion'),
     path('production_house_dashboard/', views.production_house_dashboard, name='production_house_dashboard'),
     path('production_settings/', views.production_settings, name='production_settings'),
+    path('add_movie/', views.add_movie, name='add_movie'),
 ]
 
 if settings.DEBUG:

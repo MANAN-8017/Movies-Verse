@@ -119,6 +119,31 @@
         </div>
     </section>
 
+    <section class="analytics-top-films" style="margin-top: 32px;">
+        <div class="section-header">
+            <h2 class="section-title">Top 5 Most trending Films</h2>
+            <span style="font-size:12px; color:#555;">Ranked by TMDB Trendings</span>
+        </div>
+        <div class="top-films-list">
+            {% for movie in trending_movies %}
+            <div class="top-film-row">
+                <span class="top-film-rank">#{{ forloop.counter }}</span>
+                <img src="https://image.tmdb.org/t/p/w92{{ movie.poster_path }}"
+                     class="top-film-thumb" alt="{{ movie.title }}">
+                <div class="top-film-info">
+                    <div class="top-film-title">{{ movie.title }}</div>
+                    <div class="top-film-meta">{{ movie.release_date }}</div>
+                </div>
+                <div class="top-film-stats">
+                    <span class="top-film-rating">★ {{ movie.vote_average|floatformat:1|default:"—" }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <p style="color:#555; font-size:14px;">No films data available.</p>
+            {% endfor %}
+        </div>
+    </section>
+
 </main>
 
 <!-- ── FOOTER ── -->

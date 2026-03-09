@@ -52,16 +52,22 @@ class Profile(models.Model):
         return f"{self.user.username}'s profile"
     
 class Movie(models.Model):
-    tmdb_id      = models.IntegerField(unique=True)
-    omdb_id      = models.CharField(max_length=20, unique=True)
-    title        = models.CharField(max_length=300)
-    poster       = models.URLField(max_length=500, blank=True)
-    release_year = models.CharField(max_length=10, blank=True)
-    runtime      = models.IntegerField(default=0, help_text="Runtime in minutes")
-    genres       = models.CharField(max_length=200, blank=True, help_text="Comma-separated genre names")
-    overview     = models.TextField(blank=True)
-    director     = models.CharField(max_length=200, blank=True)
+    tmdb_id        = models.IntegerField(null=True, blank=True, unique=True)
+    omdb_id        = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    title          = models.CharField(max_length=300)
+    poster         = models.URLField(max_length=500, blank=True)
+    release_date = models.DateField(null=True, blank=True)
+    runtime        = models.IntegerField(default=0, help_text="Runtime in minutes")
+    genres         = models.CharField(max_length=200, blank=True, help_text="Comma-separated genre names")
+    overview       = models.TextField(blank=True)
+    director       = models.CharField(max_length=200, blank=True)
     origin_country = models.CharField(max_length=10, blank=True, help_text="ISO 3166-1 country code, e.g. 'US'")
+
+    production_house = models.ForeignKey(
+        'ProductionHouse', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='local_movies'
+    )
+    poster_image = models.ImageField(upload_to='promotions/media/', null=True, blank=True)
 
     def __str__(self):
         return self.title

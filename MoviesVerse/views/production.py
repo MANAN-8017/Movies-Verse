@@ -16,31 +16,48 @@ def production_house_dashboard(request):
 
     production_house = ProductionHouse.objects.get(id=ph_id)
 
-    movies = []
-    if production_house.tmdb_company_id:
-        movies = fetch_movies_by_company(production_house.tmdb_company_id)
-        
-    total_films = len(movies)
-    
-    rated = [m['vote_average'] for m in movies if m.get('vote_average')]
-    avg_rating = round(sum(rated) / len(rated), 1) if rated else None
-    
-    today = date.today()
-    upcoming_count = 0  
-    for movie in movies:
-        realese_date_str = movie.get('release_date')
-        if realese_date_str and realese_date_str > str(today) :
-            movie['status'] = 'upcoming'
-            upcoming_count += 1
-        else:
-            movie['status'] = 'released'
+    local_qs = Movie.objects.filter(production_house=production_house)
+    today = str(date.today())
+    local_movies = []
+    for m in local_qs:
+        release_date_str = str(m.release_date) if m.release_date else ''
+        local_movies.append({
+            'id':               f'local_{m.id}',
+            'title':            m.title,
+            'overview':         m.overview,
+            'release_date':     release_date_str,
+            'poster_path':      None,
+            'poster_image_url': m.poster_image.url if m.poster_image else None,
+            'vote_average':     0,
+            'popularity':       0,
+            'is_local':         True,
+            'status':           'upcoming' if release_date_str and release_date_str > today else 'released',
+        })
 
+    tmdb_movies, tmdb_total = [], 0
+    if production_house.tmdb_company_id:
+        tmdb_movies = fetch_movies_by_company(production_house.tmdb_company_id)
+        tmdb_total = len(tmdb_movies)
+
+    for movie in tmdb_movies:
+        rd = movie.get('release_date')
+        movie['status']   = 'upcoming' if rd and rd > today else 'released'
+
+    all_movies     = local_movies + tmdb_movies
+    total_films    = tmdb_total + local_qs.count()
+    rated          = [m['vote_average'] for m in tmdb_movies if m.get('vote_average')]
+    avg_rating     = round(sum(rated) / len(rated), 1) if rated else None
+    upcoming_count = sum(1 for m in all_movies if m.get('status') == 'upcoming')
+
+    all_movies.sort(key=lambda m: m.get('release_date') or '', reverse=True)
+    
     return render(request, 'production_house/production_house_dashboard.html', {
-        'production': production_house,
-        'movies': movies,
-        'avg_rating': avg_rating,
-        'total_films': total_films,
+        'production':     production_house,
+        'movies':         all_movies,
+        'total_films':    total_films,
+        'avg_rating':     avg_rating,
         'upcoming_count': upcoming_count,
+        'local_count':    local_qs.count(),
     })
     
 
@@ -54,6 +71,8 @@ def production_analytics(request):
 
     # movies from TMDB
     tmdb_movies = []
+    local_qs = Movie.objects.filter(production_house=production_house)
+    
     if production_house.tmdb_company_id:
         tmdb_movies = fetch_movies_by_company(production_house.tmdb_company_id)
 
@@ -63,9 +82,16 @@ def production_analytics(request):
         key=lambda m: m.get('popularity', 0),
         reverse=True
     )[:5]
+    
+    #trending
+    trending_movies = sorted(
+        tmdb_movies,
+        key=lambda m: m.get('trending', 0),
+        reverse=True
+    )[:5]
 
     # Total
-    total_films = len(tmdb_movies)
+    total_films = len(tmdb_movies) + local_qs.count()
 
     # tmdb rating
     rated = [m['vote_average'] for m in tmdb_movies if m.get('vote_average')]
@@ -73,7 +99,7 @@ def production_analytics(request):
 
     # Get TMDB IDs to find matching local DB movies
     tmdb_ids = [m["id"] for m in tmdb_movies if m.get("id")]
-    local_movies = Movie.objects.filter(tmdb_id__in=tmdb_ids)
+    local_movies = Movie.objects.filter(tmdb_id__in=tmdb_ids)   
 
     # Watchlist and favourite counts from local DB
     total_watchlists = Watchlist.objects.filter(movie__in=local_movies).count()
@@ -86,6 +112,7 @@ def production_analytics(request):
         'avg_rating': avg_rating,
         'total_watchlists': total_watchlists,
         'total_favourites': total_favourites,
+        'trending_movies': trending_movies,
     })
 
     
@@ -235,4 +262,28 @@ def production_settings(request):
         'production': production_house,
         'error': error,
         'success': success,
+    })
+    
+def add_movie(request):
+    ph_id = request.session.get('production_house_id')
+    if not ph_id:
+        return redirect('sign_in')
+
+    production_house = ProductionHouse.objects.get(id=ph_id)
+
+    if request.method == 'POST':
+        Movie.objects.create(
+            production_house = production_house,
+            title        = request.POST.get('title', '').strip(),
+            overview     = request.POST.get('overview', '').strip(),
+            release_date = request.POST.get('release_date') or None,
+            runtime      = request.POST.get('runtime') or 0,
+            genres       = request.POST.get('genres', '').strip(),
+            director     = request.POST.get('director', '').strip(),
+            poster_image = request.FILES.get('poster_image'),
+        )
+        return redirect('production_house_dashboard')
+
+    return render(request, 'production_house/add_movie.html', {
+        'production': production_house,
     })

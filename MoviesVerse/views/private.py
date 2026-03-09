@@ -126,7 +126,7 @@ def settings_page(request):
 
 @login_required
 def watched(request):
-    return render(request, 'watched.html')
+    return render(request, 'user/watched.html')
 
 @login_required
 def watchlist(request):

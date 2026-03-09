@@ -30,7 +30,7 @@ urlpatterns = [
     path('terms_of_use/', views.terms_of_use, name='terms_of_use'),
     path('privacy_policy/', views.privacy_policy, name='privacy_policy'),
 
-    path("search/", views.search_movies, name="search_movies"),
+    path("search/", views.search, name="search"),
     path("movie/<str:imdb_id>/", views.movie_detail, name="movie_detail"),
     
      #production house

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from MoviesVerse.services.movie_service import *
 
-def search_movies(request):
+def search(request):
     query = request.GET.get("q", "").strip()
     results = search_movies(query)
 

@@ -1,5 +1,6 @@
 import time
 import requests
+from termcolor import colored
 from django.conf import settings
 from .utils.movie_cache import *
 from django.core.cache import cache
@@ -131,29 +132,68 @@ def fetch_from_tmdb(imdb_id):
                 return cached_movie
     
 def search_tmdb_movies(movie_name):
-    try:
-        response = requests.get(
-            f"{BASE_TMDB}/search/movie",
-            params={"api_key": TMDB_API_KEY, "query": movie_name},
-            timeout=5
-        )
 
-        if response.status_code != 200:
+    for attempt in range(3):
+        try:
+            response = requests.get(
+                f"{BASE_TMDB}/search/movie",
+                params={"api_key": TMDB_API_KEY, "query": movie_name},
+                timeout=5
+            )
+
+            if response.status_code != 200:
+                return []
+
+            results = response.json().get("results", [])
+            final_results = []
+
+            for m in results[:20]:
+
+                if len(final_results) >= 10:
+                    break
+
+                r = requests.get(
+                    f"{BASE_TMDB}/movie/{m.get('id')}/external_ids",
+                    params={"api_key": TMDB_API_KEY},
+                    timeout=5
+                )
+
+                if r.status_code != 200:
+                    continue
+
+                data = r.json() if r.content else {}
+                imdb_id = data.get("imdb_id")
+
+                if not imdb_id:
+                    continue
+
+                cache_key = f"movie_{imdb_id}"
+                cached_movie = cache.get(cache_key)
+
+                if cached_movie:
+                    final_results.append(cached_movie)
+                    continue
+
+                movie_data = {
+                    "title": m.get("title"),
+                    "year": (m.get("release_date") or "")[:4],
+                    "poster": f"https://image.tmdb.org/t/p/w500{m.get('poster_path')}" if m.get("poster_path") else None,
+                    "tmdb_id": m.get("id"),
+                    "imdb_id": imdb_id,
+                    "source": "tmdb"
+                }
+
+                final_results.append(movie_data)
+
+            if final_results:
+                return final_results
+            
             return []
 
-        results = response.json().get("results", [])
+        except requests.RequestException as e:
+            print(f"TMDB attempt {attempt+1} failed:", e)
 
-        return [
-            {
-                "title": m.get("title"),
-                "year": m.get("release_date", "")[:4],
-                "poster": f"https://image.tmdb.org/t/p/w500{m.get('poster_path')}" if m.get("poster_path") else None,
-                "tmdb_id": m.get("id"),
-                "imdb_id": None,
-                "source": "tmdb"
-            }
-            for m in results[:10]
-        ]
-
-    except requests.RequestException:
-        return []
+            if attempt < 2:
+                time.sleep(1)
+            else:
+                return None

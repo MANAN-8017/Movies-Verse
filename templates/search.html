@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search: {{ query }} — MoviesVerse</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
+    
+    <form class="search-box" method="get" action="{% url 'search' %}">
+        {% csrf_token %}
+        <input type="text" name="q" placeholder="Search movies, TV shows..." required>
+        <button type="submit"> Search </button>
+    </form>
+        
+        <div class="nav-links">
+            <a href="{% url 'index' %}">Movies</a>
+            <a href="{% url 'watchlist' %}">Watchlist</a>
+            
+            <div class="profile-dropdown">
+                
+            {% if request.user.is_authenticated and request.user.profile.profile_pic %}
+                <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+            {% else %}
+                <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
+            {% endif %}
+
+                <div class="dropdown-menu">
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'profile' %}">Profile</a>
+                        <a href="{% url 'watched' %}">Watched</a>
+                        <a href="{% url 'favourite' %}">Favourite Movies</a>
+                        <a href="{% url 'settings' %}">Settings</a>
+                        <hr>
+                        <a href="{% url 'logout' %}" class="logout">Logout</a>
+                    {% else %}
+                        <a href="{% url 'sign_in' %}">Login</a>
+                        <a href="{% url 'sign_up' %}">Create new account</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <main class="content">
+        <section class="section">
+
+            <!-- Header -->
+            <div class="section-header">
+                {% if query %}
+                    <h2 class="section-title">
+                        Results for "{{ query }}"
+                        <span style="font-size: 14px; color: #aaa; font-weight: normal;">
+                            — {{ results|length }} found
+                        </span>
+                    </h2>
+                {% else %}
+                    <h2 class="section-title">Search Movies</h2>
+                {% endif %}
+            </div>
+
+            <!-- Results Grid -->
+            {% if results %}
+                <div class="movie-grid">
+                    {% for movie in results %}
+                    <div class="movie-card">
+
+                        <div class="card-poster">
+                            <a href="{% url 'movie_detail' movie.imdb_id %}">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                            </a>
+                        </div>
+
+                        <div class="card-info">
+                            <h3 class="card-title">{{ movie.title }}</h3>
+                            <p class="card-meta">{{ movie.year|slice:":4"|default:"—" }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            {% elif query %}
+                <!-- No results found -->
+                <div style="text-align:center; padding: 80px 20px; color: #aaa;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🎬</div>
+                    <h3 style="color: #fff; margin-bottom: 8px;">No results found for "{{ query }}"</h3>
+                    <p>Try a different keyword or check your spelling.</p>
+                </div>
+
+            {% else %}
+                <!-- Empty state — no query yet -->
+                <div style="text-align:center; padding: 80px 20px; color: #aaa;">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+                    <h3 style="color: #fff; margin-bottom: 8px;">Search for a movie</h3>
+                    <p>Type a movie name in the search bar above.</p>
+                </div>
+            {% endif %}
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="{% url 'help' %}" class="footer-link">Help</a>
+            <a href="{% url 'privacy_policy' %}" class="footer-link">Privacy Policy</a>
+            <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
+        </div>
+        <p class="footer-text">© 2026 MoviesVerse.com</p>
+    </footer>
+
+</body>
+</html>

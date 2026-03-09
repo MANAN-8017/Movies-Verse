@@ -50,11 +50,46 @@ def get_movies(imdb_id):
     return movie
 
 def search_movies(movie_name):
+    print(f"Searching movies for: {movie_name}")
+
+    search_cache_key = f"search_tmdb_{movie_name.lower().strip()}"
+    cached_search = cache.get(search_cache_key)
+
+    if cached_search:
+        print(colored("Search Result is already cached!", 'green'))
+        return cached_search
+
+    print("Trying OMDB to search")
+    omdb_results = search_omdb_movies(movie_name)
+    
+    if omdb_results:
+        print(colored("Fetched search result from OMDB!", 'blue'))
+        print("Trying TMDB to extend search result")
+    else:
+        print(colored("OMDB failed to give search result", 'red'))
+        print("Trying TMDB to get search result")
 
     tmdb_results = search_tmdb_movies(movie_name)
-    omdb_results = search_omdb_movies(movie_name)
 
-    return tmdb_results + [
-        m for m in omdb_results
-        if m["imdb_id"] not in {t["imdb_id"] for t in tmdb_results}
-    ]
+    if tmdb_results:
+        print(colored("Fetched search results from TMDB!", 'green'))
+    elif not omdb_results:
+        print(colored("couldn't find movie that you are looking for...", 'red'))
+
+    combined_results = omdb_results + tmdb_results
+
+    unique_movies = {}
+    for movie in combined_results:
+        imdb_id = movie.get('imdb_id')
+
+        if imdb_id not in unique_movies:
+            unique_movies[imdb_id] = movie
+
+        elif not unique_movies[imdb_id].get('poster') and movie.get('poster'):
+            unique_movies[imdb_id] = movie
+
+    movies = sorted(unique_movies.values(), key=lambda x: x.get('year'))
+
+    cache.set(search_cache_key, movies, 60 * 60 * 24)
+
+    return movies

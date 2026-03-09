@@ -64,7 +64,7 @@ def fetch_from_omdb(imdb_id):
 
         movie = build_movie_data_omdb(data)
         merged_movie = merge_movie_data(cached_movie, movie)
-
+        
         return merged_movie
 
     except requests.RequestException:
@@ -91,7 +91,6 @@ def search_omdb_movies(movie_name):
                 "title": m.get("Title"),
                 "year": m.get("Year"),
                 "poster": clean(m.get("Poster")),
-                "tmdb_id": None,
                 "imdb_id": m.get("imdbID"),
                 "source": "omdb"
             }

@@ -1,9 +1,25 @@
 from django.shortcuts import render
 from MoviesVerse.services.movie_service import *
+from ..models import Watchlist, Movie, Like, Watched
+from MoviesVerse.models import Movie, Watchlist
+from MoviesVerse.services.movie_service import get_movies
+
 
 def index(request):
 
     featured_movie = get_movies("tt15398776")
+
+    from ..models import Watchlist
+
+    is_in_watchlist = False
+
+    if request.user.is_authenticated and featured_movie:
+        imdb_id = featured_movie.get("imdb_id") or featured_movie.get("imdbID")
+
+        is_in_watchlist = Watchlist.objects.filter(
+            user=request.user,
+            movie__omdb_id=imdb_id
+        ).exists()
 
     trending_ids = [
         "tt0120338",  # Titanic
@@ -43,6 +59,7 @@ def index(request):
         "trending_movies": trending_movies,
         "popular_movies": popular_movies,
         # "extra_movies": extra_movies,
+        "is_in_watchlist": is_in_watchlist
     }
 
     return render(request, "index.html", context)
@@ -117,3 +134,57 @@ def privacy_policy(request):
 
 def terms_of_use(request):
     return render(request, 'terms_of_use.html')
+
+
+def movie_detail(request, imdb_id):
+
+    # Step 1: check if movie already exists in DB
+    movie = Movie.objects.filter(omdb_id=imdb_id).first()
+
+    # Step 2: if not found → fetch from API and save
+    if not movie:
+        data = get_movies(imdb_id)
+
+        movie = Movie.objects.create(
+            omdb_id = imdb_id,
+            tmdb_id = data.get("tmdb_id") or 0,
+            title = data.get("title"),
+            poster = data.get("poster"),
+            release_year = data.get("year"),
+            runtime = int(str(data.get("runtime","0")).split()[0]),
+            genres = ", ".join(data.get("genres", [])) if isinstance(data.get("genres"), list) else data.get("genres"),
+            overview = data.get("overview"),
+            director = ", ".join(data.get("directors", [])) if isinstance(data.get("directors"), list) else data.get("director"),
+            origin_country = data.get("language")
+        )
+
+    # Step 3: check user status
+    is_watchlist = False
+    is_liked = False
+    is_watched = False
+
+    if request.user.is_authenticated:
+
+        is_watchlist = Watchlist.objects.filter(
+            user=request.user,
+            movie=movie
+        ).exists()
+
+        is_liked = Like.objects.filter(
+            user=request.user,
+            movie=movie
+        ).exists()
+
+        is_watched = Watched.objects.filter(
+            user=request.user,
+            movie=movie
+        ).exists()
+
+    context = {
+        "movie": movie,
+        "is_in_watchlist": is_watchlist,
+        "is_liked": is_liked,
+        "is_watched": is_watched
+    }
+
+    return render(request, "movie_detail.html", context)

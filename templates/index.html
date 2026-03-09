@@ -70,12 +70,31 @@
                     </div>
                     <div class="movie-meta">{{ featured_movie.year }} • {{ featured_movie.runtime }} • {{ featured_movie.genres|join:", " }}</div>
                     <p class="movie-description">{{ featured_movie.overview }}</p>
+                    
                     <div class="action-buttons">
-                        <button class="btn btn-primary"><a href="{% url 'movie_detail' 'tt15398776' %}" style="text-decoration: none; color: black;">▶ Watch Trailer</a></button>
-                        <button class="btn btn-secondary" onclick="toggleWatchlist_index(this)">
-                            <span class="text">+ Add to Watchlist</span>
+
+                        <button class="btn btn-primary">
+                        <a href="{% url 'movie_detail' featured_movie.imdb_id %}" 
+                        style="text-decoration:none;color:black;">
+                        ▶ Watch Trailer
+                        </a>
                         </button>
-                    </div>
+                        
+                        <button
+                        class="btn btn-secondary {% if is_in_watchlist %}active{% endif %}"
+                        onclick="toggleWatchlist_index(this,'{{ featured_movie.imdb_id }}')">
+                        
+                        <span class="text">
+                        {% if is_in_watchlist %}
+                        ✔ Added to Watchlist
+                        {% else %}
+                        + Add to Watchlist
+                        {% endif %}
+                        </span>
+                        
+                        </button>
+                        
+                        </div>
                 </div>
             </div>
             {% endif %}

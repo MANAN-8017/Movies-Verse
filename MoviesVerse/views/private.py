@@ -4,15 +4,158 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+
+from django.http import JsonResponse
+from ..models import Watchlist, Movie
+from MoviesVerse.models import Movie, Watchlist, Like, Watched
+from MoviesVerse.services.movie_service import get_movies
 
 User = get_user_model()
 @login_required
 def favourite(request):
     return render(request, 'user/favourite.html')
 
+# @login_required
+# def profile(request):
+#     return render(request, "user/profile.html")
+
 @login_required
 def profile(request):
-    return render(request, "user/profile.html")
+
+    watchlist_qs = Watchlist.objects.filter(user=request.user).select_related("movie")
+    watched_qs = Watched.objects.filter(user=request.user).select_related("movie")
+    favourites_qs = Favourite.objects.filter(user=request.user).select_related("movie")
+    ratings_qs = Rating.objects.filter(user=request.user)
+    comments_qs = Comment.objects.filter(user=request.user)
+    likes_qs = Like.objects.filter(user=request.user)
+    search_qs = SearchHistory.objects.filter(user=request.user)
+
+    context = {
+        "watchlist_count": watchlist_qs.count(),
+        "total_watched": watched_qs.count(),
+        "favourites_count": favourites_qs.count(),
+        "ratings_count": ratings_qs.count(),
+        "comments_count": comments_qs.count(),
+        "likes_count": likes_qs.count(),
+
+        "watchlist_movies": [w.movie for w in watchlist_qs],
+        "watched_movies": [W.movie for W in watched_qs],
+        "favourite_movies": [f.movie for f in favourites_qs],
+        "rated_movies": ratings_qs,
+        "user_comments": comments_qs,
+        "liked_movies": [l.movie for l in likes_qs],
+        "search_history": search_qs,
+    }
+
+    return render(request, "user/profile.html", context)
+
+@login_required
+def toggle_watchlist(request, imdb_id):
+
+    movie = Movie.objects.filter(omdb_id=imdb_id).first()
+
+    # If movie not in DB → fetch from API and create
+    if not movie:
+        data = get_movies(imdb_id)
+
+        movie = Movie.objects.create(
+            omdb_id=imdb_id,
+            tmdb_id=data.get("tmdb_id") or 0,
+            title=data.get("title"),
+            poster=data.get("poster"),
+            release_year=data.get("year"),
+            runtime=int(str(data.get("runtime", "0")).split()[0]),
+            genres=", ".join(data.get("genres", [])),
+            overview=data.get("overview"),
+            director=", ".join(data.get("directors", [])),
+            origin_country=data.get("language")
+        )
+
+    watch = Watchlist.objects.filter(user=request.user, movie=movie)
+
+    if watch.exists():
+        watch.delete()
+        status = "removed"
+    else:
+        Watchlist.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    count = Watchlist.objects.filter(user=request.user).count()
+
+    return JsonResponse({
+        "status": status,
+        "count": count
+    })
+
+@login_required
+def toggle_like(request, imdb_id):
+
+    movie = Movie.objects.filter(omdb_id=imdb_id).first()
+
+    # If movie not in database → fetch and create
+    if not movie:
+        data = get_movies(imdb_id)
+
+        movie = Movie.objects.create(
+            omdb_id=imdb_id,
+            tmdb_id=data.get("tmdb_id") or 0,
+            title=data.get("title"),
+            poster=data.get("poster"),
+            release_year=data.get("year"),
+            runtime=int(str(data.get("runtime", "0")).split()[0]),
+            genres=", ".join(data.get("genres", [])),
+            overview=data.get("overview"),
+            director=", ".join(data.get("directors", [])),
+            origin_country=data.get("language")
+        )
+
+    like = Like.objects.filter(user=request.user, movie=movie)
+
+    if like.exists():
+        like.delete()
+        status = "removed"
+    else:
+        Like.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    return JsonResponse({
+        "status": status,
+    })
+
+@login_required
+def toggle_watched(request, imdb_id):
+
+    movie = Movie.objects.filter(omdb_id=imdb_id).first()
+
+    if not movie:
+        data = get_movies(imdb_id)
+
+        movie = Movie.objects.create(
+            omdb_id=imdb_id,
+            tmdb_id=data.get("tmdb_id") or 0,
+            title=data.get("title"),
+            poster=data.get("poster"),
+            release_year=data.get("year"),
+            runtime=int(str(data.get("runtime", "0")).split()[0]),
+            genres=", ".join(data.get("genres", [])),
+            overview=data.get("overview"),
+            director=", ".join(data.get("directors", [])),
+            origin_country=data.get("language")
+        )
+
+    watched = Watched.objects.filter(user=request.user, movie=movie)
+
+    if watched.exists():
+        watched.delete()
+        status = "removed"
+    else:
+        Watched.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    return JsonResponse({
+        "status": status
+    })
 
 @login_required
 def settings_page(request):

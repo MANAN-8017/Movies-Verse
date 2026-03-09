@@ -1,48 +1,138 @@
 // Navbar dropdown    
-{
-    document.addEventListener("click", function (e) {
-        const dropdown = document.querySelector(".profile-dropdown");
+// {
+//     document.addEventListener("click", function (e) {
+//         const dropdown = document.querySelector(".profile-dropdown");
+//         dropdown.classList.toggle("active", dropdown.contains(e.target));
+//     });
+// }
+document.addEventListener("click", function (e) {
+    const dropdown = document.querySelector(".profile-dropdown");
+    if(dropdown){
         dropdown.classList.toggle("active", dropdown.contains(e.target));
+    }
+});
+
+
+function toggleWatchlist_index(btn, imdbId){
+
+    fetch(`/watchlist/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.innerHTML = "✔ Added to Watchlist";
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.innerHTML = "+ Add to Watchlist";
+        }
+
     });
+
 }
 
-// Watchlist toggle - Index Page
-{
-    function toggleWatchlist_index(btn) {
-        btn.classList.toggle("active");
-            
-        const text = btn.querySelector(".text");
-            
-        text.textContent = btn.classList.contains("active")
-        ? "✔ Added to Watchlist"
-        : "+ Add to Watchlist";
+function toggleWatchlist_detail(btn){
+
+    // get imdb id from button
+    const imdbId = btn.dataset.imdb;
+
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
     }
+
+    fetch(`/watchlist/toggle/${imdbId}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.innerHTML = "Watchlisted";
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.innerHTML = "Watchlist";
+        }
+
+    }).catch(error => {
+        console.error("Watchlist toggle error:", error);
+    });
+
 }
+
 
 // Like, Watched and Watchlist toggles - Movie Detail Page
 {
+    
+
     function toggleLike(btn){
-        btn.classList.toggle("active");
-        const icon = btn.querySelector(".icon");
-        const text = btn.querySelector(".text");
-        if(btn.classList.contains("active")){
-            icon.textContent="♥"; text.textContent="Liked";
-        }else{
-            icon.textContent="♡"; text.textContent="Like";
+
+        const imdbId = btn.dataset.imdb;
+    
+        if(!imdbId){
+            console.error("IMDb ID missing!");
+            return;
         }
+    
+        fetch(`/like/toggle/${imdbId}/`)
+        .then(res => res.json())
+        .then(data => {
+    
+            const icon = btn.querySelector(".icon");
+            const text = btn.querySelector(".text");
+    
+            if(data.status === "added"){
+                btn.classList.add("active");
+                icon.textContent = "♥";
+                text.textContent = "Liked";
+            }
+    
+            if(data.status === "removed"){
+                btn.classList.remove("active");
+                icon.textContent = "♡";
+                text.textContent = "Like";
+            }
+    
+        });
+    
     }
 
     function toggleWatched(btn){
-        btn.classList.toggle("active");
-        const text = btn.querySelector(".text");
-        text.textContent = btn.classList.contains("active") ? "Watched":"Watch";
+
+        const imdbId = btn.dataset.imdb;
+    
+        if(!imdbId){
+            console.error("IMDb ID missing!");
+            return;
+        }
+    
+        fetch(`/watched/toggle/${imdbId}/`)
+        .then(res => res.json())
+        .then(data => {
+    
+            const text = btn.querySelector(".text");
+    
+            if(data.status === "added"){
+                btn.classList.add("active");
+                text.innerHTML = "Watched";
+            }
+    
+            if(data.status === "removed"){
+                btn.classList.remove("active");
+                text.innerHTML = "Watch";
+            }
+    
+        });
+    
     }
 
-    function toggleWatchlist(btn){
-        btn.classList.toggle("active");
-        const text = btn.querySelector(".text");
-        text.textContent = btn.classList.contains("active") ? "Watchlisted":"Watchlist";
-    }
 
     document.addEventListener("DOMContentLoaded",()=>{
         document.querySelectorAll(".stars").forEach(container=>{

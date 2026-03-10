@@ -56,20 +56,22 @@
 
         <div class="trailer-box">
             {% if movie.trailer %}
-            <iframe
-                width="100%"
-                height="400"
-                src="https://www.youtube.com/embed/{{ movie.trailer }}"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
+        <iframe
+            width="100%"
+            height="400"
+            src="https://www.youtube.com/embed/{{ movie.trailer }}"
+            frameborder="0"
+            allowfullscreen
+            referrerpolicy="strict-origin-when-cross-origin">
+            {% comment %} sending referrer to youtube.com to veify that request is coming from real webpage  {% endcomment %}
+        </iframe>
 
-            <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" target="_blank">
-                Watch on YouTube
-            </a>
-            {% else %}
-            <p>Trailer not available</p>
-            {% endif %}
+        <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" target="_blank">
+            Watch on YouTube
+        </a>
+        {% else %}
+        <p>Trailer not available</p>
+        {% endif %}
         </div>
 
         <!-- DESCRIPTION BELOW TRAILER -->

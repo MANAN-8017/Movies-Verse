@@ -13,7 +13,7 @@ BASE_TMDB = "https://api.themoviedb.org/3"
     
 def get_movies(imdb_id):
 
-    cache_key = f"movie_{imdb_id}"
+    cache_key = f"movie_api_{imdb_id}"
     cached_movie = cache.get(cache_key)
 
     if cached_movie and cached_movie.get("actors") and cached_movie.get("backdrop"):

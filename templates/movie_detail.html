@@ -85,7 +85,7 @@
     <!-- RIGHT COLUMN -->
     <div class="movie-meta">
         <div class="poster">
-            <img src="{{ movie.poster }}" alt="Oppenheimer Poster">
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
         </div>
 
         <div class="movie-info">
@@ -100,56 +100,35 @@
             <div class="details">
                 Release Date: {{ movie.release_date }}<br><br>
                 Language: {{ movie.language }}<br><br>
-                Runtime: {{ movie.runtime }}<br><br>
+                Runtime(min): {{ movie.runtime }}<br><br>
                 Director: {{ movie.directors|join:", " }}<br><br>
                 Writer: {{ movie.writers|join:", " }}<br><br>
             </div>
 
-            <button class="action-btn like-btn {% if is_liked %}active{% endif %}"
-                    onclick="toggleLike(this)"
-                    data-imdb="{{ movie.omdb_id }}">
+            <div class="action-row">
 
-                        <span class="icon">
-                            {% if is_liked %}♥{% else %}♡{% endif %}
-                            </span>
-                            
-                            <span class="text">
-                            {% if is_liked %}Liked{% else %}Like{% endif %}
-                        </span>
+                <button class="action-btn like-btn {% if is_liked %}active{% endif %}"
+                        onclick="toggleLike(this)"
+                        data-imdb="{{ movie.imdb_id }}">
+                        <span class="icon">{% if is_liked %}♥{% else %}♡{% endif %}</span>
+                        <span class="text">Like</span>
+                </button>
 
-            </button>
-
-            <button class="action-btn watch-btn {% if is_watched %}active{% endif %}"
-                data-imdb="{{ movie.omdb_id }}"
-                onclick="toggleWatched(this)">
-
+                <button class="action-btn watch-btn {% if is_watched %}active{% endif %}"
+                    data-imdb="{{ movie.imdb_id }}"
+                    onclick="toggleWatched(this)">
                         <span class="icon">👁</span>
+                        <span class="text">{% if is_watched %}Watched{% else %}Watch{% endif %}</span>
+                </button>
 
-                        <span class="text">
-                            {% if is_watched %}
-                            Watched
-                            {% else %}
-                            Watch
-                            {% endif %}
-                        </span>
-
-            </button>
-
-            <button class="action-btn list-btn {% if is_in_watchlist %}active{% endif %}"
-                onclick="toggleWatchlist_detail(this)"
-                data-imdb="{{ movie.omdb_id }}">
-        
+                <button class="action-btn list-btn {% if is_in_watchlist %}active{% endif %}"
+                        onclick="toggleWatchlist(this)"
+                        data-imdb="{{ movie.imdb_id }}">
                         <span class="icon">🕒</span>
-                        
-                        <span class="text">
-                        {% if is_in_watchlist %}
-                        Watchlisted
-                        {% else %}
-                        Watchlist
-                        {% endif %}
-                        </span>
-            </button>
+                        <span class="text">{% if is_in_watchlist %}Watchlisted{% else %}Watchlist{% endif %}</span>
+                </button>
             </div>
+        </div>
         </div>
     </div>
 </div>
@@ -252,6 +231,8 @@
             <a href="{% url 'terms_of_use' %}" class="footer-link">Terms of Use</a>
         </div>
         <p class="footer-text">© 2026 MoviesVerse.com</p>
-    </footer>
+        
+</footer>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

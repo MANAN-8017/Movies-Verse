@@ -58,115 +58,23 @@
 <div class="movie-grid">
 
 <!-- Movie Card Template -->
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/hd/297acd129204217.616629e21fe76.png" alt="Interstellar">
+         {% if likes %}
+            {% for movie in likes %}
+                <div class="movie-card">
+                    <div class="card-poster">
+                        <a href="{% url 'movie_detail' movie.imdb_id %}" style="text-decoration:none;">
+                            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                        </a>
 
-        <span class="heart-static"></span>
-        <div class="star-rating rating-5">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://images.squarespace-cdn.com/content/v1/5b468551266c0757375ead0c/3c18667e-4854-458c-9c82-69b4bb5f9e5e/ba2.jpeg" alt="Black Adam">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-4">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://tse2.mm.bing.net/th/id/OIP.pzHzXKTcOWnvKPz1Tfyp0QHaLH" alt="The Dark Knight">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-5">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://image.tmdb.org/t/p/original/rYy4MShKrZVXhiG4BLqwW1PeSOT.jpg" alt="Iron Man">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-4">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://image.tmdb.org/t/p/original/77AK9mGHeXAa3Sz8vPhUkAOgwCc.jpg" alt="Doctor Strange">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-3">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400/fe748e176533255.64c6e08a621b1.jpg" alt="Dune">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-4">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://m.media-amazon.com/images/I/7178DnoGXyL._AC_SY606_.jpg" alt="Ad Astra">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-3">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://static1.srcdn.com/wordpress/wp-content/uploads/2024/12/final-destinations-bloodlines-poster.jpg" alt="Final Destination">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-2">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-<div class="movie-card">
-    <div class="card-poster">
-        <img src="https://th.bing.com/th/id/R.d7eeaca150a053adb14433b0ca257117?rik=YbnF9%2fQN6452mg&riu=http%3a%2f%2fcdn.collider.com%2fwp-content%2fuploads%2f2017%2f11%2fblack-panther-poster.jpg&ehk=X3mIKETm9eOvv8SmWICKqf1AIFrXH3annd6jZR1iVss%3d&risl=&pid=ImgRaw&r=0 alt="Black Panther">
-        <span class="heart-static"></span>
-
-        <div class="star-rating rating-4">
-            <span class="star-base">★★★★★</span>
-            <span class="star-fill">★★★★★</span>
-        </div>
-    </div>
-</div>
-
-
+                        <span class="heart-static"></span>
+                        <div class="star-rating rating-5">
+                            <span class="star-base">★★★★★</span>
+                            <span class="star-fill">★★★★★</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
 
 </div>
 </section>

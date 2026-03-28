@@ -9,7 +9,7 @@ def search(request):
     results = search_movies(query)
 
     if results:
-        return render(request, "search.html", {"results": results})
+        return render(request, "search.html", {"results": results, "query": query})
 
     return HttpResponse("No movies found", status=404)
 

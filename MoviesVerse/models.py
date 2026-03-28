@@ -54,6 +54,7 @@ class Profile(models.Model):
 class Movie(models.Model):
     tmdb_id        = models.IntegerField(null=True, blank=True, unique=True)
     omdb_id        = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    imdb_id        = models.CharField(max_length=50, null=True, blank=True, unique=True)
     title          = models.CharField(max_length=300)
     poster         = models.URLField(max_length=500, blank=True)
     release_date = models.DateField(null=True, blank=True)

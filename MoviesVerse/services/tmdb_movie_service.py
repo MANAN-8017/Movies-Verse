@@ -54,6 +54,11 @@ def build_movie_data_tmdb(movie):
         else None
     )
 
+    l = clean(movie.get("spoken_languages"))
+
+    for i in l:
+        language = clean(i.get('english_name'))
+
     movie_data = {
         "imdb_id": clean(movie.get("imdb_id")),
         "tmdb_id": movie.get("id"),
@@ -61,6 +66,7 @@ def build_movie_data_tmdb(movie):
         "overview": clean(movie.get("overview")),
         "genres": genres,
         "release_date": release_date,
+        "language": language,
         "year": year,
         "runtime": clean(movie.get("runtime")),
         "rating": clean(movie.get("vote_average")),

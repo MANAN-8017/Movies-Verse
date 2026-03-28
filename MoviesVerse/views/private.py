@@ -1,76 +1,172 @@
 from ..models import *
+from django.db.models import Sum
 from django.contrib import messages
+from django.core.cache import cache
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
-
-from django.http import JsonResponse
-from ..models import Watchlist, Movie
-from MoviesVerse.models import Movie, Watchlist, Like, Watched
 from MoviesVerse.services.movie_service import get_movies
 
 User = get_user_model()
 @login_required
 def favourite(request):
-    return render(request, 'user/favourite.html')
-
-# @login_required
-# def profile(request):
-#     return render(request, "user/profile.html")
+    likes_qs = Like.objects.filter(user=request.user).select_related("movie")
+    
+    context = {
+        "likes": [w.movie for w in likes_qs]
+    }
+    return render(request, 'user/favourite.html', context)
 
 @login_required
 def profile(request):
 
-    watchlist_qs = Watchlist.objects.filter(user=request.user).select_related("movie")
+    likes_qs = Like.objects.filter(user=request.user)
+    likes_preview = likes_qs[:5]
+    print(likes_qs, "liked movies found for user:", request.user.username)
+
     watched_qs = Watched.objects.filter(user=request.user).select_related("movie")
-    favourites_qs = Favourite.objects.filter(user=request.user).select_related("movie")
+    watched_preview = watched_qs[:5]
+
+    watchlist_qs = Watchlist.objects.filter(user=request.user).select_related("movie")
+    watchlist_preview = watchlist_qs[:5]
+
     ratings_qs = Rating.objects.filter(user=request.user)
     comments_qs = Comment.objects.filter(user=request.user)
-    likes_qs = Like.objects.filter(user=request.user)
     search_qs = SearchHistory.objects.filter(user=request.user)
+
+    total_runtime = watched_qs.aggregate(total=Sum("movie__runtime"))["total"] or 0
+
+    minutes = total_runtime
+    hours = minutes // 60
+    minutes = minutes % 60
+
+    days = hours // 24
+    hours = hours % 24
+
+    months = days // 30
+    days = days % 30
+
+    years = months // 12
+    months = months % 12
 
     context = {
         "watchlist_count": watchlist_qs.count(),
         "total_watched": watched_qs.count(),
-        "favourites_count": favourites_qs.count(),
         "ratings_count": ratings_qs.count(),
         "comments_count": comments_qs.count(),
         "likes_count": likes_qs.count(),
 
-        "watchlist_movies": [w.movie for w in watchlist_qs],
-        "watched_movies": [W.movie for W in watched_qs],
-        "favourite_movies": [f.movie for f in favourites_qs],
+        "hours": hours,
+        "days": days,
+        "months": months,
+        "years": years,
+
+        "liked_movies": [l.movie for l in likes_preview],
+        "watched_movies": [w.movie for w in watched_preview],
+        "watchlist_movies": [w.movie for w in watchlist_preview],
         "rated_movies": ratings_qs,
         "user_comments": comments_qs,
-        "liked_movies": [l.movie for l in likes_qs],
         "search_history": search_qs,
     }
 
     return render(request, "user/profile.html", context)
 
-@login_required
-def toggle_watchlist(request, imdb_id):
+from datetime import datetime
+
+def get_or_create_movie(imdb_id):
+
+    cache_key = f"movie_model_{imdb_id}"
+    movie = cache.get(cache_key)
+
+    if movie:
+        return movie
 
     movie = Movie.objects.filter(omdb_id=imdb_id).first()
 
-    # If movie not in DB → fetch from API and create
-    if not movie:
-        data = get_movies(imdb_id)
+    if movie:
+        cache.set(cache_key, movie, 60 * 60 * 24)
+        return movie
 
-        movie = Movie.objects.create(
-            omdb_id=imdb_id,
-            tmdb_id=data.get("tmdb_id") or 0,
-            title=data.get("title"),
-            poster=data.get("poster"),
-            release_year=data.get("year"),
-            runtime=int(str(data.get("runtime", "0")).split()[0]),
-            genres=", ".join(data.get("genres", [])),
-            overview=data.get("overview"),
-            director=", ".join(data.get("directors", [])),
-            origin_country=data.get("language")
-        )
+    data = get_movies(imdb_id)
+
+    if not data:
+        return None
+
+    runtime_raw = data.get("runtime")
+
+    try:
+        runtime = int(str(runtime_raw).split()[0])
+    except (ValueError, TypeError):
+        runtime = 0
+
+    release_date = data.get("release_date")
+
+    movie = Movie.objects.create(
+        omdb_id=imdb_id,
+        tmdb_id=data.get("tmdb_id"),
+        title=data.get("title") or "Unknown",
+        poster=data.get("poster") or "",
+        release_date=release_date,
+        runtime=runtime,
+        genres=", ".join(data.get("genres", [])),
+        overview=data.get("overview") or "",
+        director=", ".join(data.get("directors", [])),
+        origin_country=data.get("language") or ""
+    )
+
+    cache.set(cache_key, movie, 60 * 60 * 24)
+
+    return movie
+
+@login_required
+def toggle_like(request, imdb_id):
+
+    movie = get_or_create_movie(imdb_id)
+    
+    print("Movie fetched for like toggle:", movie)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
+
+    like = Like.objects.filter(user=request.user, movie=movie)
+
+    if like.exists():
+        like.delete()
+        status = "removed"
+    else:
+        Like.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    return JsonResponse({"status": status})
+
+@login_required
+def toggle_watched(request, imdb_id):
+
+    movie = get_or_create_movie(imdb_id)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
+
+    watched = Watched.objects.filter(user=request.user, movie=movie)
+
+    if watched.exists():
+        watched.delete()
+        status = "removed"
+    else:
+        Watched.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    return JsonResponse({"status": status})
+
+@login_required
+def toggle_watchlist(request, imdb_id):
+
+    movie = get_or_create_movie(imdb_id)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
 
     watch = Watchlist.objects.filter(user=request.user, movie=movie)
 
@@ -86,75 +182,6 @@ def toggle_watchlist(request, imdb_id):
     return JsonResponse({
         "status": status,
         "count": count
-    })
-
-@login_required
-def toggle_like(request, imdb_id):
-
-    movie = Movie.objects.filter(omdb_id=imdb_id).first()
-
-    # If movie not in database → fetch and create
-    if not movie:
-        data = get_movies(imdb_id)
-
-        movie = Movie.objects.create(
-            omdb_id=imdb_id,
-            tmdb_id=data.get("tmdb_id") or 0,
-            title=data.get("title"),
-            poster=data.get("poster"),
-            release_year=data.get("year"),
-            runtime=int(str(data.get("runtime", "0")).split()[0]),
-            genres=", ".join(data.get("genres", [])),
-            overview=data.get("overview"),
-            director=", ".join(data.get("directors", [])),
-            origin_country=data.get("language")
-        )
-
-    like = Like.objects.filter(user=request.user, movie=movie)
-
-    if like.exists():
-        like.delete()
-        status = "removed"
-    else:
-        Like.objects.create(user=request.user, movie=movie)
-        status = "added"
-
-    return JsonResponse({
-        "status": status,
-    })
-
-@login_required
-def toggle_watched(request, imdb_id):
-
-    movie = Movie.objects.filter(omdb_id=imdb_id).first()
-
-    if not movie:
-        data = get_movies(imdb_id)
-
-        movie = Movie.objects.create(
-            omdb_id=imdb_id,
-            tmdb_id=data.get("tmdb_id") or 0,
-            title=data.get("title"),
-            poster=data.get("poster"),
-            release_year=data.get("year"),
-            runtime=int(str(data.get("runtime", "0")).split()[0]),
-            genres=", ".join(data.get("genres", [])),
-            overview=data.get("overview"),
-            director=", ".join(data.get("directors", [])),
-            origin_country=data.get("language")
-        )
-
-    watched = Watched.objects.filter(user=request.user, movie=movie)
-
-    if watched.exists():
-        watched.delete()
-        status = "removed"
-    else:
-        Watched.objects.create(user=request.user, movie=movie)
-        status = "added"
-
-    return JsonResponse({
-        "status": status
     })
 
 @login_required
@@ -269,8 +296,18 @@ def settings_page(request):
 
 @login_required
 def watched(request):
-    return render(request, 'user/watched.html')
+    watched_qs = Watched.objects.filter(user=request.user).select_related("movie")
+    
+    context = {
+        "watched": [w.movie for w in watched_qs]
+    }
+    return render(request, 'user/watched.html', context)
 
 @login_required
 def watchlist(request):
-    return render(request, 'user/watchlist.html')
+    watchlist_qs = Watchlist.objects.filter(user=request.user).select_related("movie")
+    
+    context = {
+        "watchlist": [w.movie for w in watchlist_qs]
+    }
+    return render(request, 'user/watchlist.html', context)

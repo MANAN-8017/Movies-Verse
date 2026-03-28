@@ -35,104 +35,77 @@ function toggleWatchlist_index(btn, imdbId){
 
 }
 
-function toggleWatchlist_detail(btn){
+// Generic Toggle Function (Watchlist, Like, Watched)
+function toggleAction(btn, endpoint, addedText, removedText, addedIcon=null, removedIcon=null){
 
-    // get imdb id from button
     const imdbId = btn.dataset.imdb;
-
+    
+    console.log(`Toggling ${endpoint} for IMDb ID:`, imdbId);
     if(!imdbId){
         console.error("IMDb ID missing!");
         return;
     }
 
-    fetch(`/watchlist/toggle/${imdbId}/`)
-    .then(response => response.json())
+    fetch(`/${endpoint}/toggle/${imdbId}/`)
+    .then(response => {
+
+        if(!response.ok){
+            throw new Error("Server error");
+        }
+
+        return response.json();
+    })
     .then(data => {
 
         const text = btn.querySelector(".text");
+        const icon = btn.querySelector(".icon");
 
         if(data.status === "added"){
+
             btn.classList.add("active");
-            text.innerHTML = "Watchlisted";
+
+            if(text) text.textContent = addedText;
+
+            if(icon && addedIcon){
+                icon.textContent = addedIcon;
+            }
+
         }
 
         if(data.status === "removed"){
+
             btn.classList.remove("active");
-            text.innerHTML = "Watchlist";
+
+            if(text) text.textContent = removedText;
+
+            if(icon && removedIcon){
+                icon.textContent = removedIcon;
+            }
+
         }
 
-    }).catch(error => {
-        console.error("Watchlist toggle error:", error);
+    })
+    .catch(error => {
+        console.error(`${endpoint} toggle error:`, error);
     });
-
 }
 
+/* -------------------------
+   Button Wrappers
+--------------------------*/
 
-// Like, Watched and Watchlist toggles - Movie Detail Page
-{
-    
+function toggleLike(btn){
+    console.log("Like button clicked:", btn);
+    toggleAction(btn,"like","Liked","Like","♥","♡");
+}
 
-    function toggleLike(btn){
+function toggleWatched(btn){
+    toggleAction(btn,"watched","Watched","Watch");
+}
 
-        const imdbId = btn.dataset.imdb;
-    
-        if(!imdbId){
-            console.error("IMDb ID missing!");
-            return;
-        }
-    
-        fetch(`/like/toggle/${imdbId}/`)
-        .then(res => res.json())
-        .then(data => {
-    
-            const icon = btn.querySelector(".icon");
-            const text = btn.querySelector(".text");
-    
-            if(data.status === "added"){
-                btn.classList.add("active");
-                icon.textContent = "♥";
-                text.textContent = "Liked";
-            }
-    
-            if(data.status === "removed"){
-                btn.classList.remove("active");
-                icon.textContent = "♡";
-                text.textContent = "Like";
-            }
-    
-        });
-    
-    }
-
-    function toggleWatched(btn){
-
-        const imdbId = btn.dataset.imdb;
-    
-        if(!imdbId){
-            console.error("IMDb ID missing!");
-            return;
-        }
-    
-        fetch(`/watched/toggle/${imdbId}/`)
-        .then(res => res.json())
-        .then(data => {
-    
-            const text = btn.querySelector(".text");
-    
-            if(data.status === "added"){
-                btn.classList.add("active");
-                text.innerHTML = "Watched";
-            }
-    
-            if(data.status === "removed"){
-                btn.classList.remove("active");
-                text.innerHTML = "Watch";
-            }
-    
-        });
-    
-    }
-
+function toggleWatchlist(btn){
+    toggleAction(btn,"watchlist","Watchlisted","Watchlist");
+}
 
     document.addEventListener("DOMContentLoaded",()=>{
         document.querySelectorAll(".stars").forEach(container=>{
@@ -145,10 +118,8 @@ function toggleWatchlist_detail(btn){
             }
         });
     });
-}
 
-// Accordion toggle - Settings page
-{
+
     function toggleAccordion(btn) {
     const item = btn.closest('.accordion-item');
     const isOpen = item.classList.contains('open');
@@ -162,4 +133,3 @@ function toggleWatchlist_detail(btn){
             setTimeout(() => el.remove(), 300);
         });
     }, 4000);
-}

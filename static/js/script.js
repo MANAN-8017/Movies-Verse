@@ -1,10 +1,4 @@
 // Navbar dropdown    
-// {
-//     document.addEventListener("click", function (e) {
-//         const dropdown = document.querySelector(".profile-dropdown");
-//         dropdown.classList.toggle("active", dropdown.contains(e.target));
-//     });
-// }
 document.addEventListener("click", function (e) {
     const dropdown = document.querySelector(".profile-dropdown");
     if(dropdown){
@@ -14,10 +8,13 @@ document.addEventListener("click", function (e) {
 
 
 function toggleWatchlist_index(btn, imdbId){
-
     fetch(`/watchlist/toggle/${imdbId}/`)
     .then(res => res.json())
     .then(data => {
+        if (data.status === "error") {
+            alert(data.message || "Cannot add to watchlist.");
+            return;
+        }
 
         const text = btn.querySelector(".text");
 
@@ -30,106 +27,129 @@ function toggleWatchlist_index(btn, imdbId){
             btn.classList.remove("active");
             text.innerHTML = "+ Add to Watchlist";
         }
-
     });
-
 }
 
-// Generic Toggle Function (Watchlist, Like, Watched)
-function toggleAction(btn, endpoint, addedText, removedText, addedIcon=null, removedIcon=null){
 
+function toggleLike(btn){
     const imdbId = btn.dataset.imdb;
-    
-    console.log(`Toggling ${endpoint} for IMDb ID:`, imdbId);
+
     if(!imdbId){
         console.error("IMDb ID missing!");
         return;
     }
 
-    fetch(`/${endpoint}/toggle/${imdbId}/`)
-    .then(response => {
-
-        if(!response.ok){
-            throw new Error("Server error");
-        }
-
-        return response.json();
-    })
+    fetch(`/like/toggle/${imdbId}/`)
+    .then(res => res.json())
     .then(data => {
-
-        const text = btn.querySelector(".text");
         const icon = btn.querySelector(".icon");
+        const text = btn.querySelector(".text");
 
         if(data.status === "added"){
-
             btn.classList.add("active");
-
-            if(text) text.textContent = addedText;
-
-            if(icon && addedIcon){
-                icon.textContent = addedIcon;
-            }
-
+            icon.textContent = "♥";
+            text.textContent = "Liked";
         }
 
         if(data.status === "removed"){
-
             btn.classList.remove("active");
-
-            if(text) text.textContent = removedText;
-
-            if(icon && removedIcon){
-                icon.textContent = removedIcon;
-            }
-
+            icon.textContent = "♡";
+            text.textContent = "Like";
         }
-
-    })
-    .catch(error => {
-        console.error(`${endpoint} toggle error:`, error);
     });
 }
 
-/* -------------------------
-   Button Wrappers
---------------------------*/
-
-function toggleLike(btn){
-    console.log("Like button clicked:", btn);
-    toggleAction(btn,"like","Liked","Like","♥","♡");
-}
 
 function toggleWatched(btn){
-    toggleAction(btn,"watched","Watched","Watch");
-}
+    const imdbId = btn.dataset.imdb;
 
-function toggleWatchlist(btn){
-    toggleAction(btn,"watchlist","Watchlisted","Watchlist");
-}
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
+    }
 
-    document.addEventListener("DOMContentLoaded",()=>{
-        document.querySelectorAll(".stars").forEach(container=>{
-            const rating=parseFloat(container.dataset.rating);
-            container.innerHTML="";
-            for(let i=1;i<=5;i++){
-                if(rating>=i) container.innerHTML+='<span class="star filled">★</span>';
-                else if(rating>=i-0.5) container.innerHTML+='<span class="star half">★</span>';
-                else container.innerHTML+='<span class="star">★</span>';
+    fetch(`/watched/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.innerHTML = "Watched";
+
+            // Auto-remove from watchlist button if present
+            if(data.removed_from_watchlist){
+                const watchlistBtn = document.querySelector(`.list-btn[data-imdb="${imdbId}"]`);
+                if(watchlistBtn){
+                    watchlistBtn.classList.remove("active");
+                    watchlistBtn.querySelector(".text").innerHTML = "Watchlist";
+                }
             }
-        });
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.innerHTML = "Watch";
+        }
     });
+}
 
 
-    function toggleAccordion(btn) {
+function toggleWatchlist_detail(btn){
+    const imdbId = btn.dataset.imdb;
+
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
+    }
+
+    fetch(`/watchlist/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+        // Block if already watched
+        if(data.status === "error"){
+            alert(data.message || "Cannot add to watchlist.");
+            return;
+        }
+
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.innerHTML = "Watchlisted";
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.innerHTML = "Watchlist";
+        }
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".stars").forEach(container => {
+        const rating = parseFloat(container.dataset.rating);
+        container.innerHTML = "";
+        for(let i = 1; i <= 5; i++){
+            if(rating >= i) container.innerHTML += '<span class="star filled">★</span>';
+            else if(rating >= i - 0.5) container.innerHTML += '<span class="star half">★</span>';
+            else container.innerHTML += '<span class="star">★</span>';
+        }
+    });
+});
+
+
+function toggleAccordion(btn) {
     const item = btn.closest('.accordion-item');
     const isOpen = item.classList.contains('open');
     btn.closest('.settings-section').querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
     if (!isOpen) item.classList.add('open');
-    }
+}
 
-    setTimeout(() => {
-        document.querySelectorAll('.alert').forEach(el => {
-            el.style.opacity = '0';
-            setTimeout(() => el.remove(), 300);
-        });
-    }, 4000);
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+    });
+}, 4000);

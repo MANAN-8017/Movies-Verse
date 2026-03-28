@@ -1,5 +1,4 @@
 {% load static %}
-{% csrf_token %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,70 +9,63 @@
     <script src="{% static 'js/script.js' %}"></script>
 </head>
 <body>
+
 <div class="navbar">
     <div class="logo"><a href="{% url 'index' %}" style="text-decoration: none; color: #f5c518;">MoviesVerse</a></div>
 
     <form class="search-box" method="get" action="{% url 'search' %}">
         {% csrf_token %}
         <input type="text" name="q" placeholder="Search movies, TV shows..." required>
-        <button type="submit"> Search </button>
+        <button type="submit">Search</button>
     </form>
 
     <div class="nav-links">
         <a href="{% url 'index' %}">Movies</a>
         <a href="{% url 'watchlist' %}">Watchlist</a>
-        
-            <div class="profile-dropdown">
 
+        <div class="profile-dropdown">
             {% if request.user.is_authenticated and request.user.profile.profile_pic %}
                 <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
             {% else %}
                 <img src="{% static 'images/default_pfp.jpeg' %}" class="profile-avatar" alt="Default Profile">
             {% endif %}
 
-        <div class="dropdown-menu">
-            <a href="{% url 'profile' %}">Profile</a>
-            <a href="{% url 'favourite' %}">Favourite Movies</a>
-            <a href="{% url 'settings' %}">Settings</a>
-            <hr>
-            <a href="{% url 'logout' %}" class="logout">Logout</a>
-        </div>
+            <div class="dropdown-menu">
+                <a href="{% url 'profile' %}">Profile</a>
+                <a href="{% url 'favourite' %}">Favourite Movies</a>
+                <a href="{% url 'settings' %}">Settings</a>
+                <hr>
+                <a href="{% url 'logout' %}" class="logout">Logout</a>
+            </div>
         </div>
     </div>
 </div>
 
 <section class="hero">
     <div class="hero-content">
-
         <h2 class="hero-title">Watched Movies</h2>
-
-        <p style="color:#ccc; margin-top:10px;">
-            Movies you’ve already completed
-        </p>
-</div>
-
+        <p style="color:#ccc; margin-top:10px;">Movies you've already completed</p>
     </div>
 </section>
 
 <main class="content">
-<section class="section">
-
-<div class="movie-grid" id="watchedGrid">
-    {% if watched %}
-        {% for movie in watched %}
-            <div class="movie-card" data-duration="142">
-                <div class="card-poster">
-                    <a href="{% url 'movie_detail' movie.imdb_id %}">
-                    <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-                </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No watched movies to display.</p>
-    {% endif %}
-</div>
-
-</section>
+    <section class="section">
+        <div class="movie-grid" id="watchedGrid">
+            {% if watched %}
+                {% for movie in watched %}
+                    <div class="movie-card">
+                        <a href="{% url 'movie_detail' movie.omdb_id %}" style="text-decoration: none;">
+                            <div class="card-poster">
+                                <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p style="color:#888;">No watched movies yet.</p>
+            {% endif %}
+        </div>
+    </section>
 </main>
 
 <footer class="footer">
@@ -84,5 +76,6 @@
     </div>
     <p class="footer-text">© 2026 MoviesVerse.com</p>
 </footer>
+
 </body>
 </html>

@@ -61,28 +61,21 @@
         <div class="movie-grid">
             {% for movie in watchlist %}
             <div class="movie-card">
-                <a href="{% url 'movie_detail' movie.imdb_id %}" style="text-decoration:none;">
+                <a href="{% url 'movie_detail' movie.omdb_id %}" style="text-decoration:none;">
                     <div class="card-poster">
                         {% if movie.poster %}
                             <img src="{{ movie.poster }}" alt="{{ movie.title }}">
                         {% else %}
-                            <div style="width:100%;height:300px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#555;font-size:13px;">No Poster</div>
+                            <div style="width:100%;height:300px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;color:#f5c518;font-size:13px;">No Poster</div>
                         {% endif %}
-                        <div class="card-overlay">
-                            <p class="card-title">{{ movie.title }}</p>
-                            {% if movie.release_date %}
-                                <p class="card-year">{{ movie.release_date|date:"Y" }}</p>
-                            {% endif %}
-                        </div>
+                    </div>
+                    <div class="card-info">
+                        <p class="card-title" style="color:#f5c518;">{{ movie.title }}</p>
+                        {% if movie.release_date %}
+                            <p class="card-meta">{{ movie.release_date|date:"Y" }}</p>
+                        {% endif %}
                     </div>
                 </a>
-                <button class="action-btn list-btn active"
-                        onclick="toggleWatchlist_detail(this)"
-                        data-imdb="{{ movie.omdb_id }}"
-                        style="width:100%; margin-top:6px;">
-                    <span class="icon">🕒</span>
-                    <span class="text">Remove</span>
-                </button>
             </div>
             {% endfor %}
         </div>

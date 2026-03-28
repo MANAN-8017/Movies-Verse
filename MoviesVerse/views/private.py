@@ -311,3 +311,59 @@ def watchlist(request):
         "watchlist": [w.movie for w in watchlist_qs]
     }
     return render(request, 'user/watchlist.html', context)
+
+@login_required
+def toggle_watched(request, imdb_id):
+    movie = get_or_create_movie(imdb_id)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
+
+    watched = Watched.objects.filter(user=request.user, movie=movie)
+
+    if watched.exists():
+        watched.delete()
+        status = "removed"
+    else:
+        # Add to watched
+        Watched.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+        # Auto-remove from watchlist if present
+        removed_from_watchlist = Watchlist.objects.filter(user=request.user, movie=movie).exists()
+        Watchlist.objects.filter(user=request.user, movie=movie).delete()
+
+        return JsonResponse({
+            "status": status,
+            "removed_from_watchlist": removed_from_watchlist
+        })
+
+    return JsonResponse({"status": status, "removed_from_watchlist": False})
+
+
+@login_required
+def toggle_watchlist(request, imdb_id):
+    movie = get_or_create_movie(imdb_id)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
+
+    # Block if already watched
+    if Watched.objects.filter(user=request.user, movie=movie).exists():
+        return JsonResponse({
+            "status": "error",
+            "message": "You have already watched this movie."
+        })
+
+    watch = Watchlist.objects.filter(user=request.user, movie=movie)
+
+    if watch.exists():
+        watch.delete()
+        status = "removed"
+    else:
+        Watchlist.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    count = Watchlist.objects.filter(user=request.user).count()
+
+    return JsonResponse({"status": status, "count": count})

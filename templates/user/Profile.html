@@ -132,9 +132,6 @@
             <button class="tab-btn active" data-tab="likes-tab">👍 Likes</button>
             <button class="tab-btn" data-tab="watched-tab">✅ Watched</button>
             <button class="tab-btn" data-tab="watchlist-tab">🎯 Watchlist</button>
-            <button class="tab-btn" data-tab="ratings-tab">⭐ Ratings</button>
-            <button class="tab-btn" data-tab="comments-tab">💬 Reviews</button>
-            <button class="tab-btn" data-tab="history-tab">🔍 Search History</button>
         </div>
 
         <!-- ── LIKES ── -->
@@ -235,101 +232,6 @@
                     <span class="empty-icon">📋</span>
                     <p>Your watchlist is empty. Start adding movies!</p>
                     <a href="{% url 'index' %}" class="btn-gold-sm">Explore Movies</a>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- ── RATINGS ── -->
-        <div id="ratings-tab" class="tab-content">
-            <div class="section-label">My Ratings <span class="count-badge">{{ ratings_count|default:"0" }}</span></div>
-            {% if rated_movies %}
-                <div class="ratings-list">
-                    {% for item in rated_movies %}
-                    <div class="rating-row">
-                        <a href="{% url 'movie_detail' item.movie.omdb_id %}" class="rating-poster">
-                            <img src="{{ item.movie.poster }}" alt="{{ item.movie.title }}">
-                        </a>
-                        <div class="rating-info">
-                            <div class="rating-title">{{ item.movie.title }}</div>
-                            <div class="rating-year">{{ item.movie.release_year }}</div>
-                            <div class="rating-date">Rated on {{ item.rated_on|date:"M d, Y" }}</div>
-                        </div>
-                        <div class="rating-stars-display">
-                            {% for i in "12345" %}
-                                <span class="{% if forloop.counter <= item.rating %}star-filled{% else %}star-empty{% endif %}">★</span>
-                            {% endfor %}
-                            <span class="rating-val">{{ item.rating }}/5</span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <span class="empty-icon">⭐</span>
-                    <p>You haven't rated any movies yet.</p>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- ── REVIEWS / COMMENTS ── -->
-        <div id="comments-tab" class="tab-content">
-            <div class="section-label">My Reviews <span class="count-badge">{{ comments_count|default:"0" }}</span></div>
-            {% if user_comments %}
-                <div class="reviews-list">
-                    {% for comment in user_comments %}
-                    <div class="review-card">
-                        <a href="{% url 'movie_detail' comment.movie.omdb_id %}" class="review-poster-mini">
-                            <img src="{{ comment.movie.poster }}" alt="{{ comment.movie.title }}">
-                        </a>
-                        <div class="review-body">
-                            <div class="review-movie-title">
-                                <a href="{% url 'movie_detail' comment.movie.omdb_id %}">{{ comment.movie.title }}</a>
-                            </div>
-                            <div class="review-stars">
-                                {% for i in "12345" %}
-                                    <span class="{% if comment.rating and forloop.counter <= comment.rating %}star-filled{% else %}star-empty{% endif %}">★</span>
-                                {% endfor %}
-                            </div>
-                            <p class="review-text">{{ comment.text }}</p>
-                            <div class="review-meta">
-                                <span>{{ comment.created_at|date:"M d, Y" }}</span>
-                                <span>👍 {{ comment.likes|default:"0" }} likes</span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <span class="empty-icon">💬</span>
-                    <p>You haven't written any reviews yet.</p>
-                </div>
-                {% endif %}
-            </div>
-
-        <!-- ── SEARCH HISTORY ── -->
-        <div id="history-tab" class="tab-content">
-            <div class="section-label-row">
-                <div class="section-label">Search History</div>
-                <button class="btn-outline-sm" onclick="clearSearchHistory()">🗑 Clear All</button>
-            </div>
-            {% if search_history %}
-                <div class="history-list">
-                    {% for item in search_history %}
-                    <div class="history-row">
-                        <span class="history-icon">🔍</span>
-                        <div class="history-info">
-                            <span class="history-query">{{ item.query }}</span>
-                            <span class="history-time">{{ item.searched_at|timesince }} ago</span>
-                        </div>
-                        <a href="{% url 'index' %}?q={{ item.query|urlencode }}" class="btn-history-search">Search again</a>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <span class="empty-icon">🔍</span>
-                    <p>No search history recorded yet.</p>
                 </div>
             {% endif %}
         </div>

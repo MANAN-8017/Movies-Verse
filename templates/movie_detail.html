@@ -9,6 +9,106 @@
     <link rel="stylesheet" href="{% static 'css/movie_detail.css' %}">
     <script src="{% static 'js/script.js' %}"></script>
 </head>
+<script>
+    function toggleLike(btn){
+    const imdbId = btn.dataset.imdb;
+
+    console.log("Toggling like for IMDb ID:", imdbId);
+
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
+    }
+
+    fetch(`/like/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+        const icon = btn.querySelector(".icon");
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            icon.textContent = "♥";
+            text.textContent = "Liked";
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            icon.textContent = "♡";
+            text.textContent = "Like";
+        }
+    });
+}
+
+function toggleWatched(btn){
+    const imdbId = btn.dataset.imdb;
+
+    console.log("Toggling watched for IMDb ID:", imdbId);
+
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
+    }
+
+    fetch(`/watched/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.innerContent = "Watched";
+
+            // Auto-remove from watchlist button if present
+            if(data.removed_from_watchlist){
+                const watchlistBtn = document.querySelector(`.list-btn[data-imdb="${imdbId}"]`);
+                if(watchlistBtn){
+                    watchlistBtn.classList.remove("active");
+                    watchlistBtn.querySelector(".text").innerHTML = "Watchlist";
+                }
+            }
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.innerContent = "Watch";
+        }
+    });
+}
+
+function toggleWatchlist(btn){
+    const imdbId = btn.dataset.imdb;
+
+    console.log("Toggling watchlist for IMDb ID:", imdbId);
+
+    if(!imdbId){
+        console.error("IMDb ID missing!");
+        return;
+    }
+
+    fetch(`/watchlist/toggle/${imdbId}/`)
+    .then(res => res.json())
+    .then(data => {
+        // Block if already watched
+        if(data.status === "error"){
+            alert(data.message || "Cannot add to watchlist.");
+            return;
+        }
+
+        const text = btn.querySelector(".text");
+
+        if(data.status === "added"){
+            btn.classList.add("active");
+            text.textContent = "Watchlisted";
+        }
+
+        if(data.status === "removed"){
+            btn.classList.remove("active");
+            text.textContent = "Watchlist";
+        }
+    });
+}
+</script>
 <body>
     <!-- NAVBAR -->
     <div class="navbar">
@@ -63,7 +163,6 @@
             frameborder="0"
             allowfullscreen
             referrerpolicy="strict-origin-when-cross-origin">
-            {% comment %} sending referrer to youtube.com to veify that request is coming from real webpage  {% endcomment %}
         </iframe>
 
         <a href="https://www.youtube.com/watch?v={{ movie.trailer }}" target="_blank">
@@ -108,24 +207,27 @@
             <div class="action-row">
 
                 <button class="action-btn like-btn {% if is_liked %}active{% endif %}"
+                        data-imdb="{{ movie.imdb_id }}"
                         onclick="toggleLike(this)"
-                        data-imdb="{{ movie.imdb_id }}">
-                        <span class="icon">{% if is_liked %}♥{% else %}♡{% endif %}</span>
+                    >
+                        <span class="icon">♡</span>
                         <span class="text">Like</span>
                 </button>
 
                 <button class="action-btn watch-btn {% if is_watched %}active{% endif %}"
-                    data-imdb="{{ movie.imdb_id }}"
-                    onclick="toggleWatched(this)">
+                        data-imdb="{{ movie.imdb_id }}"
+                        onclick="toggleWatched(this)"
+                    >
                         <span class="icon">👁</span>
-                        <span class="text">{% if is_watched %}Watched{% else %}Watch{% endif %}</span>
+                        <span class="text">Watch</span>
                 </button>
 
                 <button class="action-btn list-btn {% if is_in_watchlist %}active{% endif %}"
+                        data-imdb="{{ movie.imdb_id }}"
                         onclick="toggleWatchlist(this)"
-                        data-imdb="{{ movie.imdb_id }}">
+                    >
                         <span class="icon">🕒</span>
-                        <span class="text">{% if is_in_watchlist %}Watchlisted{% else %}Watchlist{% endif %}</span>
+                        <span class="text">Watchlist</span>
                 </button>
             </div>
         </div>

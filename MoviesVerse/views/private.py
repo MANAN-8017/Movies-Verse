@@ -121,70 +121,6 @@ def get_or_create_movie(imdb_id):
     return movie
 
 @login_required
-def toggle_like(request, imdb_id):
-
-    movie = get_or_create_movie(imdb_id)
-    
-    print("Movie fetched for like toggle:", movie)
-
-    if not movie:
-        return JsonResponse({"status": "error"}, status=400)
-
-    like = Like.objects.filter(user=request.user, movie=movie)
-
-    if like.exists():
-        like.delete()
-        status = "removed"
-    else:
-        Like.objects.create(user=request.user, movie=movie)
-        status = "added"
-
-    return JsonResponse({"status": status})
-
-@login_required
-def toggle_watched(request, imdb_id):
-
-    movie = get_or_create_movie(imdb_id)
-
-    if not movie:
-        return JsonResponse({"status": "error"}, status=400)
-
-    watched = Watched.objects.filter(user=request.user, movie=movie)
-
-    if watched.exists():
-        watched.delete()
-        status = "removed"
-    else:
-        Watched.objects.create(user=request.user, movie=movie)
-        status = "added"
-
-    return JsonResponse({"status": status})
-
-@login_required
-def toggle_watchlist(request, imdb_id):
-
-    movie = get_or_create_movie(imdb_id)
-
-    if not movie:
-        return JsonResponse({"status": "error"}, status=400)
-
-    watch = Watchlist.objects.filter(user=request.user, movie=movie)
-
-    if watch.exists():
-        watch.delete()
-        status = "removed"
-    else:
-        Watchlist.objects.create(user=request.user, movie=movie)
-        status = "added"
-
-    count = Watchlist.objects.filter(user=request.user).count()
-
-    return JsonResponse({
-        "status": status,
-        "count": count
-    })
-
-@login_required
 def settings_page(request):
 
     if request.method == "POST":
@@ -312,6 +248,28 @@ def watchlist(request):
     }
     return render(request, 'user/watchlist.html', context)
 
+@login_required
+def toggle_like(request, imdb_id):
+
+    movie = get_or_create_movie(imdb_id)
+    
+    print("Movie fetched for like toggle:", movie)
+
+    if not movie:
+        return JsonResponse({"status": "error"}, status=400)
+
+    like = Like.objects.filter(user=request.user, movie=movie)
+
+    if like.exists():
+        like.delete()
+        status = "removed"
+    else:
+        Like.objects.create(user=request.user, movie=movie)
+        status = "added"
+
+    return JsonResponse({"status": status})
+
+    
 @login_required
 def toggle_watched(request, imdb_id):
     movie = get_or_create_movie(imdb_id)

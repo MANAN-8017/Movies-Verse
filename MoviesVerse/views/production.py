@@ -3,7 +3,7 @@ from datetime import date, datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from MoviesVerse.models import Favourite, ProductionHouse, Promotion
+from MoviesVerse.models import Favourite, ProductionHouse, Promotion, Watched
 import requests
 from MoviesVerse.services.production_service import fetch_movies_by_company
 from MoviesVerse.services.tmdb_movie_service import BASE_TMDB, TMDB_API_KEY, merge_movie_data
@@ -102,7 +102,7 @@ def production_analytics(request):
     local_movies = Movie.objects.filter(tmdb_id__in=tmdb_ids)   
 
     # Watchlist and favourite counts from local DB
-    total_watchlists = Watchlist.objects.filter(movie__in=local_movies).count()
+    total_watchlists = Watched.objects.filter(movie__in=local_movies).count()
     total_favourites = Favourite.objects.filter(movie__in=local_movies).count()
 
     return render(request, 'production_house/production_analytics.html', {
